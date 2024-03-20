@@ -1,0 +1,62 @@
+/account
+Manage details of/delete account. Personal accounts can't be modified or deleted.
+
+
+/balance
+Get the current balance of a bank account.
+
+
+/balancetop
+View the top balances across the bank system.
+
+
+/bulkpay
+Bulk pay from a company/government account to (up to) 10 personal accounts.
+
+
+/create_account
+Create a new account. (Only bot moderators can create government accounts.)
+
+
+/eco
+(Bot moderator only.) Manage account balances. (Default is your personal account)
+
+
+/help
+Get an explanation of what commands exist and what they do.
+
+
+/initialize
+Initialize your personal bank account.
+
+
+/list_accounts
+List accounts you own and their balances. (To do: accounts you are a Treasurer of as well)
+
+
+/log
+Look at the transaction log of an account (Bot admins can see any account)
+
+
+/pay
+Pay from one of your accounts to another account. (Default from acc. -> Personal Account)
+
+
+/paypercent
+Pay a percentage of balance from your account to another account (Default acc = Personal Account)
+
+
+/tax
+Takes tax out of an account. (Only government accounts can use this command)
+
+
+/transfer
+Transfer/pay from one of your accounts to another account. (Default from acc. Personal Account)
+
+
+/transfer_unlock
+(Bot moderator only.) Unlock a user's transfer lock if it gets stuck.
+
+DONE
+/treasurer
+Manage the treasurers for your company/government accounts.
