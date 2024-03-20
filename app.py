@@ -100,9 +100,7 @@ async def list_accounts(ctx):
     await log_interaction(ctx)
 
 
-# Assuming the rest of your bot setup and functions are defined above
 
-# Create a subcommand group for treasurer actions
 treasurer_group = bot.create_group("treasurer", "Manage treasurers for an account.")
 
 @treasurer_group.command(name="add", description="Add a treasurer to an account.")
@@ -148,10 +146,6 @@ async def list_treasurers(ctx, account_name: str):
     else:
         await ctx.respond(f"Account '{account_name}' does not exist.")
     await log_interaction(ctx)
-
-# The rest of your bot code follows
-
-
 
 
 bot.run(TOKEN)
