@@ -139,10 +139,8 @@ async def add_treasurer(ctx, account_name: str, treasurer_name: str):
     user_id = str(ctx.author.id)
     print(user_id)
     accounts = load_accounts(user_id)
-    print(f"Owner: {accounts[account_name].get("owner", "")} Author: {ctx.author.id}")
     if account_name in accounts:
-        print(f"Owner: {accounts[account_name].get("owner", "")} Author: {ctx.author.id}")
-        if ctx.author.id == accounts[account_name].get("owner", ""):
+        if user_id == accounts[account_name].get("owner", ""):
             if treasurer_name not in accounts[account_name]["treasurers"]:
                 accounts[account_name]["treasurers"].append(treasurer_name)
                 save_accounts(user_id, accounts)

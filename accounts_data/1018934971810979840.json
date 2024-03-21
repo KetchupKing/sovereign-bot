@@ -11,7 +11,8 @@
         "balance": 1000,
         "currency": "gold",
         "treasurers": [
-            "kalikingly"
+            "kalikingly",
+            "<@365931996129787914>"
         ],
         "owner": "1018934971810979840"
     }
