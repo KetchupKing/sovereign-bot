@@ -1,6 +1,0 @@
-Command 'account' used by kalikingly
-Command 'list_accounts' used by kalikingly
-Command 'list_accounts' used by kalikingly
-Command 'list_accounts' used by kalikingly
-Command 'treasurer_add' used by kalikingly
-Command 'treasurer_remove' used by kalikingly
