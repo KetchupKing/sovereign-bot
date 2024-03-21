@@ -159,7 +159,7 @@ async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
     user_id = str(ctx.author.id)
     accounts = load_accounts(user_id)
     if account_name in accounts:
-        if ctx.author.name == accounts[account_name].get("owner", ""):
+        if user_id == accounts[account_name].get("owner", ""):
             if treasurer_name in accounts[account_name]["treasurers"]:
                 accounts[account_name]["treasurers"].remove(treasurer_name)
                 save_accounts(user_id, accounts)
