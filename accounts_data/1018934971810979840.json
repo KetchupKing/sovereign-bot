@@ -1,0 +1,18 @@
+{
+    "personal": {
+        "balance": 1000,
+        "currency": "gold",
+        "treasurers": []
+    },
+    "T": {
+        "account_name": "T",
+        "command_name": "T",
+        "account_type": "company",
+        "balance": 1000,
+        "currency": "gold",
+        "treasurers": [
+            "kalikingly"
+        ],
+        "owner": "1018934971810979840"
+    }
+}
