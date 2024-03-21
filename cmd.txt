@@ -57,6 +57,6 @@ Transfer/pay from one of your accounts to another account. (Default from acc. Pe
 /transfer_unlock
 (Bot moderator only.) Unlock a user's transfer lock if it gets stuck.
 
-DONE
+
 /treasurer
 Manage the treasurers for your company/government accounts.

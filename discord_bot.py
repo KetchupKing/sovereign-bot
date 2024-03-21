@@ -1,23 +1,28 @@
 import discord
+#from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
 import json
 import aiofiles
 
+##################################################################
+
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
+
+##################################################################
 
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
-@bot.event
-async def on_ready():
-    print(f'Successfully logged in {bot.user}')
+##################################################################
 
 async def log_interaction(ctx):
     async with aiofiles.open('command_log.txt', mode='a') as f:
         await f.write(f"Command '{ctx.command.name}' used by {ctx.author.name}\n")
+
+##################################################################
 
 def load_accounts(user_id):
     file_name = f"{user_id}.json"
@@ -30,10 +35,14 @@ def load_accounts(user_id):
         print(f"Error: {file_name} is empty or not properly formatted.")
         return {}
 
+##################################################################
+
 def save_accounts(user_id, accounts):
     file_name = f"{user_id}.json"
     with open(file_name, 'w') as f:
         json.dump(accounts, f, indent=4)
+
+##################################################################
 
 def check_or_create_account(user_id):
     accounts = load_accounts(user_id)
@@ -50,12 +59,7 @@ def check_or_create_account(user_id):
     else:
         return f"Your account balance is {accounts['personal']['balance']} {accounts['personal']['currency']}."
 
-@bot.slash_command(name="account", description="Check or create a personal account.")
-async def account(ctx):
-    user_id = str(ctx.author.id)
-    response = check_or_create_account(user_id)
-    await ctx.respond(response)
-    await log_interaction(ctx)
+##################################################################
 
 def create_new_account(ctx, user_id, account_name, command_name, account_type):
     accounts = load_accounts(user_id)
@@ -72,11 +76,35 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
     save_accounts(user_id, accounts)
     return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', balance 1000 gold, has been created."
 
+##################################################################
+
+
+
+
+@bot.event
+async def on_ready():
+    print(f'Successfully logged in {bot.user}')
+
+
+@bot.slash_command(name="account", description="Check or create a personal account.")
+async def account(ctx):
+    user_id = str(ctx.author.id)
+    response = check_or_create_account(user_id)
+    await ctx.respond(response)
+    await log_interaction(ctx)
+
+
 @bot.slash_command(name="create_account", description="Create a new account with specified details.")
 async def create_account(ctx, account_name: str, command_name: str, account_type: str):
+    account_type_choices = ["company", "government"]
+    
+    if account_type not in account_type_choices:
+        await ctx.send("Invalid account type. Please choose from 'company' or 'government'.")
+        return
+    
     user_id = str(ctx.author.id)
     response = create_new_account(ctx, user_id, account_name, command_name, account_type)
-    await ctx.respond(response)
+    await ctx.send(response)
     await log_interaction(ctx)
 
 @bot.slash_command(name="list_accounts", description="List the name and balance of every account the user owns or is a treasurer of.")
@@ -84,7 +112,7 @@ async def list_accounts(ctx):
     user_id = str(ctx.author.id)
     accounts = load_accounts(user_id)
     response_list = []
-
+    
     if "personal" in accounts:
         response_list.append(f"Personal Account: {accounts['personal']['balance']} {accounts['personal']['currency']}")
 
@@ -100,10 +128,7 @@ async def list_accounts(ctx):
     await log_interaction(ctx)
 
 
-
-treasurer_group = bot.create_group("treasurer", "Manage treasurers for an account.")
-
-@treasurer_group.command(name="add", description="Add a treasurer to an account.")
+@bot.slash_command(name="add", description="Add a treasurer to an account.")
 async def add_treasurer(ctx, account_name: str, treasurer_name: str):
     user_id = str(ctx.author.id)
     accounts = load_accounts(user_id)
@@ -118,7 +143,8 @@ async def add_treasurer(ctx, account_name: str, treasurer_name: str):
         await ctx.respond(f"Account '{account_name}' does not exist.")
     await log_interaction(ctx)
 
-@treasurer_group.command(name="remove", description="Remove a treasurer from an account.")
+
+@bot.slash_command(name="remove", description="Remove a treasurer from an account.")
 async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
     user_id = str(ctx.author.id)
     accounts = load_accounts(user_id)
@@ -133,7 +159,8 @@ async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
         await ctx.respond(f"Account '{account_name}' does not exist.")
     await log_interaction(ctx)
 
-@treasurer_group.command(name="list", description="List all treasurers for an account.")
+
+@bot.slash_command(name="list", description="List all treasurers for an account.")
 async def list_treasurers(ctx, account_name: str):
     user_id = str(ctx.author.id)
     accounts = load_accounts(user_id)
