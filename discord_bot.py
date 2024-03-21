@@ -198,6 +198,30 @@ async def list_treasurers(ctx, command_name: str):
         await ctx.respond(f"Account with command name '{command_name}' does not exist.")
     await log_interaction(ctx)
 
-
+@bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
+async def pay(ctx, amount: int, account_to_pay: discord.User):
+    sender_id = str(ctx.author.id)
+    recipient_id = str(account_to_pay.id)
+    sender_accounts = load_accounts(sender_id)
+    
+    if "personal" not in sender_accounts:
+        await ctx.respond("You do not have a personal account.")
+        return
+    
+    if sender_accounts["personal"]["balance"] < amount:
+        await ctx.respond("Insufficient funds.")
+        return
+    
+    sender_accounts["personal"]["balance"] -= amount
+    save_accounts(sender_id, sender_accounts)
+    recipient_accounts = load_accounts(recipient_id)
+    
+    if "personal" not in recipient_accounts:
+        await ctx.respond("The recipient does not have a personal account.")
+        return
+    
+    recipient_accounts["personal"]["balance"] += amount
+    save_accounts(recipient_id, recipient_accounts)
+    await ctx.respond(f"Successfully paid {amount} gold to {account_to_pay.name}.")
 
 bot.run(TOKEN)
