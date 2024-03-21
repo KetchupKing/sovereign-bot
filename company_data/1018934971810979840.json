@@ -1,6 +1,6 @@
 {
     "T": {
-        "account_name": "Test",
+        "account_name": "test",
         "command_name": "T",
         "account_type": "company",
         "balance": 1000,
