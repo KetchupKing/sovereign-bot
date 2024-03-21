@@ -18,34 +18,42 @@ async def log_interaction(ctx):
     async with aiofiles.open('command_log.txt', mode='a') as f:
         await f.write(f"Command '{ctx.command.name}' used by {ctx.author.name}\n")
 
-def load_accounts(account_name, account_type=None):
-    if account_type == "company":
-        file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
-    else:
-        file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{account_name}.json")
+def load_accounts(user_id, account_type=None):
+    personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
+    company_file_name = os.path.join(COMPANY_DATA_DIR, f"{user_id}.json")
     
-    accounts = {}
+    personal_accounts = {}
+    company_accounts = {}
     
     try:
-        with open(file_name, 'r') as f:
-            accounts = json.load(f)
+        with open(personal_file_name, 'r') as f:
+            personal_accounts = json.load(f)
     except FileNotFoundError:
         pass
     except json.JSONDecodeError:
-        print(f"Error: {file_name} is empty or not properly formatted.")
+        print(f"Error: {personal_file_name} is empty or not properly formatted.")
     
-    return accounts
-
-
-def save_accounts(account_name, accounts, account_type=None):
+    try:
+        with open(company_file_name, 'r') as f:
+            company_accounts = json.load(f)
+    except FileNotFoundError:
+        pass
+    except json.JSONDecodeError:
+        print(f"Error: {company_file_name} is empty or not properly formatted.")
+    
     if account_type == "company":
-        file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
+        return company_accounts
     else:
-        file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{account_name}.json")
-    
+        return personal_accounts
+
+
+def save_accounts(user_id, accounts, account_type=None):
+    if account_type == "company":
+        file_name = os.path.join(COMPANY_DATA_DIR, f"{user_id}.json")
+    else:
+        file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
     with open(file_name, 'w') as f:
         json.dump(accounts, f, indent=4)
-
 
 def check_or_create_account(user_id):
     accounts = load_accounts(user_id)
@@ -62,31 +70,20 @@ def check_or_create_account(user_id):
     else:
         return f"Your account balance is {accounts['personal']['balance']} {accounts['personal']['currency']}."
 
-def create_new_account(ctx, account_name, command_name, account_type):
-    # Sanitize account_name to ensure it's a valid filename
-    # This is a simple example; you might need more sophisticated sanitization
-    sanitized_account_name = account_name.replace(' ', '_').replace('/', '_')
-    
-    # Check if an account with the same name already exists
-    existing_accounts = load_accounts(sanitized_account_name, account_type)
-    if existing_accounts:
-        return f"An account with the name '{account_name}' already exists."
-    
-    # Initialize the new account
-    accounts = {
-        command_name: {
-            "account_name": account_name,
-            "command_name": command_name,
-            "account_type": account_type,
-            "balance": 1000,
-            "currency": "gold",
-            "treasurers": []
-        }
+def create_new_account(ctx, user_id, account_name, command_name, account_type):
+    accounts = load_accounts(user_id, account_type)
+    account_id = command_name
+    treasurers = [ctx.author.name] if account_type == "company" else []
+    accounts[account_id] = {
+        "account_name": account_name,
+        "command_name": command_name,
+        "account_type": account_type,
+        "balance": 1000,
+        "currency": "gold",
+        "treasurers": treasurers,
+        "owner": user_id
     }
-    
-    # Save the new account
-    save_accounts(sanitized_account_name, accounts, account_type)
-    
+    save_accounts(user_id, accounts, account_type)
     return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', balance 1000 gold, has been created."
 
 
