@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import json
 import aiofiles
+import re
 
 
 ACCOUNTS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'accounts_data')
@@ -65,7 +66,8 @@ def check_or_create_account(user_id):
             "personal": {
                 "balance": 1000,
                 "currency": "gold",
-                "treasurers": []
+                "own accounts": [],
+                "treasurer of": []
             }
         }
         save_accounts(user_id, accounts)
@@ -87,6 +89,9 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
         "treasurers": treasurers,
         "owner": user_id
     }
+    personal_accounts = load_accounts(user_id)
+    personal_accounts["personal"]["own accounts"].append(account_name)
+    save_accounts(user_id, personal_accounts)
     save_accounts(user_id, accounts, account_type)
     return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', balance 1000 gold, has been created."
 
@@ -130,6 +135,10 @@ async def list_accounts(ctx):
     
     for account_id, account_info in company_accounts.items():
         response_list.append(f"{account_info['account_name']}: {account_info['balance']} {account_info['currency']}")
+
+    for account_id, account_info in company_accounts.items():
+        if user_id in account_info["treasurers"]:
+            response_list.append(f"Treasurer of {account_info['account_name']}: {account_info['balance']} {account_info['currency']}")
     
     if response_list:
         response = "\n".join(response_list)
@@ -146,12 +155,20 @@ async def add_treasurer(ctx, command_name: str, treasurer_name: str):
     
     if command_name in accounts:
         if user_id == accounts[command_name].get("owner", ""):
-            if treasurer_name not in accounts[command_name]["treasurers"]:
-                accounts[command_name]["treasurers"].append(treasurer_name)
-                save_accounts(user_id, accounts, account_type="company")
-                await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{accounts[command_name]['account_name']}'.")
+            match = re.search(r'<@!?(\d+)>', treasurer_name)
+            if match:
+                treasurer_id = match.group(1)
+                if treasurer_id not in accounts[command_name]["treasurers"]:
+                    accounts[command_name]["treasurers"].append(treasurer_id)
+                    treasurer_accounts = load_accounts(treasurer_id)
+                    treasurer_accounts["personal"]["treasurer of"].append(accounts[command_name]['account_name'])
+                    save_accounts(treasurer_id, treasurer_accounts)
+                    save_accounts(user_id, accounts, account_type="company")
+                    await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{accounts[command_name]['account_name']}'.")
+                else:
+                    await ctx.respond(f"Treasurer '{treasurer_name}' is already added to '{accounts[command_name]['account_name']}'.")
             else:
-                await ctx.respond(f"Treasurer '{treasurer_name}' is already added to '{accounts[command_name]['account_name']}'.")
+                await ctx.respond("Invalid treasurer mention.")
         else:
             await ctx.respond("You are not the owner of this account.")
     else:
@@ -177,7 +194,6 @@ async def remove_treasurer(ctx, command_name: str, treasurer_name: str):
     else:
         await ctx.respond(f"Account with command name '{command_name}' does not exist.")
     await log_interaction(ctx)
-
 
 
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")

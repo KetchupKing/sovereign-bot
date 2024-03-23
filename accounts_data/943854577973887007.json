@@ -2,9 +2,9 @@
     "personal": {
         "balance": 1000,
         "currency": "gold",
-        "own accounts": [
+        "own accounts": [],
+        "treasurer of": [
             "test"
-        ],
-        "treasurer of": []
+        ]
     }
 }
