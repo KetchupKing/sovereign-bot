@@ -79,7 +79,7 @@ def check_or_create_account(user_id):
 def create_new_account(ctx, user_id, account_name, command_name, account_type):
     accounts = load_accounts(user_id, account_type)
     account_id = command_name
-    treasurers = [ctx.author.name] if account_type == "company" else []
+    treasurers = [user_id] if account_type == "company" else []
     accounts[account_id] = {
         "account_name": account_name,
         "command_name": command_name,
@@ -134,11 +134,12 @@ async def list_accounts(ctx):
         response_list.append(f"Personal Account: {personal_accounts['personal']['balance']} {personal_accounts['personal']['currency']}")
     
     for account_id, account_info in company_accounts.items():
-        response_list.append(f"{account_info['account_name']}: {account_info['balance']} {account_info['currency']}")
-
-    for account_id, account_info in company_accounts.items():
-        if user_id in account_info["treasurers"]:
-            response_list.append(f"Treasurer of {account_info['account_name']}: {account_info['balance']} {account_info['currency']}")
+        response_list.append(f"Own Accounts: {account_info['account_name']}: {account_info['balance']} {account_info['currency']}")
+    
+    for account_name in personal_accounts["personal"]["treasurer of"]:
+        for account_id, account_info in company_accounts.items():
+            if account_name == account_info["account_name"]:
+                response_list.append(f"Treasurer of: {account_name}: {account_info['balance']} {account_info['currency']}")
     
     if response_list:
         response = "\n".join(response_list)
@@ -204,7 +205,9 @@ async def list_treasurers(ctx, command_name: str):
     if command_name in accounts:
         treasurers = accounts[command_name]["treasurers"]
         if treasurers:
-            await ctx.respond(f"Treasurers for '{accounts[command_name]['account_name']}': {', '.join(treasurers)}")
+            treasurer_names = [await bot.fetch_user(int(treasurer_id)) for treasurer_id in treasurers]
+            treasurer_names = [user.display_name for user in treasurer_names]
+            await ctx.respond(f"Treasurers for '{accounts[command_name]['account_name']}': {', '.join(treasurer_names)}")
         else:
             await ctx.respond(f"No treasurers found for '{accounts[command_name]['account_name']}'.")
     else:

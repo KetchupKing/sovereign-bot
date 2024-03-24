@@ -3,7 +3,7 @@
         "balance": 1000,
         "currency": "gold",
         "own accounts": [
-            "test"
+            "testaccount"
         ],
         "treasurer of": []
     }
