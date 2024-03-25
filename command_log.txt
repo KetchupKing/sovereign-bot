@@ -85,3 +85,8 @@ Command 'treasurer_add' used by kalikingly
 Command 'treasurer_list' used by kalikingly
 Command 'list_accounts' used by ketchup_king_
 Command 'treasurer_remove' used by kalikingly
+Command 'list_accounts' used by kalikingly
+Command 'list_accounts' used by kalikingly
+Command 'list_accounts' used by ketchup_king_
+Command 'treasurer_add' used by kalikingly
+Command 'list_accounts' used by ketchup_king_

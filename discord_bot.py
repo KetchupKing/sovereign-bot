@@ -7,7 +7,6 @@ import aiofiles
 import re
 import glob
 
-
 ACCOUNTS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'accounts_data')
 COMPANY_DATA_DIR = os.path.join(os.path.dirname(__file__), 'company_data')
 os.makedirs(ACCOUNTS_DATA_DIR, exist_ok=True)
@@ -59,6 +58,7 @@ def load_accounts(user_id=None, account_type=None, account_name=None):
         except json.JSONDecodeError:
             print(f"Error: {personal_file_name} is empty or not properly formatted.")
     return None
+
 
 
 def save_accounts(user_id, accounts, account_type=None, account_name=None):
@@ -134,7 +134,7 @@ async def create_account(ctx, account_name: str, command_name: str, account_type
     await log_interaction(ctx)
 
 
-@bot.slash_command(name="list_accounts", description="List the name and balance of every account the user owns or is a treasurer of.")
+@bot.slash_command(name="list_accounts", description="List the personal account, owned accounts, and accounts the user is a treasurer for.")
 async def list_accounts(ctx):
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
@@ -149,16 +149,24 @@ async def list_accounts(ctx):
                 if user_id in account_info["treasurers"] or user_id == account_info["owner"]:
                     company_accounts[account_info["account_name"]] = account_info
     
-    response_list = []
-    
-    if "personal" in personal_accounts:
-        response_list.append(f"Personal Account: {personal_accounts['personal']['balance']} {personal_accounts['personal']['currency']}")
+    owned_accounts = []
+    treasurer_accounts = []
     
     for account_name, account_info in company_accounts.items():
-        response_list.append(f"{account_name}: {account_info['balance']} {account_info['currency']}")
+        if user_id == account_info["owner"]:
+            owned_accounts.append(account_name)
+        elif user_id in account_info["treasurers"]:
+            treasurer_accounts.append(account_name)
     
-    if response_list:
-        response = "\n".join(response_list)
+    response = ""
+    if "personal" in personal_accounts:
+        response += f"Personal Account: {personal_accounts['personal']['balance']} {personal_accounts['personal']['currency']}\n"
+    if owned_accounts:
+        response += f"Owned Accounts: {', '.join(owned_accounts)}\n"
+    if treasurer_accounts:
+        response += f"Treasurer For: {', '.join(treasurer_accounts)}\n"
+    
+    if response:
         await ctx.respond(f"Your accounts:\n{response}")
     else:
         await ctx.respond("You do not own or manage any accounts.")
@@ -229,6 +237,8 @@ async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
     await log_interaction(ctx)
 
 
+
+
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")
 async def list_treasurers(ctx, account_name: str):
     user_id = str(ctx.author.id)
@@ -252,6 +262,7 @@ async def list_treasurers(ctx, account_name: str):
     else:
         await ctx.respond(f"No treasurers found for '{account_name}'.")
     await log_interaction(ctx)
+
 
 
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
