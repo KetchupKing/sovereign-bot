@@ -271,12 +271,15 @@ async def pay(ctx, amount: int, account_to_pay: discord.User = None, account_nam
     recipient_id = str(account_to_pay.id) if account_to_pay else None
 
     if from_account:
+        print(from_account)
         sender_accounts = load_accounts(account_type="company", account_name=from_account)
+        print(sender_accounts)
         if sender_accounts is None:
             await ctx.respond("The specified 'from account' does not exist.")
             return
     else:
         sender_accounts = load_accounts(sender_id)
+        print(sender_accounts)
         if sender_accounts is None:
             await ctx.respond("You do not have a personal account.")
             return
@@ -295,12 +298,15 @@ async def pay(ctx, amount: int, account_to_pay: discord.User = None, account_nam
     save_accounts(sender_id, sender_accounts)
 
     if account_name:
+        print(account_name)
         recipient_accounts = load_accounts(account_type="company", account_name=account_name)
+        print(recipient_accounts)
         if recipient_accounts is None:
             await ctx.respond("The specified 'account name' does not exist.")
             return
     else:
         recipient_accounts = load_accounts(recipient_id)
+        print(recipient_accounts)
         if recipient_accounts is None:
             await ctx.respond("The recipient does not have a personal account.")
             return
