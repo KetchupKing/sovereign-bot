@@ -1,13 +1,12 @@
 {
     "T": {
-        "account_name": "testaccount",
+        "account_name": "test",
         "command_name": "T",
         "account_type": "company",
         "balance": 1000,
         "currency": "gold",
         "treasurers": [
-            "1018934971810979840",
-            "943854577973887007"
+            "1018934971810979840"
         ],
         "owner": "1018934971810979840"
     }

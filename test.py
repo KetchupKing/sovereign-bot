@@ -5,7 +5,7 @@ import os
 import json
 import aiofiles
 import re
-
+import glob
 
 ACCOUNTS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'accounts_data')
 COMPANY_DATA_DIR = os.path.join(os.path.dirname(__file__), 'company_data')
@@ -22,37 +22,48 @@ async def log_interaction(ctx):
         await f.write(f"Command '{ctx.command.name}' used by {ctx.author.name}\n")
 
 
-def load_accounts(user_id, account_type=None):
-    personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
-    company_file_name = os.path.join(COMPANY_DATA_DIR, f"{user_id}.json")
-    personal_accounts = {}
-    company_accounts = {}
-    
-    try:
-        with open(personal_file_name, 'r') as f:
-            personal_accounts = json.load(f)
-    except FileNotFoundError:
-        pass
-    except json.JSONDecodeError:
-        print(f"Error: {personal_file_name} is empty or not properly formatted.")
-    
-    try:
-        with open(company_file_name, 'r') as f:
-            company_accounts = json.load(f)
-    except FileNotFoundError:
-        pass
-    except json.JSONDecodeError:
-        print(f"Error: {company_file_name} is empty or not properly formatted.")
-    
+def save_company_account_changes(account_name, accounts):
+    file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
+    files = glob.glob(file_name)
+    for file in files:
+        with open(file, 'r') as f:
+            existing_accounts = json.load(f)
+            for account_id, account_info in existing_accounts.items():
+                if account_info['account_name'] == account_name:
+                    existing_accounts[account_id] = accounts
+                    with open(file, 'w') as f_write:
+                        json.dump(existing_accounts, f_write, indent=4)
+                    return True
+    return False
+
+
+def load_accounts(user_id=None, account_type=None, account_name=None):
     if account_type == "company":
-        return company_accounts
+        file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
+        files = glob.glob(file_name)
+        for file in files:
+            with open(file, 'r') as f:
+                accounts = json.load(f)
+                for account_id, account_info in accounts.items():
+                    if account_name and account_info['account_name'] == account_name:
+                        return account_info
     else:
-        return personal_accounts
+        personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
+        try:
+            with open(personal_file_name, 'r') as f:
+                personal_accounts = json.load(f)
+                return personal_accounts
+        except FileNotFoundError:
+            pass
+        except json.JSONDecodeError:
+            print(f"Error: {personal_file_name} is empty or not properly formatted.")
+    return None
 
 
-def save_accounts(user_id, accounts, account_type=None):
+
+def save_accounts(user_id, accounts, account_type=None, account_name=None):
     if account_type == "company":
-        file_name = os.path.join(COMPANY_DATA_DIR, f"{user_id}.json")
+        file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
     else:
         file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
     with open(file_name, 'w') as f:
@@ -92,7 +103,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
     personal_accounts = load_accounts(user_id)
     personal_accounts["personal"]["own accounts"].append(account_name)
     save_accounts(user_id, personal_accounts)
-    save_accounts(user_id, accounts, account_type)
+    save_accounts(user_id, accounts, account_type, account_name)
     return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', balance 1000 gold, has been created."
 
 
@@ -127,19 +138,24 @@ async def create_account(ctx, account_name: str, command_name: str, account_type
 async def list_accounts(ctx):
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
-    company_accounts = load_accounts(user_id, account_type="company")
+    company_accounts = {}
+    
+    file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
+    files = glob.glob(file_name)
+    for file in files:
+        with open(file, 'r') as f:
+            accounts = json.load(f)
+            for account_id, account_info in accounts.items():
+                if user_id in account_info["treasurers"] or user_id == account_info["owner"]:
+                    company_accounts[account_info["account_name"]] = account_info
+    
     response_list = []
     
     if "personal" in personal_accounts:
         response_list.append(f"Personal Account: {personal_accounts['personal']['balance']} {personal_accounts['personal']['currency']}")
     
-    for account_id, account_info in company_accounts.items():
-        response_list.append(f"Own Accounts: {account_info['account_name']}: {account_info['balance']} {account_info['currency']}")
-    
-    for account_name in personal_accounts["personal"]["treasurer of"]:
-        for account_id, account_info in company_accounts.items():
-            if account_name == account_info["account_name"]:
-                response_list.append(f"Treasurer of: {account_name}: {account_info['balance']} {account_info['currency']}")
+    for account_name, account_info in company_accounts.items():
+        response_list.append(f"{account_name}: {account_info['balance']} {account_info['currency']}")
     
     if response_list:
         response = "\n".join(response_list)
@@ -150,69 +166,95 @@ async def list_accounts(ctx):
 
 
 @bot.slash_command(name="treasurer_add", description="Add a treasurer to an account.")
-async def add_treasurer(ctx, command_name: str, treasurer_name: str):
+async def add_treasurer(ctx, account_name: str, treasurer_name: str):
     user_id = str(ctx.author.id)
-    accounts = load_accounts(user_id, account_type="company")
+    account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
-    if command_name in accounts:
-        if user_id == accounts[command_name].get("owner", ""):
-            match = re.search(r'<@!?(\d+)>', treasurer_name)
-            if match:
-                treasurer_id = match.group(1)
-                if treasurer_id not in accounts[command_name]["treasurers"]:
-                    accounts[command_name]["treasurers"].append(treasurer_id)
-                    treasurer_accounts = load_accounts(treasurer_id)
-                    treasurer_accounts["personal"]["treasurer of"].append(accounts[command_name]['account_name'])
-                    save_accounts(treasurer_id, treasurer_accounts)
-                    save_accounts(user_id, accounts, account_type="company")
-                    await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{accounts[command_name]['account_name']}'.")
-                else:
-                    await ctx.respond(f"Treasurer '{treasurer_name}' is already added to '{accounts[command_name]['account_name']}'.")
+    if account_to_modify is None:
+        await ctx.respond(f"Account with name '{account_name}' does not exist.")
+        return
+    
+    if user_id != account_to_modify.get("owner", ""):
+        await ctx.respond("You are not the owner of this account.")
+        return
+    
+    match = re.search(r'<@!?(\d+)>', treasurer_name)
+    if match:
+        treasurer_id = match.group(1)
+        if treasurer_id not in account_to_modify["treasurers"]:
+            account_to_modify["treasurers"].append(treasurer_id)
+            if save_company_account_changes(account_name, account_to_modify):
+                treasurer_accounts = load_accounts(treasurer_id)
+                treasurer_accounts["personal"]["treasurer of"].append(account_name)
+                save_accounts(treasurer_id, treasurer_accounts)
+                await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{account_name}'.")
             else:
-                await ctx.respond("Invalid treasurer mention.")
+                await ctx.respond("Failed to save changes.")
         else:
-            await ctx.respond("You are not the owner of this account.")
+            await ctx.respond(f"Treasurer '{treasurer_name}' is already added to '{account_name}'.")
     else:
-        await ctx.respond(f"Account with command name '{command_name}' does not exist.")
+        await ctx.respond("Invalid treasurer mention.")
     await log_interaction(ctx)
 
 
 @bot.slash_command(name="treasurer_remove", description="Remove a treasurer from an account.")
-async def remove_treasurer(ctx, command_name: str, treasurer_name: str):
+async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
     user_id = str(ctx.author.id)
-    accounts = load_accounts(user_id, account_type="company")
+    account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
-    if command_name in accounts:
-        if user_id == accounts[command_name].get("owner", ""):
-            if treasurer_name in accounts[command_name]["treasurers"]:
-                accounts[command_name]["treasurers"].remove(treasurer_name)
-                save_accounts(user_id, accounts, account_type="company")
-                await ctx.respond(f"Treasurer '{treasurer_name}' has been removed from '{accounts[command_name]['account_name']}'.")
+    if account_to_modify is None:
+        await ctx.respond(f"Account with name '{account_name}' does not exist.")
+        return
+    
+    if user_id != account_to_modify.get("owner", ""):
+        await ctx.respond("You are not the owner of this account.")
+        return
+    
+    match = re.search(r'<@!?(\d+)>', treasurer_name)
+    if match:
+        treasurer_id = match.group(1)
+        if treasurer_id in account_to_modify["treasurers"]:
+            account_to_modify["treasurers"].remove(treasurer_id)
+            if save_company_account_changes(account_name, account_to_modify):
+                treasurer_accounts = load_accounts(treasurer_id)
+                treasurer_accounts["personal"]["treasurer of"].remove(account_name)
+                save_accounts(treasurer_id, treasurer_accounts)
+                await ctx.respond(f"Treasurer '{treasurer_name}' has been removed from '{account_name}'.")
             else:
-                await ctx.respond(f"Treasurer '{treasurer_name}' is not added to '{accounts[command_name]['account_name']}'.")
+                await ctx.respond("Failed to save changes.")
         else:
-            await ctx.respond("You are not the owner of this account.")
+            await ctx.respond(f"Treasurer '{treasurer_name}' is not added to '{account_name}'.")
     else:
-        await ctx.respond(f"Account with command name '{command_name}' does not exist.")
+        await ctx.respond("Invalid treasurer mention.")
     await log_interaction(ctx)
+
+
 
 
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")
-async def list_treasurers(ctx, command_name: str):
+async def list_treasurers(ctx, account_name: str):
     user_id = str(ctx.author.id)
-    accounts = load_accounts(user_id, account_type="company")
+    account_to_list = load_accounts(account_type="company", account_name=account_name)
     
-    if command_name in accounts:
-        treasurers = accounts[command_name]["treasurers"]
-        if treasurers:
-            treasurer_names = [await bot.fetch_user(int(treasurer_id)) for treasurer_id in treasurers]
-            treasurer_names = [user.display_name for user in treasurer_names]
-            await ctx.respond(f"Treasurers for '{accounts[command_name]['account_name']}': {', '.join(treasurer_names)}")
-        else:
-            await ctx.respond(f"No treasurers found for '{accounts[command_name]['account_name']}'.")
+    if account_to_list is None:
+        await ctx.respond(f"Account with name '{account_name}' does not exist.")
+        return
+    
+    if user_id != account_to_list.get("owner", ""):
+        await ctx.respond("You are not the owner of this account.")
+        return
+    
+    treasurers = account_to_list["treasurers"]
+    if treasurers:
+        treasurer_names = []
+        for treasurer_id in treasurers:
+            user = await bot.fetch_user(int(treasurer_id))
+            treasurer_names.append(user.display_name)
+        await ctx.respond(f"Treasurers for '{account_name}': {', '.join(treasurer_names)}")
     else:
-        await ctx.respond(f"Account with command name '{command_name}' does not exist.")
+        await ctx.respond(f"No treasurers found for '{account_name}'.")
     await log_interaction(ctx)
+
 
 
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
