@@ -266,30 +266,55 @@ async def list_treasurers(ctx, account_name: str):
 
 
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
-async def pay(ctx, amount: int, account_to_pay: discord.User):
+async def pay(ctx, amount: int, account_to_pay: discord.User = None, account_name: str = None, from_account: str = None, memo: str = None):
     sender_id = str(ctx.author.id)
-    recipient_id = str(account_to_pay.id)
-    sender_accounts = load_accounts(sender_id)
-    
-    if "personal" not in sender_accounts:
-        await ctx.respond("You do not have a personal account.")
-        return
-    
-    if sender_accounts["personal"]["balance"] < amount:
+    recipient_id = str(account_to_pay.id) if account_to_pay else None
+
+    if from_account:
+        sender_accounts = load_accounts(account_type="company", account_name=from_account)
+        if sender_accounts is None:
+            await ctx.respond("The specified 'from account' does not exist.")
+            return
+    else:
+        sender_accounts = load_accounts(sender_id)
+        if sender_accounts is None:
+            await ctx.respond("You do not have a personal account.")
+            return
+
+    if "personal" in sender_accounts and sender_accounts["personal"]["balance"] < amount:
         await ctx.respond("Insufficient funds.")
         return
-    
-    sender_accounts["personal"]["balance"] -= amount
-    save_accounts(sender_id, sender_accounts)
-    recipient_accounts = load_accounts(recipient_id)
-    
-    if "personal" not in recipient_accounts:
-        await ctx.respond("The recipient does not have a personal account.")
+    elif "company" in sender_accounts and sender_accounts["company"]["balance"] < amount:
+        await ctx.respond("Insufficient funds in the company account.")
         return
-    
-    recipient_accounts["personal"]["balance"] += amount
+
+    if "personal" in sender_accounts:
+        sender_accounts["personal"]["balance"] -= amount
+    elif "company" in sender_accounts:
+        sender_accounts["company"]["balance"] -= amount
+    save_accounts(sender_id, sender_accounts)
+
+    if account_name:
+        recipient_accounts = load_accounts(account_type="company", account_name=account_name)
+        if recipient_accounts is None:
+            await ctx.respond("The specified 'account name' does not exist.")
+            return
+    else:
+        recipient_accounts = load_accounts(recipient_id)
+        if recipient_accounts is None:
+            await ctx.respond("The recipient does not have a personal account.")
+            return
+
+    if "personal" in recipient_accounts:
+        recipient_accounts["personal"]["balance"] += amount
+    elif "company" in recipient_accounts:
+        recipient_accounts["company"]["balance"] += amount
     save_accounts(recipient_id, recipient_accounts)
-    await ctx.respond(f"Successfully paid {amount} gold to {account_to_pay.name}.")
 
-
+    response_message = f"Successfully paid {amount} gold to {account_to_pay.name if account_to_pay else account_name}."
+    if memo:
+        response_message += f" Memo: {memo}"
+    await ctx.respond(response_message)
+    
+    
 bot.run(TOKEN)
