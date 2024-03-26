@@ -90,3 +90,4 @@ Command 'list_accounts' used by kalikingly
 Command 'list_accounts' used by ketchup_king_
 Command 'treasurer_add' used by kalikingly
 Command 'list_accounts' used by ketchup_king_
+Command 'list_accounts' used by kalikingly

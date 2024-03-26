@@ -266,7 +266,14 @@ async def list_treasurers(ctx, account_name: str):
 
 
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
-async def pay(ctx, amount: int, account_to_pay: discord.User = None, account_name: str = None, from_account: str = None, memo: str = None):
+async def pay(
+    ctx,
+    amount: int = discord.Option(description="The amount to transfer"),
+    account_to_pay: discord.User = discord.Option(description="The user to pay", required=False),
+    account_name: str = discord.Option(description="The name of the account to pay", required=False),
+    from_account: str = discord.Option(description="The account from which to transfer", required=False),
+    memo: str = discord.Option(description="A memo for the transaction", required=False)
+):
     sender_id = str(ctx.author.id)
     recipient_id = str(account_to_pay.id) if account_to_pay else None
 
