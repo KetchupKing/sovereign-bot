@@ -1,12 +1,15 @@
 {
     "personal": {
-        "balance": 1000,
+        "balance": 470,
         "currency": "gold",
         "own accounts": [
-            "manfreds cool company"
+            "M",
+            "M",
+            "M",
+            "M",
+            "F",
+            "The Evil Tax Government"
         ],
-        "treasurer of": [
-            "test"
-        ]
+        "treasurer of": []
     }
 }

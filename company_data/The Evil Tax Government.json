@@ -1,9 +1,9 @@
 {
-    "mcc": {
-        "account_name": "manfreds cool company",
-        "command_name": "mcc",
+    "TEX": {
+        "account_name": "The Evil Tax Government",
+        "command_name": "TEX",
         "account_type": "company",
-        "balance": 1000,
+        "balance": 1050,
         "currency": "gold",
         "treasurers": [
             "365931996129787914"

@@ -1,9 +1,9 @@
 {
-    "M": {
-        "account_name": "M",
-        "command_name": "M",
+    "F": {
+        "account_name": "F",
+        "command_name": "F",
         "account_type": "company",
-        "balance": 960,
+        "balance": 970,
         "currency": "gold",
         "treasurers": [
             "365931996129787914"
