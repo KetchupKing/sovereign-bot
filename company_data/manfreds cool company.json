@@ -1,0 +1,13 @@
+{
+    "mcc": {
+        "account_name": "manfreds cool company",
+        "command_name": "mcc",
+        "account_type": "company",
+        "balance": 1000,
+        "currency": "gold",
+        "treasurers": [
+            "365931996129787914"
+        ],
+        "owner": "365931996129787914"
+    }
+}

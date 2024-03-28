@@ -292,4 +292,4 @@ async def pay(ctx, amount: int, account_to_pay: discord.User):
     await ctx.respond(f"Successfully paid {amount} gold to {account_to_pay.name}.")
 
 
-bot.run(TOKEN)
+#bot.run(TOKEN)

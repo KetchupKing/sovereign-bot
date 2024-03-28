@@ -86,9 +86,11 @@ def check_or_create_account(user_id):
     else:
         return f"Your account balance is {accounts['personal']['balance']} {accounts['personal']['currency']}."
 
-
 def create_new_account(ctx, user_id, account_name, command_name, account_type):
-    accounts = load_accounts(user_id, account_type)
+    
+
+    accounts = load_accounts(user_id, account_type) if load_accounts(user_id, account_type) else {}
+
     account_id = command_name
     treasurers = [user_id] if account_type == "company" else []
     accounts[account_id] = {
@@ -101,6 +103,8 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
         "owner": user_id
     }
     personal_accounts = load_accounts(user_id)
+    if personal_accounts == None:
+        return f"You need a personal account before you can create a company account"
     personal_accounts["personal"]["own accounts"].append(account_name)
     save_accounts(user_id, personal_accounts)
     save_accounts(user_id, accounts, account_type, account_name)
@@ -274,6 +278,9 @@ async def pay(
     from_account: str = discord.Option(description="The account from which to transfer", required=False),
     memo: str = discord.Option(description="A memo for the transaction", required=False)
 ):
+    
+    print(account_to_pay)
+
     sender_id = str(ctx.author.id)
     recipient_id = str(account_to_pay.id) if account_to_pay else None
 

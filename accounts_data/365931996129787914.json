@@ -1,13 +1,12 @@
 {
     "personal": {
-        "balance": 850,
+        "balance": 1000,
         "currency": "gold",
         "own accounts": [
-            "test",
-            "testing"
+            "manfreds cool company"
         ],
         "treasurer of": [
-            "m"
+            "test"
         ]
     }
 }

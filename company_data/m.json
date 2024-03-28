@@ -1,0 +1,14 @@
+{
+    "m": {
+        "account_name": "m",
+        "command_name": "m",
+        "account_type": "company",
+        "balance": 1000,
+        "currency": "gold",
+        "treasurers": [
+            "365931996129787914",
+            "1018934971810979840"
+        ],
+        "owner": "365931996129787914"
+    }
+}
