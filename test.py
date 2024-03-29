@@ -286,8 +286,6 @@ async def pay(
     sender_id = str(ctx.author.id)
     recipient_id = str(account_to_pay.id) if account_to_pay else None
 
-    taxPercentage = int(tax_percentage)
-
 
     if from_account:
         #print(from_account)
@@ -304,7 +302,6 @@ async def pay(
             return
         
     transactionType = None    
-
 
     if "personal" in sender_accounts:
         print("paying from personal account")
@@ -341,6 +338,7 @@ async def pay(
             return
 
     if tax_percentage and tax_account:
+        taxPercentage = int(tax_percentage)
         taxAccount = load_accounts(account_type="company", account_name=tax_account)
         
         taxAmount = round(amountNumber*(taxPercentage/100))
@@ -351,7 +349,6 @@ async def pay(
         print(tax_account)
         save_company_account_changes(tax_account,taxAccount)
 
-    print(taxAccount)
 
     if "personal" in recipient_accounts:
         if tax_percentage and tax_account:
