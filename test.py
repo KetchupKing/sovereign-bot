@@ -372,6 +372,7 @@ async def pay(
     if tax_percentage and tax_account:
         response_message += f" With {tax_percentage}% tax to '{taxAccount["account_name"]}'"
     await ctx.respond(response_message)
+    await log_interaction(ctx)
     
     
 bot.run(TOKEN)
