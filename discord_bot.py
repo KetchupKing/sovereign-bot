@@ -29,7 +29,7 @@ def save_company_account_changes(account_name, accounts):
         with open(file, 'r') as f:
             existing_accounts = json.load(f)
             for account_id, account_info in existing_accounts.items():
-                if account_info['account_name'] == account_name:
+                if (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
                     existing_accounts[account_id] = accounts
                     with open(file, 'w') as f_write:
                         json.dump(existing_accounts, f_write, indent=4)
@@ -45,7 +45,7 @@ def load_accounts(user_id=None, account_type=None, account_name=None):
             with open(file, 'r') as f:
                 accounts = json.load(f)
                 for account_id, account_info in accounts.items():
-                    if account_name and account_info['account_name'] == account_name:
+                    if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
                         return account_info
     else:
         personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
@@ -86,9 +86,11 @@ def check_or_create_account(user_id):
     else:
         return f"Your account balance is {accounts['personal']['balance']} {accounts['personal']['currency']}."
 
-
 def create_new_account(ctx, user_id, account_name, command_name, account_type):
-    accounts = load_accounts(user_id, account_type)
+    
+
+    accounts = load_accounts(user_id, account_type) if load_accounts(user_id, account_type) else {}
+
     account_id = command_name
     treasurers = [user_id] if account_type == "company" else []
     accounts[account_id] = {
@@ -101,6 +103,8 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
         "owner": user_id
     }
     personal_accounts = load_accounts(user_id)
+    if personal_accounts == None:
+        return f"You need a personal account before you can create a company account"
     personal_accounts["personal"]["own accounts"].append(account_name)
     save_accounts(user_id, personal_accounts)
     save_accounts(user_id, accounts, account_type, account_name)
@@ -266,30 +270,109 @@ async def list_treasurers(ctx, account_name: str):
 
 
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
-async def pay(ctx, amount: int, account_to_pay: discord.User):
+async def pay(
+    ctx,
+    amount: int = discord.Option(description="The amount to transfer"),
+    account_to_pay: discord.User = discord.Option(discord.User, description="The user to pay", required=False),
+    account_name: str = discord.Option(description="The name of the account to pay", required=False),
+    from_account: str = discord.Option(description="The account from which to transfer", required=False),
+    tax_account: str = discord.Option(description="The account to add tax to", required=False),
+    tax_percentage: int = discord.Option(description="Percentage of tax to subtract", required=False),
+    memo: str = discord.Option(description="A memo for the transaction", required=False)
+):
+    
+    amountNumber = int(amount)
+
     sender_id = str(ctx.author.id)
-    recipient_id = str(account_to_pay.id)
-    sender_accounts = load_accounts(sender_id)
-    
-    if "personal" not in sender_accounts:
-        await ctx.respond("You do not have a personal account.")
-        return
-    
-    if sender_accounts["personal"]["balance"] < amount:
-        await ctx.respond("Insufficient funds.")
-        return
-    
-    sender_accounts["personal"]["balance"] -= amount
-    save_accounts(sender_id, sender_accounts)
-    recipient_accounts = load_accounts(recipient_id)
-    
-    if "personal" not in recipient_accounts:
-        await ctx.respond("The recipient does not have a personal account.")
-        return
-    
-    recipient_accounts["personal"]["balance"] += amount
-    save_accounts(recipient_id, recipient_accounts)
-    await ctx.respond(f"Successfully paid {amount} gold to {account_to_pay.name}.")
+    recipient_id = str(account_to_pay.id) if account_to_pay else None
 
 
+    if from_account:
+        #print(from_account)
+        sender_accounts = load_accounts(account_type="company", account_name=from_account)
+        print(sender_accounts)
+        if sender_accounts is None:
+            await ctx.respond("The specified 'from account' does not exist.")
+            return
+    else:
+        sender_accounts = load_accounts(sender_id)
+        #print(sender_accounts)
+        if sender_accounts is None:
+            await ctx.respond("You do not have a personal account.")
+            return
+        
+    transactionType = None    
+
+    if "personal" in sender_accounts:
+        print("paying from personal account")
+        if sender_accounts["personal"]["balance"] < amountNumber:
+            await ctx.respond("Insufficient funds.")
+            return
+        else:
+            sender_accounts["personal"]["balance"] -= amountNumber
+            save_accounts(sender_id, sender_accounts)   
+
+            transactionType = "personal"
+    elif sender_accounts["account_type"] == "company":
+        print("paying from company account")
+        if sender_accounts["balance"] < amountNumber:
+            await ctx.respond("Insufficient funds in the company account.")
+            return
+        else:
+            sender_accounts["balance"] -= amountNumber
+            save_company_account_changes(from_account,sender_accounts)
+            transactionType = "company"
+
+    if account_name:
+        #print(account_name)
+        recipient_accounts = load_accounts(account_type="company", account_name=account_name)
+        #print(recipient_accounts)
+        if recipient_accounts is None:
+            await ctx.respond("The specified 'account name' does not exist.")
+            return
+    else:
+        recipient_accounts = load_accounts(recipient_id)
+        #print(recipient_accounts)
+        if recipient_accounts is None:
+            await ctx.respond("The recipient does not have a personal account.")
+            return
+
+    if tax_percentage and tax_account:
+        taxPercentage = int(tax_percentage)
+        taxAccount = load_accounts(account_type="company", account_name=tax_account)
+        
+        taxAmount = round(amountNumber*(taxPercentage/100))
+        newAmount = round(amountNumber-taxAmount)
+        print(f"sending to recipient: {newAmount}, sending to tax target: {taxAmount}")
+
+        taxAccount["balance"] += taxAmount
+        print(tax_account)
+        save_company_account_changes(tax_account,taxAccount)
+
+
+    if "personal" in recipient_accounts:
+        if tax_percentage and tax_account:
+            recipient_accounts["personal"]["balance"] += newAmount
+            save_accounts(recipient_id, recipient_accounts)
+        else:
+            recipient_accounts["personal"]["balance"] += amountNumber
+            save_accounts(recipient_id, recipient_accounts)
+
+    elif recipient_accounts["account_type"] == "company":
+        if tax_percentage and tax_account:
+            recipient_accounts["balance"] += newAmount
+            save_company_account_changes(account_name,recipient_accounts)
+        else:
+            recipient_accounts["balance"] += amountNumber
+            save_company_account_changes(account_name,recipient_accounts)
+    
+    response_message = f"Successfully paid {amountNumber} {sender_accounts["currency"] if transactionType == "company" else sender_accounts["personal"]["currency"]} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts["account_name"] if transactionType == "company" else "personal account"}."
+    if memo:
+        response_message += f" Memo: {memo}."
+    if tax_percentage and tax_account:
+        response_message += f" With {tax_percentage}% tax to '{taxAccount["account_name"]}'"
+    await ctx.respond(response_message)
+    await log_interaction(ctx)
+    
+    
 #bot.run(TOKEN)
