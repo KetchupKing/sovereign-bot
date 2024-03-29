@@ -37,7 +37,7 @@ def save_company_account_changes(account_name, accounts):
     return False
 
 
-def load_accounts(user_id=None, account_type=None, account_name=None):
+def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
     if account_type == "company":
         file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
         files = glob.glob(file_name)
@@ -58,7 +58,6 @@ def load_accounts(user_id=None, account_type=None, account_name=None):
         except json.JSONDecodeError:
             print(f"Error: {personal_file_name} is empty or not properly formatted.")
     return None
-
 
 
 def save_accounts(user_id, accounts, account_type=None, account_name=None):
@@ -86,11 +85,13 @@ def check_or_create_account(user_id):
     else:
         return f"Your account balance is {accounts['personal']['balance']} {accounts['personal']['currency']}."
 
+
 def create_new_account(ctx, user_id, account_name, command_name, account_type):
+    existing_accounts = load_accounts(user_id, account_type, account_name)
+    if existing_accounts:
+        return f"Error: The account name '{account_name}' or command name '{command_name}' is already in use."
     
-
     accounts = load_accounts(user_id, account_type) if load_accounts(user_id, account_type) else {}
-
     account_id = command_name
     treasurers = [user_id] if account_type == "company" else []
     accounts[account_id] = {
@@ -241,8 +242,6 @@ async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
     await log_interaction(ctx)
 
 
-
-
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")
 async def list_treasurers(ctx, account_name: str):
     user_id = str(ctx.author.id)
@@ -268,7 +267,6 @@ async def list_treasurers(ctx, account_name: str):
     await log_interaction(ctx)
 
 
-
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
 async def pay(
     ctx,
@@ -286,9 +284,7 @@ async def pay(
     sender_id = str(ctx.author.id)
     recipient_id = str(account_to_pay.id) if account_to_pay else None
 
-
     if from_account:
-        #print(from_account)
         sender_accounts = load_accounts(account_type="company", account_name=from_account)
         print(sender_accounts)
         if sender_accounts is None:
@@ -296,7 +292,6 @@ async def pay(
             return
     else:
         sender_accounts = load_accounts(sender_id)
-        #print(sender_accounts)
         if sender_accounts is None:
             await ctx.respond("You do not have a personal account.")
             return
@@ -310,9 +305,9 @@ async def pay(
             return
         else:
             sender_accounts["personal"]["balance"] -= amountNumber
-            save_accounts(sender_id, sender_accounts)   
-
+            save_accounts(sender_id, sender_accounts)
             transactionType = "personal"
+
     elif sender_accounts["account_type"] == "company":
         print("paying from company account")
         if sender_accounts["balance"] < amountNumber:
@@ -324,15 +319,12 @@ async def pay(
             transactionType = "company"
 
     if account_name:
-        #print(account_name)
         recipient_accounts = load_accounts(account_type="company", account_name=account_name)
-        #print(recipient_accounts)
         if recipient_accounts is None:
             await ctx.respond("The specified 'account name' does not exist.")
             return
     else:
         recipient_accounts = load_accounts(recipient_id)
-        #print(recipient_accounts)
         if recipient_accounts is None:
             await ctx.respond("The recipient does not have a personal account.")
             return
