@@ -117,6 +117,12 @@ async def on_ready():
     print(f'Successfully logged in {bot.user}')
 
 
+@bot.slash_command(name="ping", description="Replies with Pong!")
+async def _ping(ctx):
+    await ctx.respond("Pong!")
+    await log_interaction(ctx)
+
+
 @bot.slash_command(name="account", description="Check or create a personal account.")
 async def account(ctx):
     user_id = str(ctx.author.id)
