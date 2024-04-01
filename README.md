@@ -1,7 +1,9 @@
 # Sovereign-bot
+
  Sovereign Bot is a Discord bot developed by [KetchupKing](https://github.com/KetchupKing) and [PentiumY](https://github.com/PentiumY)
+
  
-Setting up the bot.
+# Setting up the bot.
 
 pip uninstall discord.py discord-py-interactions discord-py-slash-command discord-typings py-cord
 
