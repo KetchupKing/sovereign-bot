@@ -6,6 +6,10 @@ import json
 import aiofiles
 import re
 import glob
+import logging
+
+logging.getLogger('discord').setLevel(logging.WARNING)
+logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 ACCOUNTS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'accounts_data')
 COMPANY_DATA_DIR = os.path.join(os.path.dirname(__file__), 'company_data')
@@ -17,9 +21,22 @@ load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
 
-async def log_interaction(ctx):
-    async with aiofiles.open('command_log.txt', mode='a') as f:
-        await f.write(f"Command '{ctx.command.name}' used by {ctx.author.name}\n")
+def log_event(user_id, command_name, options):
+    log_entry = {
+        "user_id": user_id,
+        "command_name": command_name,
+        "options": options
+    }
+    with open('discord_bot.log', 'a') as log_file:
+        log_file.write(json.dumps(log_entry) + '\n')
+
+
+def display_logs():
+    with open('discord_bot.log', 'r') as log_file:
+        for line in log_file:
+            log_entry = json.loads(line)
+            template_string = "User ID: {user_id}, Command: {command_name}, Options: {options}"
+            print(template_string.format(**log_entry))
 
 
 def save_company_account_changes(account_name, accounts):
@@ -37,7 +54,7 @@ def save_company_account_changes(account_name, accounts):
     return False
 
 
-def load_accounts(user_id=None, account_type=None, account_name=None):
+def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
     if account_type == "company":
         file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
         files = glob.glob(file_name)
@@ -58,7 +75,6 @@ def load_accounts(user_id=None, account_type=None, account_name=None):
         except json.JSONDecodeError:
             print(f"Error: {personal_file_name} is empty or not properly formatted.")
     return None
-
 
 
 def save_accounts(user_id, accounts, account_type=None, account_name=None):
@@ -86,11 +102,13 @@ def check_or_create_account(user_id):
     else:
         return f"Your account balance is {accounts['personal']['balance']} {accounts['personal']['currency']}."
 
+
 def create_new_account(ctx, user_id, account_name, command_name, account_type):
+    existing_accounts = load_accounts(user_id, account_type, account_name)
+    if existing_accounts:
+        return f"Error: The account name '{account_name}' is already in use."
     
-
     accounts = load_accounts(user_id, account_type) if load_accounts(user_id, account_type) else {}
-
     account_id = command_name
     treasurers = [user_id] if account_type == "company" else []
     accounts[account_id] = {
@@ -116,16 +134,23 @@ async def on_ready():
     print(f'Successfully logged in {bot.user}')
 
 
+@bot.slash_command(name="ping", description="Replies with Pong!")
+async def ping(ctx):
+    log_event(ctx.author.id, "ping", {})
+    await ctx.respond("Pong!")
+
+
 @bot.slash_command(name="account", description="Check or create a personal account.")
 async def account(ctx):
+    log_event(ctx.author.id, "account", {})
     user_id = str(ctx.author.id)
     response = check_or_create_account(user_id)
     await ctx.respond(response)
-    await log_interaction(ctx)
 
 
 @bot.slash_command(name="create_account", description="Create a new account with specified details.")
 async def create_account(ctx, account_name: str, command_name: str, account_type: str):
+    log_event(ctx.author.id, "create_account", {"account_name": account_name, "command_name": command_name, "account_type": account_type})
     account_type_choices = ["company", "government"]
 
     if account_type not in account_type_choices:
@@ -135,11 +160,11 @@ async def create_account(ctx, account_name: str, command_name: str, account_type
     user_id = str(ctx.author.id)
     response = create_new_account(ctx, user_id, account_name, command_name, account_type)
     await ctx.respond(response)
-    await log_interaction(ctx)
 
 
 @bot.slash_command(name="list_accounts", description="List the personal account, owned accounts, and accounts the user is a treasurer for.")
 async def list_accounts(ctx):
+    log_event(ctx.author.id, "list_accounts", {})
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
     company_accounts = {}
@@ -174,11 +199,11 @@ async def list_accounts(ctx):
         await ctx.respond(f"Your accounts:\n{response}")
     else:
         await ctx.respond("You do not own or manage any accounts.")
-    await log_interaction(ctx)
 
 
 @bot.slash_command(name="treasurer_add", description="Add a treasurer to an account.")
 async def add_treasurer(ctx, account_name: str, treasurer_name: str):
+    log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name})
     user_id = str(ctx.author.id)
     account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
@@ -206,11 +231,11 @@ async def add_treasurer(ctx, account_name: str, treasurer_name: str):
             await ctx.respond(f"Treasurer '{treasurer_name}' is already added to '{account_name}'.")
     else:
         await ctx.respond("Invalid treasurer mention.")
-    await log_interaction(ctx)
 
 
 @bot.slash_command(name="treasurer_remove", description="Remove a treasurer from an account.")
 async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
+    log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name})
     user_id = str(ctx.author.id)
     account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
@@ -238,13 +263,11 @@ async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
             await ctx.respond(f"Treasurer '{treasurer_name}' is not added to '{account_name}'.")
     else:
         await ctx.respond("Invalid treasurer mention.")
-    await log_interaction(ctx)
-
-
 
 
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")
 async def list_treasurers(ctx, account_name: str):
+    log_event(ctx.author.id, "treasurer_list", {"account_name": account_name})
     user_id = str(ctx.author.id)
     account_to_list = load_accounts(account_type="company", account_name=account_name)
     
@@ -265,8 +288,6 @@ async def list_treasurers(ctx, account_name: str):
         await ctx.respond(f"Treasurers for '{account_name}': {', '.join(treasurer_names)}")
     else:
         await ctx.respond(f"No treasurers found for '{account_name}'.")
-    await log_interaction(ctx)
-
 
 
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
@@ -280,23 +301,20 @@ async def pay(
     tax_percentage: int = discord.Option(description="Percentage of tax to subtract", required=False),
     memo: str = discord.Option(description="A memo for the transaction", required=False)
 ):
-    
+
+    log_event(ctx.author.id, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo})
+
     amountNumber = int(amount)
 
     sender_id = str(ctx.author.id)
     recipient_id = str(account_to_pay.id) if account_to_pay else None
-
-
     if from_account:
-        #print(from_account)
         sender_accounts = load_accounts(account_type="company", account_name=from_account)
-        print(sender_accounts)
         if sender_accounts is None:
             await ctx.respond("The specified 'from account' does not exist.")
             return
     else:
         sender_accounts = load_accounts(sender_id)
-        #print(sender_accounts)
         if sender_accounts is None:
             await ctx.respond("You do not have a personal account.")
             return
@@ -304,17 +322,15 @@ async def pay(
     transactionType = None    
 
     if "personal" in sender_accounts:
-        print("paying from personal account")
         if sender_accounts["personal"]["balance"] < amountNumber:
             await ctx.respond("Insufficient funds.")
             return
         else:
             sender_accounts["personal"]["balance"] -= amountNumber
-            save_accounts(sender_id, sender_accounts)   
-
+            save_accounts(sender_id, sender_accounts)
             transactionType = "personal"
+
     elif sender_accounts["account_type"] == "company":
-        print("paying from company account")
         if sender_accounts["balance"] < amountNumber:
             await ctx.respond("Insufficient funds in the company account.")
             return
@@ -324,15 +340,12 @@ async def pay(
             transactionType = "company"
 
     if account_name:
-        #print(account_name)
         recipient_accounts = load_accounts(account_type="company", account_name=account_name)
-        #print(recipient_accounts)
         if recipient_accounts is None:
             await ctx.respond("The specified 'account name' does not exist.")
             return
     else:
         recipient_accounts = load_accounts(recipient_id)
-        #print(recipient_accounts)
         if recipient_accounts is None:
             await ctx.respond("The recipient does not have a personal account.")
             return
@@ -372,7 +385,6 @@ async def pay(
     if tax_percentage and tax_account:
         response_message += f" With {tax_percentage}% tax to '{taxAccount["account_name"]}'"
     await ctx.respond(response_message)
-    await log_interaction(ctx)
     
     
-#bot.run(TOKEN)
+bot.run(TOKEN)
