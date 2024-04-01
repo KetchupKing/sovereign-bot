@@ -14,3 +14,5 @@ pip install -U git+https://github.com/Pycord-Development/pycord
 pip install discord-py-slash-command
 
 pip install aiofiles
+
+pip install PyNaCl
