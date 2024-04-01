@@ -29,9 +29,10 @@ def log_event(user_id, command_name, options):
     }
     with open('discord_bot.log', 'a') as log_file:
         log_file.write(json.dumps(log_entry) + '\n')
+        logs_to_txt()
 
 
-def save_logs_to_file(filename='formatted_logs.txt'):
+def logs_to_txt(filename='discord_log.txt'):
     with open('discord_bot.log', 'r') as log_file, open(filename, 'w') as output_file:
         for line in log_file:
             log_entry = json.loads(line)
