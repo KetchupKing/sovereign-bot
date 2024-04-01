@@ -152,7 +152,11 @@ async def account(ctx):
 
 
 @bot.slash_command(name="create_account", description="Create a new account with specified details.")
-async def create_account(ctx, account_name: str, command_name: str, account_type: str):
+async def create_account(ctx, 
+                         account_name: str, 
+                         command_name: str, 
+                         account_type: str
+                         ):
     log_event(ctx.author.id, "create_account", {"account_name": account_name, "command_name": command_name, "account_type": account_type})
     account_type_choices = ["company", "government"]
 
@@ -205,8 +209,11 @@ async def list_accounts(ctx):
 
 
 @bot.slash_command(name="treasurer_add", description="Add a treasurer to an account.")
-async def add_treasurer(ctx, account_name: str, treasurer_name: str):
-    log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name})
+async def add_treasurer(ctx, 
+                        account_name: str, 
+                        treasurer_name: discord.User
+                        ):
+    log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name.name})
     user_id = str(ctx.author.id)
     account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
@@ -218,27 +225,26 @@ async def add_treasurer(ctx, account_name: str, treasurer_name: str):
         await ctx.respond("You are not the owner of this account.")
         return
     
-    match = re.search(r'<@!?(\d+)>', treasurer_name)
-    if match:
-        treasurer_id = match.group(1)
-        if treasurer_id not in account_to_modify["treasurers"]:
-            account_to_modify["treasurers"].append(treasurer_id)
-            if save_company_account_changes(account_name, account_to_modify):
-                treasurer_accounts = load_accounts(treasurer_id)
-                treasurer_accounts["personal"]["treasurer of"].append(account_name)
-                save_accounts(treasurer_id, treasurer_accounts)
-                await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{account_name}'.")
-            else:
-                await ctx.respond("Failed to save changes.")
+    treasurer_id = str(treasurer_name.id)
+    if treasurer_id not in account_to_modify["treasurers"]:
+        account_to_modify["treasurers"].append(treasurer_id)
+        if save_company_account_changes(account_name, account_to_modify):
+            treasurer_accounts = load_accounts(treasurer_id)
+            treasurer_accounts["personal"]["treasurer of"].append(account_name)
+            save_accounts(treasurer_id, treasurer_accounts)
+            await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{account_name}'.")
         else:
-            await ctx.respond(f"Treasurer '{treasurer_name}' is already added to '{account_name}'.")
+            await ctx.respond("Failed to save changes.")
     else:
-        await ctx.respond("Invalid treasurer mention.")
+        await ctx.respond(f"Treasurer '{treasurer_name}' is already added to '{account_name}'.")
 
 
 @bot.slash_command(name="treasurer_remove", description="Remove a treasurer from an account.")
-async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
-    log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name})
+async def remove_treasurer(ctx, 
+                           account_name: str, 
+                           treasurer_name: discord.User
+                           ):
+    log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name.name})
     user_id = str(ctx.author.id)
     account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
@@ -250,26 +256,24 @@ async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
         await ctx.respond("You are not the owner of this account.")
         return
     
-    match = re.search(r'<@!?(\d+)>', treasurer_name)
-    if match:
-        treasurer_id = match.group(1)
-        if treasurer_id in account_to_modify["treasurers"]:
-            account_to_modify["treasurers"].remove(treasurer_id)
-            if save_company_account_changes(account_name, account_to_modify):
-                treasurer_accounts = load_accounts(treasurer_id)
-                treasurer_accounts["personal"]["treasurer of"].remove(account_name)
-                save_accounts(treasurer_id, treasurer_accounts)
-                await ctx.respond(f"Treasurer '{treasurer_name}' has been removed from '{account_name}'.")
-            else:
-                await ctx.respond("Failed to save changes.")
+    treasurer_id = str(treasurer_name.id)
+    if treasurer_id in account_to_modify["treasurers"]:
+        account_to_modify["treasurers"].remove(treasurer_id)
+        if save_company_account_changes(account_name, account_to_modify):
+            treasurer_accounts = load_accounts(treasurer_id)
+            treasurer_accounts["personal"]["treasurer of"].remove(account_name)
+            save_accounts(treasurer_id, treasurer_accounts)
+            await ctx.respond(f"Treasurer '{treasurer_name}' has been removed from '{account_name}'.")
         else:
-            await ctx.respond(f"Treasurer '{treasurer_name}' is not added to '{account_name}'.")
+            await ctx.respond("Failed to save changes.")
     else:
-        await ctx.respond("Invalid treasurer mention.")
+        await ctx.respond(f"Treasurer '{treasurer_name}' is not added to '{account_name}'.")
 
 
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")
-async def list_treasurers(ctx, account_name: str):
+async def list_treasurers(ctx, 
+                          account_name: str
+                          ):
     log_event(ctx.author.id, "treasurer_list", {"account_name": account_name})
     user_id = str(ctx.author.id)
     account_to_list = load_accounts(account_type="company", account_name=account_name)
