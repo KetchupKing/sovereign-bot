@@ -31,14 +31,6 @@ def log_event(user_id, command_name, options):
         log_file.write(json.dumps(log_entry) + '\n')
 
 
-def display_logs():
-    with open('discord_bot.log', 'r') as log_file:
-        for line in log_file:
-            log_entry = json.loads(line)
-            template_string = "User ID: {user_id}, Command: {command_name}, Options: {options}"
-            print(template_string.format(**log_entry))
-
-
 def save_company_account_changes(account_name, accounts):
     file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
     files = glob.glob(file_name)
