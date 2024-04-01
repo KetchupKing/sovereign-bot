@@ -8,6 +8,7 @@ import re
 import glob
 import logging
 
+logging.getLogger('discord').setLevel(logging.WARNING)
 logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 ACCOUNTS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'accounts_data')
@@ -28,15 +29,14 @@ def log_event(user_id, command_name, options):
     }
     with open('discord_bot.log', 'a') as log_file:
         log_file.write(json.dumps(log_entry) + '\n')
+
+
 def display_logs():
     with open('discord_bot.log', 'r') as log_file:
         for line in log_file:
             log_entry = json.loads(line)
             template_string = "User ID: {user_id}, Command: {command_name}, Options: {options}"
             print(template_string.format(**log_entry))
-
-
-
 
 
 def save_company_account_changes(account_name, accounts):
@@ -308,10 +308,8 @@ async def pay(
 
     sender_id = str(ctx.author.id)
     recipient_id = str(account_to_pay.id) if account_to_pay else None
-
     if from_account:
         sender_accounts = load_accounts(account_type="company", account_name=from_account)
-        print(sender_accounts)
         if sender_accounts is None:
             await ctx.respond("The specified 'from account' does not exist.")
             return
@@ -324,7 +322,6 @@ async def pay(
     transactionType = None    
 
     if "personal" in sender_accounts:
-        print("paying from personal account")
         if sender_accounts["personal"]["balance"] < amountNumber:
             await ctx.respond("Insufficient funds.")
             return
@@ -334,7 +331,6 @@ async def pay(
             transactionType = "personal"
 
     elif sender_accounts["account_type"] == "company":
-        print("paying from company account")
         if sender_accounts["balance"] < amountNumber:
             await ctx.respond("Insufficient funds in the company account.")
             return
