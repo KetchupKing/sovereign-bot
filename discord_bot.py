@@ -138,13 +138,17 @@ async def on_ready():
 
 
 @bot.slash_command(name="ping", description="Replies with Pong!")
-async def ping(ctx):
+async def ping(
+	ctx
+):
 	log_event(ctx.author.id, "ping", {})
 	await ctx.respond("Pong!")
 
 
 @bot.slash_command(name="account", description="Check or create a personal account.")
-async def account(ctx):
+async def account(
+	ctx
+):
 	log_event(ctx.author.id, "account", {})
 	user_id = str(ctx.author.id)
 	response = check_or_create_account(user_id)
@@ -152,11 +156,12 @@ async def account(ctx):
 
 
 @bot.slash_command(name="create_account", description="Create a new account with specified details.")
-async def create_account(ctx, 
-						 account_name: str, 
-						 command_name: str, 
-						 account_type: str
-						 ):
+async def create_account(
+	ctx, 
+	account_name: str, 
+	command_name: str, 
+	account_type: str
+):
 	log_event(ctx.author.id, "create_account", {"account_name": account_name, "command_name": command_name, "account_type": account_type})
 	account_type_choices = ["company", "government"]
 
@@ -170,7 +175,9 @@ async def create_account(ctx,
 
 
 @bot.slash_command(name="list_accounts", description="List the personal account, owned accounts, and accounts the user is a treasurer for.")
-async def list_accounts(ctx):
+async def list_accounts(
+	ctx
+):
 	log_event(ctx.author.id, "list_accounts", {})
 	user_id = str(ctx.author.id)
 	personal_accounts = load_accounts(user_id)
@@ -209,10 +216,11 @@ async def list_accounts(ctx):
 
 
 @bot.slash_command(name="treasurer_add", description="Add a treasurer to an account.")
-async def add_treasurer(ctx, 
-						account_name: str, 
-						treasurer_name: discord.User
-						):
+async def add_treasurer(
+	ctx, 
+	account_name: str, 
+	treasurer_name: discord.User
+):
 	log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name.name})
 	user_id = str(ctx.author.id)
 	account_to_modify = load_accounts(account_type="company", account_name=account_name)
@@ -240,10 +248,11 @@ async def add_treasurer(ctx,
 
 
 @bot.slash_command(name="treasurer_remove", description="Remove a treasurer from an account.")
-async def remove_treasurer(ctx, 
-						   account_name: str, 
-						   treasurer_name: discord.User
-						   ):
+async def remove_treasurer(
+	ctx, 
+	account_name: str, 
+	treasurer_name: discord.User
+):
 	log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name.name})
 	user_id = str(ctx.author.id)
 	account_to_modify = load_accounts(account_type="company", account_name=account_name)
@@ -271,9 +280,10 @@ async def remove_treasurer(ctx,
 
 
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")
-async def list_treasurers(ctx, 
-						  account_name: str
-						  ):
+async def list_treasurers(
+	ctx, 
+	account_name: str
+):
 	log_event(ctx.author.id, "treasurer_list", {"account_name": account_name})
 	user_id = str(ctx.author.id)
 	account_to_list = load_accounts(account_type="company", account_name=account_name)
