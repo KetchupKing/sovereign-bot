@@ -9,6 +9,7 @@ import glob
 import logging
 
 logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 ACCOUNTS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'accounts_data')
 COMPANY_DATA_DIR = os.path.join(os.path.dirname(__file__), 'company_data')
 os.makedirs(ACCOUNTS_DATA_DIR, exist_ok=True)
@@ -17,6 +18,25 @@ intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
+
+
+def log_event(user_id, command_name, options):
+    log_entry = {
+        "user_id": user_id,
+        "command_name": command_name,
+        "options": options
+    }
+    with open('discord_bot.log', 'a') as log_file:
+        log_file.write(json.dumps(log_entry) + '\n')
+def display_logs():
+    with open('discord_bot.log', 'r') as log_file:
+        for line in log_file:
+            log_entry = json.loads(line)
+            template_string = "User ID: {user_id}, Command: {command_name}, Options: {options}"
+            print(template_string.format(**log_entry))
+
+
+
 
 
 def save_company_account_changes(account_name, accounts):
@@ -116,13 +136,13 @@ async def on_ready():
 
 @bot.slash_command(name="ping", description="Replies with Pong!")
 async def ping(ctx):
-    logging.info(f"User {ctx.author.name} executed command /ping.")
+    log_event(ctx.author.id, "ping", {})
     await ctx.respond("Pong!")
 
 
 @bot.slash_command(name="account", description="Check or create a personal account.")
 async def account(ctx):
-    logging.info(f"User {ctx.author.name} executed command /account.")
+    log_event(ctx.author.id, "account", {})
     user_id = str(ctx.author.id)
     response = check_or_create_account(user_id)
     await ctx.respond(response)
@@ -130,7 +150,7 @@ async def account(ctx):
 
 @bot.slash_command(name="create_account", description="Create a new account with specified details.")
 async def create_account(ctx, account_name: str, command_name: str, account_type: str):
-    logging.info(f"User {ctx.author.name} executed command /create_account with options: account_name={account_name}, command_name={command_name}, account_type={account_type}")
+    log_event(ctx.author.id, "create_account", {"account_name": account_name, "command_name": command_name, "account_type": account_type})
     account_type_choices = ["company", "government"]
 
     if account_type not in account_type_choices:
@@ -144,7 +164,7 @@ async def create_account(ctx, account_name: str, command_name: str, account_type
 
 @bot.slash_command(name="list_accounts", description="List the personal account, owned accounts, and accounts the user is a treasurer for.")
 async def list_accounts(ctx):
-    logging.info(f"User {ctx.author.name} executed command /list_accounts.")
+    log_event(ctx.author.id, "list_accounts", {})
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
     company_accounts = {}
@@ -183,7 +203,7 @@ async def list_accounts(ctx):
 
 @bot.slash_command(name="treasurer_add", description="Add a treasurer to an account.")
 async def add_treasurer(ctx, account_name: str, treasurer_name: str):
-    logging.info(f"User {ctx.author.name} executed command /treasurer_add with options: account_name={account_name}, treasurer_name={treasurer_name}")
+    log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name})
     user_id = str(ctx.author.id)
     account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
@@ -215,7 +235,7 @@ async def add_treasurer(ctx, account_name: str, treasurer_name: str):
 
 @bot.slash_command(name="treasurer_remove", description="Remove a treasurer from an account.")
 async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
-    logging.info(f"User {ctx.author.name} executed command /treasurer_remove with options: account_name={account_name}, treasurer_name={treasurer_name}")
+    log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name})
     user_id = str(ctx.author.id)
     account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
@@ -247,7 +267,7 @@ async def remove_treasurer(ctx, account_name: str, treasurer_name: str):
 
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")
 async def list_treasurers(ctx, account_name: str):
-    logging.info(f"User {ctx.author.name} executed command /treasurer_list with options: account_name={account_name}")
+    log_event(ctx.author.id, "treasurer_list", {"account_name": account_name})
     user_id = str(ctx.author.id)
     account_to_list = load_accounts(account_type="company", account_name=account_name)
     
@@ -282,7 +302,7 @@ async def pay(
     memo: str = discord.Option(description="A memo for the transaction", required=False)
 ):
 
-    logging.info(f"User {ctx.author.name} executed command /pay with options: amount={amount}, account_to_pay={account_to_pay.name if account_to_pay else 'None'}, account_name={account_name}, from_account={from_account}, tax_account={tax_account}, tax_percentage={tax_percentage}, memo={memo}")
+    log_event(ctx.author.id, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo})
 
     amountNumber = int(amount)
 
