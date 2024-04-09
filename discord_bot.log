@@ -13,3 +13,4 @@
 {"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
 {"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": null, "tax_percentage": null, "memo": "ephemeral test", "ephemeral": "true"}}
 {"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": "no"}}
+{"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": true}}
