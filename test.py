@@ -465,7 +465,8 @@ def getItemsOnPage(lst, page_num, items_per_page=10):
 @bot.slash_command(name="baltop", description="Accounts with the most Sovereign.")
 async def baltop(
     ctx, 
-    page: int = discord.Option(int,description="The amount to transfer", required=False, default=1)
+    page: int = discord.Option(int,description="The amount to transfer", required=False, default=1),
+    ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     log_event(ctx.author.id, "baltop", {})
     sorted_accounts = getItemsOnPage(sort_accounts(),page)
@@ -473,7 +474,7 @@ async def baltop(
     for i, (account_id, account_info) in enumerate(sorted_accounts, start=1):
         account_name = account_info.get('account_name')
         response += f"{i+((page-1)*10)}. {account_name} - {account_info['balance']} Sovereign\n"
-    await ctx.respond(response)
+    await ctx.respond(response, ephemeral=ephemeral)
 
 
 bot.run(TOKEN)
