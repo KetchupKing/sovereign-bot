@@ -95,13 +95,13 @@ def check_or_create_account(user_id):
 		accounts = {
 			"personal": {
 				"balance": 1000,
-				"currency": "gold",
+				"currency": "Sovereign",
 				"own accounts": [],
 				"treasurer of": []
 			}
 		}
 		save_accounts(user_id, accounts)
-		return "A new personal account named 'personal' has been created with an initial balance of 1000 gold."
+		return "A new personal account named 'personal' has been created with an initial balance of 1000 Sovereign."
 	else:
 		return f"Your account balance is {accounts['personal']['balance']} {accounts['personal']['currency']}."
 
@@ -119,7 +119,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
 		"command_name": command_name,
 		"account_type": account_type,
 		"balance": 1000,
-		"currency": "gold",
+		"currency": "Sovereign",
 		"treasurers": treasurers,
 		"owner": user_id
 	}
@@ -129,7 +129,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
 	personal_accounts["personal"]["own accounts"].append(account_name)
 	save_accounts(user_id, personal_accounts)
 	save_accounts(user_id, accounts, account_type, account_name)
-	return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', balance 1000 gold, has been created."
+	return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', balance 1000 Sovereign, has been created."
 
 
 @bot.event

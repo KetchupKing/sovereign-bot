@@ -4,7 +4,7 @@
         "command_name": "T",
         "account_type": "company",
         "balance": 1000,
-        "currency": "gold",
+        "currency": "Sovereign",
         "treasurers": [
             "1018934971810979840"
         ],
