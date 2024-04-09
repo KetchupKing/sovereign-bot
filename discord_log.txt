@@ -1,0 +1,14 @@
+User ID: 1018934971810979840, Command: ping, Options: 
+User ID: 1018934971810979840, Command: account, Options: 
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: test, tax_percentage: 15, memo: None
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: account, Options: 
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: testing, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: T, from_account: None, tax_account: None, tax_percentage: None, memo: None
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: None, tax_percentage: None, memo: ephemeral test, ephemeral: true

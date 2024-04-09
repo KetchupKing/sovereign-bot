@@ -1,0 +1,15 @@
+{"user_id": 1018934971810979840, "command_name": "ping", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "account", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": "test", "tax_percentage": "15", "memo": null}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "account", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "testing", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": null, "account_name": "T", "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": null, "tax_percentage": null, "memo": "ephemeral test", "ephemeral": "true"}}
+{"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": "no"}}

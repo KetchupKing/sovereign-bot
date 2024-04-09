@@ -316,10 +316,11 @@ async def pay(
 	from_account: str = discord.Option(description="The account from which to transfer", required=False),
 	tax_account: str = discord.Option(description="The account to add tax to", required=False),
 	tax_percentage: int = discord.Option(description="Percentage of tax to subtract", required=False),
-	memo: str = discord.Option(description="A memo for the transaction", required=False)
+	memo: str = discord.Option(description="A memo for the transaction", required=False),
+	ephemeral: bool = discord.Option(description="Make the response ephemeral", required=False, default=False)
 ):
 
-	log_event(ctx.author.id, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo})
+	log_event(ctx.author.id, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo, "ephemeral": ephemeral})
 
 	amountNumber = int(amount)
 
@@ -401,7 +402,7 @@ async def pay(
 		response_message += f" Memo: {memo}."
 	if tax_percentage and tax_account:
 		response_message += f" With {tax_percentage}% tax to '{taxAccount["account_name"]}'"
-	await ctx.respond(response_message)
-	
+	await ctx.respond(response_message, ephemeral=ephemeral)
+
 	
 bot.run(TOKEN)
