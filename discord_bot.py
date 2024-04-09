@@ -419,5 +419,5 @@ async def pay(
 		response_message += f" With {tax_percentage}% tax to '{taxAccount["account_name"]}'"
 	await ctx.respond(response_message, ephemeral=ephemeral)
 
-	
+
 bot.run(TOKEN)
