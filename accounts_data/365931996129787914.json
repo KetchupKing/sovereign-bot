@@ -1,9 +1,15 @@
 {
     "personal": {
-        "balance": 5300,
+        "account_name": "m_anfred",
+        "balance": 1000,
         "currency": "Sovereign",
         "own accounts": [
-            "Evil Company Ltd"
+            "a",
+            "aa",
+            "aaa",
+            "aaaa",
+            "aaaaa",
+            "aaaaa1"
         ],
         "treasurer of": []
     }

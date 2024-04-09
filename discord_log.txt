@@ -1,54 +1,37 @@
-User ID: 1018934971810979840, Command: ping, Options: 
-User ID: 1018934971810979840, Command: account, Options: 
-User ID: 1018934971810979840, Command: list_accounts, Options: 
-User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: test, tax_percentage: 15, memo: None
-User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: account, Options: 
-User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: list_accounts, Options: 
-User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: testing, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: T, from_account: None, tax_account: None, tax_percentage: None, memo: None
-User ID: 1018934971810979840, Command: list_accounts, Options: 
-User ID: 1018934971810979840, Command: list_accounts, Options: 
-User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: None, tax_percentage: None, memo: ephemeral test, ephemeral: true
-User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: no
-User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
-User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: test, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
-User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: T, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
-User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: T, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
-User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: T, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
-User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: te, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: te, command_name: F, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: no, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: no, command_name: F, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: no, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: testttt, command_name: T, account_type: company
-User ID: 1018934971810979840, Command: create_account, Options: account_name: testttt, command_name: GH, account_type: company
-User ID: 365931996129787914, Command: list_accounts, Options: 
-User ID: 365931996129787914, Command: create_account, Options: account_name: Evil Company Ltd, command_name: ecl, account_type: company
-User ID: 365931996129787914, Command: list_accounts, Options: 
-User ID: 1018934971810979840, Command: baltop, Options: 
-User ID: 1018934971810979840, Command: baltop, Options: 
-User ID: 365931996129787914, Command: pay, Options: amount: 100, account_to_pay: None, account_name: ecl, from_account: test, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
-User ID: 365931996129787914, Command: list_accounts, Options: 
-User ID: 365931996129787914, Command: pay, Options: amount: 1000, account_to_pay: None, account_name: ecl, from_account: test, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
-User ID: 365931996129787914, Command: pay, Options: amount: 900, account_to_pay: None, account_name: ecl, from_account: test, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
-User ID: 365931996129787914, Command: baltop, Options: 
-User ID: 365931996129787914, Command: treasurer_list, Options: account_name: test
-User ID: 365931996129787914, Command: pay, Options: amount: 1000, account_to_pay: None, account_name: ecl, from_account: testing, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
-User ID: 365931996129787914, Command: pay, Options: amount: 1000, account_to_pay: None, account_name: ecl, from_account: testttt, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
-User ID: 365931996129787914, Command: baltop, Options: 
-User ID: 1018934971810979840, Command: list_accounts, Options: 
-User ID: 365931996129787914, Command: pay, Options: amount: 4000, account_to_pay: m_anfred, account_name: None, from_account: ecl, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
 User ID: 365931996129787914, Command: account, Options: 
+User ID: 365931996129787914, Command: account, Options: 
+User ID: 365931996129787914, Command: account, Options: 
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 365931996129787914, Command: create_account, Options: account_name: a, command_name: a, account_type: company
+User ID: 365931996129787914, Command: create_account, Options: account_name: a, command_name: a, account_type: company
+User ID: 365931996129787914, Command: create_account, Options: account_name: aa, command_name: aa, account_type: company
+User ID: 365931996129787914, Command: create_account, Options: account_name: aaa, command_name: aaa, account_type: company
+User ID: 365931996129787914, Command: create_account, Options: account_name: aaaa, command_name: aaaa, account_type: company
+User ID: 365931996129787914, Command: create_account, Options: account_name: aaaaa, command_name: aaaaa, account_type: company
+User ID: 365931996129787914, Command: create_account, Options: account_name: aaaaa1, command_name: aaaaa1, account_type: company
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
 User ID: 1018934971810979840, Command: baltop, Options: 
 User ID: 1018934971810979840, Command: baltop, Options: 
 User ID: 1018934971810979840, Command: baltop, Options: 
-User ID: 1018934971810979840, Command: baltop, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: account, Options: 
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 
