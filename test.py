@@ -140,6 +140,21 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
 	return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', balance 1000 Sovereign, has been created."
 
 
+def sort_accounts():
+    all_accounts = []
+
+    for file_name in glob.glob(os.path.join(COMPANY_DATA_DIR, '*.json')):
+        with open(file_name, 'r') as f:
+            accounts = json.load(f)
+            for account_id, account_info in accounts.items():
+                if 'account_name' in account_info and 'balance' in account_info:
+                    all_accounts.append((account_id, account_info))
+
+    sorted_accounts = sorted(all_accounts, key=lambda x: x[1]['balance'], reverse=True)
+
+    return sorted_accounts
+
+
 @bot.event
 async def on_ready():
 	print(f'Successfully logged in {bot.user}')
@@ -419,5 +434,16 @@ async def pay(
 		response_message += f" With {tax_percentage}% tax to '{taxAccount["account_name"]}'"
 	await ctx.respond(response_message, ephemeral=ephemeral)
 
-	
+
+@bot.slash_command(name="baltop", description="Accounts with the most Sovereign.")
+async def baltop(ctx):
+    log_event(ctx.author.id, "baltop", {})
+    sorted_accounts = sort_accounts()
+    response = "Accounts with the most Sovereign:\n"
+    for i, (account_id, account_info) in enumerate(sorted_accounts, start=1):
+        account_name = account_info.get('account_name')
+        response += f"{i}. {account_name} - {account_info['balance']} Sovereign\n"
+    await ctx.respond(response)
+
+
 bot.run(TOKEN)

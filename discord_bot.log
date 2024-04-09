@@ -34,3 +34,22 @@
 {"user_id": 365931996129787914, "command_name": "list_accounts", "options": {}}
 {"user_id": 365931996129787914, "command_name": "create_account", "options": {"account_name": "Evil Company Ltd", "command_name": "ecl", "account_type": "company"}}
 {"user_id": 365931996129787914, "command_name": "list_accounts", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "baltop", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "baltop", "options": {}}
+{"user_id": 365931996129787914, "command_name": "pay", "options": {"amount": "100", "account_to_pay": null, "account_name": "ecl", "from_account": "test", "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}}
+{"user_id": 365931996129787914, "command_name": "list_accounts", "options": {}}
+{"user_id": 365931996129787914, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": null, "account_name": "ecl", "from_account": "test", "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}}
+{"user_id": 365931996129787914, "command_name": "pay", "options": {"amount": "900", "account_to_pay": null, "account_name": "ecl", "from_account": "test", "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}}
+{"user_id": 365931996129787914, "command_name": "baltop", "options": {}}
+{"user_id": 365931996129787914, "command_name": "treasurer_list", "options": {"account_name": "test"}}
+{"user_id": 365931996129787914, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": null, "account_name": "ecl", "from_account": "testing", "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}}
+{"user_id": 365931996129787914, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": null, "account_name": "ecl", "from_account": "testttt", "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}}
+{"user_id": 365931996129787914, "command_name": "baltop", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
+{"user_id": 365931996129787914, "command_name": "pay", "options": {"amount": "4000", "account_to_pay": "m_anfred", "account_name": null, "from_account": "ecl", "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}}
+{"user_id": 365931996129787914, "command_name": "account", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "baltop", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "baltop", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "baltop", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "baltop", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "baltop", "options": {}}

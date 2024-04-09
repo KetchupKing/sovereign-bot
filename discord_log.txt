@@ -33,3 +33,22 @@ User ID: 1018934971810979840, Command: create_account, Options: account_name: te
 User ID: 1018934971810979840, Command: create_account, Options: account_name: testttt, command_name: GH, account_type: company
 User ID: 365931996129787914, Command: list_accounts, Options: 
 User ID: 365931996129787914, Command: create_account, Options: account_name: Evil Company Ltd, command_name: ecl, account_type: company
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: baltop, Options: 
+User ID: 1018934971810979840, Command: baltop, Options: 
+User ID: 365931996129787914, Command: pay, Options: amount: 100, account_to_pay: None, account_name: ecl, from_account: test, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: pay, Options: amount: 1000, account_to_pay: None, account_name: ecl, from_account: test, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
+User ID: 365931996129787914, Command: pay, Options: amount: 900, account_to_pay: None, account_name: ecl, from_account: test, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 365931996129787914, Command: treasurer_list, Options: account_name: test
+User ID: 365931996129787914, Command: pay, Options: amount: 1000, account_to_pay: None, account_name: ecl, from_account: testing, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
+User ID: 365931996129787914, Command: pay, Options: amount: 1000, account_to_pay: None, account_name: ecl, from_account: testttt, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
+User ID: 365931996129787914, Command: baltop, Options: 
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: pay, Options: amount: 4000, account_to_pay: m_anfred, account_name: None, from_account: ecl, tax_account: None, tax_percentage: None, memo: None, ephemeral: False
+User ID: 365931996129787914, Command: account, Options: 
+User ID: 1018934971810979840, Command: baltop, Options: 
+User ID: 1018934971810979840, Command: baltop, Options: 
+User ID: 1018934971810979840, Command: baltop, Options: 
+User ID: 1018934971810979840, Command: baltop, Options: 
