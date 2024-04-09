@@ -107,9 +107,17 @@ def check_or_create_account(user_id):
 
 
 def create_new_account(ctx, user_id, account_name, command_name, account_type):
-	existing_accounts = load_accounts(user_id, account_type, account_name)
-	if existing_accounts:
-		return f"Error: The account name '{account_name}' is already in use."
+	all_accounts = {}
+	file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
+	files = glob.glob(file_name)
+	for file in files:
+		with open(file, 'r') as f:
+			accounts = json.load(f)
+			all_accounts.update(accounts)
+
+	for account_id, account_info in all_accounts.items():
+		if account_info['account_name'] == account_name or account_info['command_name'] == command_name:
+			return f"Error: The account name '{account_name}' or command name '{command_name}' is already in use."
 	
 	accounts = load_accounts(user_id, account_type) if load_accounts(user_id, account_type) else {}
 	account_id = command_name

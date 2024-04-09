@@ -13,3 +13,23 @@ User ID: 1018934971810979840, Command: list_accounts, Options:
 User ID: 1018934971810979840, Command: list_accounts, Options: 
 User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: None, tax_percentage: None, memo: ephemeral test, ephemeral: true
 User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: no
+User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
+User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: test, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
+User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: T, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
+User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: T, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
+User ID: 1018934971810979840, Command: pay, Options: amount: 50, account_to_pay: None, account_name: T, from_account: None, tax_account: None, tax_percentage: None, memo: None, ephemeral: True
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: te, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: te, command_name: F, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: no, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: no, command_name: F, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: no, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: testttt, command_name: T, account_type: company
+User ID: 1018934971810979840, Command: create_account, Options: account_name: testttt, command_name: GH, account_type: company
+User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: create_account, Options: account_name: Evil Company Ltd, command_name: ecl, account_type: company

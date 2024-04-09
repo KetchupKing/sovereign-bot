@@ -14,3 +14,23 @@
 {"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": null, "tax_percentage": null, "memo": "ephemeral test", "ephemeral": "true"}}
 {"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": "no"}}
 {"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": true}}
+{"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": null, "account_name": "test", "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": true}}
+{"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": null, "account_name": "T", "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": true}}
+{"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": null, "account_name": "T", "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": true}}
+{"user_id": 1018934971810979840, "command_name": "pay", "options": {"amount": "50", "account_to_pay": null, "account_name": "T", "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": true}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "te", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "te", "command_name": "F", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "no", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "no", "command_name": "F", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "no", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "testttt", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "testttt", "command_name": "GH", "account_type": "company"}}
+{"user_id": 365931996129787914, "command_name": "list_accounts", "options": {}}
+{"user_id": 365931996129787914, "command_name": "create_account", "options": {"account_name": "Evil Company Ltd", "command_name": "ecl", "account_type": "company"}}
+{"user_id": 365931996129787914, "command_name": "list_accounts", "options": {}}

@@ -1,12 +1,13 @@
 {
     "personal": {
-        "balance": 550,
+        "balance": 44900,
         "currency": "Sovereign",
         "own accounts": [
-            "test",
-            "test",
             "testing",
-            "test"
+            "test",
+            "test",
+            "no",
+            "testttt"
         ],
         "treasurer of": []
     }

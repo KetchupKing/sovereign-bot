@@ -2,7 +2,9 @@
     "personal": {
         "balance": 1300,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "Evil Company Ltd"
+        ],
         "treasurer of": []
     }
 }

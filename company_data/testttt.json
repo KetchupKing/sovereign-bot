@@ -1,0 +1,13 @@
+{
+    "GH": {
+        "account_name": "testttt",
+        "command_name": "GH",
+        "account_type": "company",
+        "balance": 1000,
+        "currency": "Sovereign",
+        "treasurers": [
+            "1018934971810979840"
+        ],
+        "owner": "1018934971810979840"
+    }
+}
