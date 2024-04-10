@@ -1,0 +1,13 @@
+{
+    "a": {
+        "account_name": "test2",
+        "command_name": "a",
+        "account_type": "company",
+        "balance": 1040,
+        "currency": "Sovereign",
+        "treasurers": [
+            "365931996129787914"
+        ],
+        "owner": "365931996129787914"
+    }
+}

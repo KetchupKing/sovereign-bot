@@ -1,0 +1,14 @@
+{
+    "daz": {
+        "account_name": "Dazvan 2.0",
+        "command_name": "daz",
+        "account_type": "government",
+        "balance": 990,
+        "currency": "Sovereign",
+        "treasurers": [
+            "365931996129787914",
+            "1018934971810979840"
+        ],
+        "owner": "365931996129787914"
+    }
+}
