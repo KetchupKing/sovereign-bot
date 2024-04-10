@@ -8,6 +8,8 @@ import re
 import glob
 import logging
 
+authorised = []
+
 logging.getLogger('discord').setLevel(logging.WARNING)
 logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -70,14 +72,15 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
                         return account_info
 
     elif account_type == "government":
-        file_name = os.path.join(GOVERNMENT_DATA_DIR, '*.json')
-        files = glob.glob(file_name)
-        for file in files:
-            with open(file, 'r') as f:
-                accounts = json.load(f)
-                for account_id, account_info in accounts.items():
-                    if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
-                        return account_info
+        if user_id in authorised:
+            file_name = os.path.join(GOVERNMENT_DATA_DIR, '*.json')
+            files = glob.glob(file_name)
+            for file in files:
+                with open(file, 'r') as f:
+                    accounts = json.load(f)
+                    for account_id, account_info in accounts.items():
+                        if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
+                            return account_info
 
     else:
         personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
