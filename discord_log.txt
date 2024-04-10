@@ -35,3 +35,4 @@ User ID: 1018934971810979840, Command: list_accounts, Options:
 User ID: 1018934971810979840, Command: account, Options: 
 User ID: 1018934971810979840, Command: list_accounts, Options: 
 User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 365931996129787914, Command: list_accounts, Options: 

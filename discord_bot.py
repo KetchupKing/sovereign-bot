@@ -163,6 +163,12 @@ def sort_accounts():
     return sorted_accounts
 
 
+def getItemsOnPage(lst, page_num, items_per_page=10):
+    start_index = (page_num - 1) * items_per_page
+    end_index = min(start_index + items_per_page, len(lst))
+    return lst[start_index:end_index]
+
+
 @bot.event
 async def on_ready():
     print(f'Successfully logged in {bot.user}')
@@ -240,24 +246,21 @@ async def list_accounts(
     embed = discord.Embed(
         title="Your accounts",
         description="All accounts you own and are a treasurer of",
-        color=discord.Colour.green(), # Pycord provides a class with default colors you can choose from
+        color=discord.Colour.green(),
     )
     response = ""
+    
     if "personal" in personal_accounts:
         response += f"Personal Account: {personal_accounts['personal']['balance']} {personal_accounts['personal']['currency']}\n"
         embed.add_field(name=f"{personal_accounts['personal']['account_name']}'s account (Personal)", value=f"Command Name: N/A\nBalance: {personal_accounts['personal']['currency']}")
+
     if owned_accounts:
         for i, (account_name, account_info) in enumerate(owned_accounts, start=1):
             response += f"{account_name}: {account_info["balance"]} {account_info["currency"]}\n"
             embed.add_field(name=f"{account_name} ({account_info["account_type"]})", value=f"Command Name: {account_info["command_name"]}\nBalance: ㏜{account_info["balance"]}",inline=False)
+
     if treasurer_accounts:
         response += f"Treasurer For: {', '.join(treasurer_accounts)}\n"
-    
-    
-
-    
-
-    #await ctx.respond("Hello! Here's a cool embed.", embed=embed) # Send the embed with some text
 
     if embed:
         await ctx.respond(embed=embed, ephemeral=ephemeral)
@@ -285,6 +288,7 @@ async def add_treasurer(
         return
     
     treasurer_id = str(treasurer_name.id)
+    
     if treasurer_id not in account_to_modify["treasurers"]:
         account_to_modify["treasurers"].append(treasurer_id)
         if save_company_account_changes(account_name, account_to_modify):
@@ -318,6 +322,7 @@ async def remove_treasurer(
         return
     
     treasurer_id = str(treasurer_name.id)
+    
     if treasurer_id in account_to_modify["treasurers"]:
         account_to_modify["treasurers"].remove(treasurer_id)
         if save_company_account_changes(account_name, account_to_modify):
@@ -350,6 +355,7 @@ async def list_treasurers(
         return
     
     treasurers = account_to_list["treasurers"]
+    
     if treasurers:
         treasurer_names = []
         for treasurer_id in treasurers:
@@ -379,6 +385,7 @@ async def pay(
 
     sender_id = str(ctx.author.id)
     recipient_id = str(account_to_pay.id) if account_to_pay else None
+    
     if from_account:
         sender_accounts = load_accounts(account_type="company", account_name=from_account)
         if sender_accounts is None:
@@ -433,7 +440,6 @@ async def pay(
         print(tax_account)
         save_company_account_changes(tax_account,taxAccount)
 
-
     if "personal" in recipient_accounts:
         if tax_percentage and tax_account:
             recipient_accounts["personal"]["balance"] += newAmount
@@ -457,10 +463,6 @@ async def pay(
         response_message += f" With {tax_percentage}% tax to '{taxAccount["account_name"]}'"
     await ctx.respond(response_message, ephemeral=ephemeral)
 
-def getItemsOnPage(lst, page_num, items_per_page=10):
-    start_index = (page_num - 1) * items_per_page
-    end_index = min(start_index + items_per_page, len(lst))
-    return lst[start_index:end_index]
 
 @bot.slash_command(name="baltop", description="Accounts with the most Sovereign.")
 async def baltop(
