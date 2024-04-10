@@ -13,6 +13,7 @@ logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(as
 
 ACCOUNTS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'accounts_data')
 COMPANY_DATA_DIR = os.path.join(os.path.dirname(__file__), 'company_data')
+GOVERNMENT_DATA_DIR = os.path.join(os.path.dirname(__file__), 'government_data')
 os.makedirs(ACCOUNTS_DATA_DIR, exist_ok=True)
 os.makedirs(COMPANY_DATA_DIR, exist_ok=True)
 intents = discord.Intents.default()
@@ -67,6 +68,17 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
                 for account_id, account_info in accounts.items():
                     if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
                         return account_info
+
+    elif account_type == "government":
+        file_name = os.path.join(GOVERNMENT_DATA_DIR, '*.json')
+        files = glob.glob(file_name)
+        for file in files:
+            with open(file, 'r') as f:
+                accounts = json.load(f)
+                for account_id, account_info in accounts.items():
+                    if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
+                        return account_info
+
     else:
         personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
         try:
@@ -83,6 +95,8 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
 def save_accounts(user_id, accounts, account_type=None, account_name=None):
     if account_type == "company":
         file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
+    elif account_type == "government":
+        file_name = os.path.join(GOVERNMENT_DATA_DIR, f"{account_name}.json")
     else:
         file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
     with open(file_name, 'w') as f:
@@ -133,6 +147,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
         "owner": user_id
     }
     personal_accounts = load_accounts(user_id)
+    
     if personal_accounts == None:
         return f"You need a personal account before you can create a company account"
     personal_accounts["personal"]["own accounts"].append(account_name)

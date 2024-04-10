@@ -1,0 +1,11 @@
+{
+    "G": {
+        "account_name": "gov",
+        "command_name": "G",
+        "account_type": "government",
+        "balance": 1000,
+        "currency": "Sovereign",
+        "treasurers": [],
+        "owner": "1018934971810979840"
+    }
+}

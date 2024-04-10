@@ -3,7 +3,10 @@
         "account_name": "kalikingly",
         "balance": 1000,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "gov",
+            "gov"
+        ],
         "treasurer of": []
     }
 }

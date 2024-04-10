@@ -37,3 +37,7 @@
 {"user_id": 365931996129787914, "command_name": "list_accounts", "options": {}}
 {"user_id": 365931996129787914, "command_name": "list_accounts", "options": {}}
 {"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "government thing", "command_name": "GT", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}

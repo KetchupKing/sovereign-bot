@@ -36,3 +36,7 @@ User ID: 1018934971810979840, Command: account, Options:
 User ID: 1018934971810979840, Command: list_accounts, Options: 
 User ID: 365931996129787914, Command: list_accounts, Options: 
 User ID: 365931996129787914, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: create_account, Options: account_name: government thing, command_name: GT, account_type: government
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: create_account, Options: account_name: gov, command_name: G, account_type: government
