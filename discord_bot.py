@@ -7,12 +7,16 @@ import aiofiles
 import re
 import glob
 import logging
+import math
+
+authorised = ['1018934971810979840', "365931996129787914"]
 
 logging.getLogger('discord').setLevel(logging.WARNING)
 logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 ACCOUNTS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'accounts_data')
 COMPANY_DATA_DIR = os.path.join(os.path.dirname(__file__), 'company_data')
+GOVERNMENT_DATA_DIR = os.path.join(os.path.dirname(__file__), 'government_data')
 os.makedirs(ACCOUNTS_DATA_DIR, exist_ok=True)
 os.makedirs(COMPANY_DATA_DIR, exist_ok=True)
 intents = discord.Intents.default()
@@ -67,6 +71,18 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
                 for account_id, account_info in accounts.items():
                     if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
                         return account_info
+
+    elif account_type == "government":
+        if user_id in authorised:
+            file_name = os.path.join(GOVERNMENT_DATA_DIR, '*.json')
+            files = glob.glob(file_name)
+            for file in files:
+                with open(file, 'r') as f:
+                    accounts = json.load(f)
+                    for account_id, account_info in accounts.items():
+                        if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
+                            return account_info
+
     else:
         personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
         try:
@@ -82,6 +98,8 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
 
 def save_accounts(user_id, accounts, account_type=None, account_name=None):
     if account_type == "company":
+        file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
+    elif account_type == "government":
         file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
     else:
         file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
@@ -122,16 +140,33 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
     
     accounts = load_accounts(user_id, account_type) if load_accounts(user_id, account_type) else {}
     account_id = command_name
-    treasurers = [user_id] if account_type == "company" else []
-    accounts[account_id] = {
-        "account_name": account_name,
-        "command_name": command_name,
-        "account_type": account_type,
-        "balance": 1000,
-        "currency": "Sovereign",
-        "treasurers": treasurers,
-        "owner": user_id
-    }
+    treasurers = [user_id]
+    
+    if account_type == "company":
+        accounts[account_id] = {
+            "account_name": account_name,
+            "command_name": command_name,
+            "account_type": account_type,
+            "balance": 1000,
+            "currency": "Sovereign",
+            "treasurers": treasurers,
+            "owner": user_id
+        }
+    
+    if account_type == "government":
+        if user_id in authorised:
+            accounts[account_id] = {
+                "account_name": account_name,
+                "command_name": command_name,
+                "account_type": account_type,
+                "balance": 1000,
+                "currency": "Sovereign",
+                "treasurers": treasurers,
+                "owner": user_id
+            }
+        else:
+            return "You need to be an authorised user"
+
     personal_accounts = load_accounts(user_id)
     if personal_accounts == None:
         return f"You need a personal account before you can create a company account"
@@ -192,15 +227,14 @@ async def account(
     user_id = str(ctx.author.id)
     userName = str(ctx.author.name)
     response = check_or_create_account(user_id, userName)
-    await ctx.respond(response, ephemeral=ephemeral)
-
+    await ctx.respond(response, ephemeral=ephemeral)    
 
 @bot.slash_command(name="create_account", description="Create a company/government account with specified details.")
 async def create_account(
     ctx, 
     account_name: str, 
     command_name: str, 
-    account_type: str,
+    account_type: str = discord.Option(str, choices=['company', 'government']),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     log_event(ctx.author.id, "create_account", {"account_name": account_name, "command_name": command_name, "account_type": account_type})
@@ -224,6 +258,7 @@ async def list_accounts(
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
     company_accounts = {}
+    government_accounts = {}
     
     file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
     files = glob.glob(file_name)
@@ -233,7 +268,7 @@ async def list_accounts(
             for account_id, account_info in accounts.items():
                 if user_id in account_info["treasurers"] or user_id == account_info["owner"]:
                     company_accounts[account_info["account_name"]] = account_info
-    
+
     owned_accounts = []
     treasurer_accounts = []
     
@@ -241,7 +276,9 @@ async def list_accounts(
         if user_id == account_info["owner"]:
             owned_accounts.append([account_name, account_info])
         elif user_id in account_info["treasurers"]:
-            treasurer_accounts.append(account_name)
+            treasurer_accounts.append([account_name, account_info])
+
+
 
     embed = discord.Embed(
         title="Your accounts",
@@ -257,10 +294,11 @@ async def list_accounts(
     if owned_accounts:
         for i, (account_name, account_info) in enumerate(owned_accounts, start=1):
             response += f"{account_name}: {account_info["balance"]} {account_info["currency"]}\n"
-            embed.add_field(name=f"{account_name} ({account_info["account_type"]})", value=f"Command Name: {account_info["command_name"]}\nBalance: ㏜{account_info["balance"]}",inline=False)
+            embed.add_field(name=f"{account_name.capitalize()} ({account_info["account_type"]})", value=f"Command Name: {account_info["command_name"]}\nBalance: ㏜{account_info["balance"]}",inline=False)
 
     if treasurer_accounts:
-        response += f"Treasurer For: {', '.join(treasurer_accounts)}\n"
+        for i, (account_name, account_info) in enumerate(treasurer_accounts, start=1):
+            embed.add_field(name=f"{account_name.capitalize()} ({account_info["account_type"]}) (Treasurer)", value=f"Command Name: {account_info["command_name"]}\nBalance: ㏜{account_info["balance"]}",inline=False)
 
     if embed:
         await ctx.respond(embed=embed, ephemeral=ephemeral)
@@ -272,7 +310,7 @@ async def list_accounts(
 async def add_treasurer(
     ctx, 
     account_name: str = discord.Option(description="Name of account adding a treasurer to"),
-    treasurer_name: discord.User = discord.Option(description="Name of treasurer adding"),
+    treasurer_name: discord.User = discord.Option(discord.User, description="Name of treasurer adding"),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name.name})
@@ -306,7 +344,7 @@ async def add_treasurer(
 async def remove_treasurer(
     ctx, 
     account_name: str = discord.Option(description="Name of account removing a treasurer from"),
-    treasurer_name: discord.User = discord.Option(description="Name of treasurer removing"),
+    treasurer_name: discord.User = discord.Option(discord.User, description="Name of treasurer removing"),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name.name})
@@ -350,7 +388,9 @@ async def list_treasurers(
         await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
         return
     
-    if user_id != account_to_list.get("owner", ""):
+    print(user_id in account_to_list["treasurers"])
+
+    if user_id != account_to_list["owner"] and not user_id in account_to_list["treasurers"]:
         await ctx.respond("You are not the owner of this account.", ephemeral=ephemeral)
         return
     
@@ -408,19 +448,23 @@ async def pay(
             save_accounts(sender_id, sender_accounts)
             transactionType = "personal"
 
-    elif sender_accounts["account_type"] == "company":
-        if sender_accounts["balance"] < amountNumber:
-            await ctx.respond("Insufficient funds in the company account.", ephemeral=ephemeral)
-            return
+    elif sender_accounts["account_type"] == "company" or sender_accounts["account_type"] == "government":
+        if sender_accounts["owner"] == sender_id or sender_id in sender_accounts["treasurers"]:
+            if sender_accounts["balance"] < amountNumber:
+                await ctx.respond("Insufficient funds in the company account.", ephemeral=ephemeral)
+                return
+            else:
+                sender_accounts["balance"] -= amountNumber
+                save_company_account_changes(from_account,sender_accounts)
+                transactionType = "company"
         else:
-            sender_accounts["balance"] -= amountNumber
-            save_company_account_changes(from_account,sender_accounts)
-            transactionType = "company"
+            await ctx.respond(f"You do not have permission for '{sender_accounts["account_name"]}'", ephemeral=ephemeral)
+            return
 
     if account_name:
         recipient_accounts = load_accounts(account_type="company", account_name=account_name)
         if recipient_accounts is None:
-            await ctx.respond("The specified 'account name' does not exist.", ephemeral=ephemeral)
+            await ctx.respond("The specified 'account name' does not exist.", ephemeral=True)
             return
     else:
         recipient_accounts = load_accounts(recipient_id)
@@ -434,10 +478,8 @@ async def pay(
         
         taxAmount = round(amountNumber*(taxPercentage/100))
         newAmount = round(amountNumber-taxAmount)
-        print(f"sending to recipient: {newAmount}, sending to tax target: {taxAmount}")
 
         taxAccount["balance"] += taxAmount
-        print(tax_account)
         save_company_account_changes(tax_account,taxAccount)
 
     if "personal" in recipient_accounts:
@@ -471,8 +513,16 @@ async def baltop(
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     log_event(ctx.author.id, "baltop", {})
-    sorted_accounts = getItemsOnPage(sort_accounts(),page)
-    response = "Accounts with the most Sovereign:\n"
+    sorted_accounts = sort_accounts()
+    trimmed_accounts = getItemsOnPage(sorted_accounts,page)
+    nAccounts = len(sorted_accounts)
+    maxPages = math.ceil(nAccounts/10)
+
+    if page > maxPages:
+        page = maxPages
+
+    response = f"Accounts with the most Sovereign:  (Page: {page}/{maxPages})\n"
+
     for i, (account_id, account_info) in enumerate(sorted_accounts, start=1):
         account_name = account_info.get('account_name')
         response += f"{i+((page-1)*10)}. {account_name} - {account_info['balance']} Sovereign\n"
