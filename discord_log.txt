@@ -111,3 +111,26 @@ User ID: 365931996129787914, Command: treasurer_list, Options: account_name: tes
 User ID: 365931996129787914, Command: treasurer_list, Options: account_name: test
 User ID: 1018934971810979840, Command: treasurer_list, Options: account_name: test
 User ID: 1018934971810979840, Command: treasurer_remove, Options: account_name: test, treasurer_name: m_anfred
+User ID: 1018934971810979840, Command: treasurer_remove, Options: account_name: test, treasurer_name: m_anfred
+User ID: 1018934971810979840, Command: account, Options: 
+User ID: 1018934971810979840, Command: list_accounts, Options: 
+User ID: 264791398480347136, Command: create_account, Options: account_name: Test, command_name: tst, account_type: company
+User ID: 264791398480347136, Command: account, Options: 
+User ID: 264791398480347136, Command: list_accounts, Options: 
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: government
+User ID: 264791398480347136, Command: pay, Options: amount: 1000, account_to_pay: kalikingly, account_name: None, from_account: None, tax_account: T, tax_percentage: -100, memo: None, ephemeral: False
+User ID: 264791398480347136, Command: list_accounts, Options: 
+User ID: 264791398480347136, Command: baltop, Options: 
+User ID: 264791398480347136, Command: account, Options: 
+User ID: 264791398480347136, Command: pay, Options: amount: 1000, account_to_pay: kalikingly, account_name: None, from_account: None, tax_account: T, tax_percentage: -100, memo: None, ephemeral: False
+User ID: 264791398480347136, Command: baltop, Options: 
+User ID: 1018934971810979840, Command: ping, Options: 
+User ID: 1018934971810979840, Command: ping, Options: 
+User ID: 1018934971810979840, Command: pong, Options: 
+User ID: 264791398480347136, Command: pay, Options: amount: 1000, account_to_pay: kalikingly, account_name: None, from_account: None, tax_account: T, tax_percentage: -100, memo: None, ephemeral: False
+User ID: 264791398480347136, Command: pay, Options: amount: 1000, account_to_pay: kalikingly, account_name: None, from_account: None, tax_account: T, tax_percentage: 92.93892929399384748399210020393838290102939388392010393839200192, memo: None, ephemeral: False
+User ID: 264791398480347136, Command: ping, Options: 
+User ID: 264791398480347136, Command: pay, Options: amount: 1000, account_to_pay: kalikingly, account_name: None, from_account: None, tax_account: T, tax_percentage: 99.99999999, memo: None, ephemeral: False
+User ID: 264791398480347136, Command: pay, Options: amount: 1000, account_to_pay: kalikingly, account_name: None, from_account: None, tax_account: T, tax_percentage: 84.1992928374732102020304949483290, memo: None, ephemeral: False
+User ID: 264791398480347136, Command: pay, Options: amount: 1000, account_to_pay: kalikingly, account_name: None, from_account: None, tax_account: T, tax_percentage: 16.939201002020294948920102039489, memo: None, ephemeral: False
+User ID: 264791398480347136, Command: pay, Options: amount: 1000, account_to_pay: kalikingly, account_name: None, from_account: None, tax_account: T, tax_percentage: 39.292919289101010101938847472, memo: None, ephemeral: False

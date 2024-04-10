@@ -9,7 +9,7 @@ import glob
 import logging
 import math
 
-authorised = ['1018934971810979840', "365931996129787914"]
+authorised = ['1018934971810979840', '365931996129787914', '264791398480347136']
 
 logging.getLogger('discord').setLevel(logging.WARNING)
 logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -221,6 +221,15 @@ async def ping(
     await ctx.respond("Pong!", ephemeral=ephemeral)
 
 
+@bot.slash_command(name="pong", description="Replies with Ping!")
+async def pong(
+    ctx,
+    ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
+):
+    log_event(ctx.author.id, "pong", {})
+    await ctx.respond("Ping!", ephemeral=ephemeral)
+
+
 @bot.slash_command(name="account", description="Check or create a personal account.")
 async def account(
     ctx,
@@ -261,7 +270,6 @@ async def list_accounts(
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
     company_accounts = {}
-    government_accounts = {}
     
     file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
     files = glob.glob(file_name)
@@ -280,8 +288,6 @@ async def list_accounts(
             owned_accounts.append([account_name, account_info])
         elif user_id in account_info["treasurers"]:
             treasurer_accounts.append([account_name, account_info])
-
-
 
     embed = discord.Embed(
         title="Your accounts",
@@ -417,12 +423,18 @@ async def pay(
     account_name: str = discord.Option(description="The name of the account to pay", required=False),
     from_account: str = discord.Option(description="The account from which to transfer", required=False),
     tax_account: str = discord.Option(description="The account to add tax to", required=False),
-    tax_percentage: int = discord.Option(description="Percentage of tax to subtract", required=False),
+    tax_percentage: int = discord.Option(int, description="Percentage of tax to subtract", required=False),
     memo: str = discord.Option(description="A memo for the transaction", required=False),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-
+    
     log_event(ctx.author.id, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo, "ephemeral": ephemeral})
+
+    tax_percentage = round(tax_percentage, 5)
+    tax_percentage = int(tax_percentage)
+    if tax_percentage > 100 or tax_percentage < 0:
+        await ctx.respond("Only put tax between 100 and 0", ephemeral=ephemeral)
+        return
 
     amountNumber = int(amount)
 

@@ -112,3 +112,26 @@
 {"user_id": 1018934971810979840, "command_name": "treasurer_list", "options": {"account_name": "test"}}
 {"user_id": 1018934971810979840, "command_name": "treasurer_remove", "options": {"account_name": "test", "treasurer_name": "m_anfred"}}
 {"user_id": 1018934971810979840, "command_name": "treasurer_remove", "options": {"account_name": "test", "treasurer_name": "m_anfred"}}
+{"user_id": 1018934971810979840, "command_name": "account", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
+{"user_id": 264791398480347136, "command_name": "create_account", "options": {"account_name": "Test", "command_name": "tst", "account_type": "company"}}
+{"user_id": 264791398480347136, "command_name": "account", "options": {}}
+{"user_id": 264791398480347136, "command_name": "list_accounts", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "government"}}
+{"user_id": 264791398480347136, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": "kalikingly", "account_name": null, "from_account": null, "tax_account": "T", "tax_percentage": "-100", "memo": null, "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "list_accounts", "options": {}}
+{"user_id": 264791398480347136, "command_name": "baltop", "options": {}}
+{"user_id": 264791398480347136, "command_name": "account", "options": {}}
+{"user_id": 264791398480347136, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": "kalikingly", "account_name": null, "from_account": null, "tax_account": "T", "tax_percentage": -100, "memo": null, "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "baltop", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "ping", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "ping", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "pong", "options": {}}
+{"user_id": 264791398480347136, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": "kalikingly", "account_name": null, "from_account": null, "tax_account": "T", "tax_percentage": "-100", "memo": null, "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": "kalikingly", "account_name": null, "from_account": null, "tax_account": "T", "tax_percentage": "92.93892929399384748399210020393838290102939388392010393839200192", "memo": null, "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "ping", "options": {}}
+{"user_id": 264791398480347136, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": "kalikingly", "account_name": null, "from_account": null, "tax_account": "T", "tax_percentage": "99.99999999", "memo": null, "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": "kalikingly", "account_name": null, "from_account": null, "tax_account": "T", "tax_percentage": "84.1992928374732102020304949483290", "memo": null, "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": "kalikingly", "account_name": null, "from_account": null, "tax_account": "T", "tax_percentage": "16.939201002020294948920102039489", "memo": null, "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": "kalikingly", "account_name": null, "from_account": null, "tax_account": "T", "tax_percentage": "39.292919289101010101938847472", "memo": null, "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "pay", "options": {"amount": "1000", "account_to_pay": "kalikingly", "account_name": null, "from_account": null, "tax_account": "T", "tax_percentage": 91, "memo": null, "ephemeral": false}}
