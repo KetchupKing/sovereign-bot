@@ -4,6 +4,7 @@
         "balance": 1000,
         "currency": "Sovereign",
         "own accounts": [
+            "test",
             "gov"
         ],
         "treasurer of": []

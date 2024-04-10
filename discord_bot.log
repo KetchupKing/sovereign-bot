@@ -41,3 +41,13 @@
 {"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {}}
 {"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
 {"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "account", "options": {}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "gov", "command_name": "G", "account_type": "government"}}

@@ -5,7 +5,9 @@
         "account_type": "government",
         "balance": 1000,
         "currency": "Sovereign",
-        "treasurers": [],
+        "treasurers": [
+            "1018934971810979840"
+        ],
         "owner": "1018934971810979840"
     }
 }
