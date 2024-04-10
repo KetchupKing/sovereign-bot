@@ -258,6 +258,7 @@ async def list_accounts(
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
     company_accounts = {}
+    government_accounts = {}
     
     file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
     files = glob.glob(file_name)
@@ -267,11 +268,26 @@ async def list_accounts(
             for account_id, account_info in accounts.items():
                 if user_id in account_info["treasurers"] or user_id == account_info["owner"]:
                     company_accounts[account_info["account_name"]] = account_info
-    
+
+    file_name = os.path.join(GOVERNMENT_DATA_DIR, '*.json')
+    files = glob.glob(file_name)
+    for file in files:
+        with open(file, 'r') as f:
+            accounts = json.load(f)
+            for account_id, account_info in accounts.items():
+                if user_id in account_info["treasurers"] or user_id == account_info["owner"]:
+                    government_accounts[account_info["account_name"]] = account_info
+
     owned_accounts = []
     treasurer_accounts = []
     
     for account_name, account_info in company_accounts.items():
+        if user_id == account_info["owner"]:
+            owned_accounts.append([account_name, account_info])
+        elif user_id in account_info["treasurers"]:
+            treasurer_accounts.append(account_name)
+
+    for account_name, account_info in government_accounts.items():
         if user_id == account_info["owner"]:
             owned_accounts.append([account_name, account_info])
         elif user_id in account_info["treasurers"]:

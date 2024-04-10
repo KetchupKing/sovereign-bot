@@ -50,3 +50,5 @@ User ID: 1018934971810979840, Command: create_account, Options: account_name: go
 User ID: 1018934971810979840, Command: create_account, Options: account_name: gov, command_name: G, account_type: government
 User ID: 1018934971810979840, Command: create_account, Options: account_name: gov, command_name: G, account_type: government
 User ID: 1018934971810979840, Command: create_account, Options: account_name: gov, command_name: G, account_type: government
+User ID: 1018934971810979840, Command: create_account, Options: account_name: gov, command_name: G, account_type: government
+User ID: 1018934971810979840, Command: list_accounts, Options: 
