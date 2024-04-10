@@ -293,12 +293,12 @@ async def list_accounts(
 
     if owned_accounts:
         for i, (account_name, account_info) in enumerate(owned_accounts, start=1):
-            response += f"{account_name}: {account_info["balance"]} {account_info["currency"]}\n"
-            embed.add_field(name=f"{account_name.capitalize()} ({account_info["account_type"]})", value=f"Command Name: {account_info["command_name"]}\nBalance: ㏜{account_info["balance"]}",inline=False)
+            response += f"{account_name}: {account_info['balance']} {account_info['currency']}\n"
+            embed.add_field(name=f"{account_name.capitalize()} ({account_info['account_type']})", value=f"Command Name: {account_info['command_name']}\nBalance: ㏜{account_info['balance']}",inline=False)
 
     if treasurer_accounts:
         for i, (account_name, account_info) in enumerate(treasurer_accounts, start=1):
-            embed.add_field(name=f"{account_name.capitalize()} ({account_info["account_type"]}) (Treasurer)", value=f"Command Name: {account_info["command_name"]}\nBalance: ㏜{account_info["balance"]}",inline=False)
+            embed.add_field(name=f"{account_name.capitalize()} ({account_info['account_type']}) (Treasurer)", value=f"Command Name: {account_info['command_name']}\nBalance: ㏜{account_info['balance']}",inline=False)
 
     if embed:
         await ctx.respond(embed=embed, ephemeral=ephemeral)
@@ -458,7 +458,7 @@ async def pay(
                 save_company_account_changes(from_account,sender_accounts)
                 transactionType = "company"
         else:
-            await ctx.respond(f"You do not have permission for '{sender_accounts["account_name"]}'", ephemeral=ephemeral)
+            await ctx.respond(f"You do not have permission for '{sender_accounts['account_name']}'", ephemeral=ephemeral)
             return
 
     if account_name:
@@ -498,11 +498,11 @@ async def pay(
             recipient_accounts["balance"] += amountNumber
             save_company_account_changes(account_name,recipient_accounts)
     
-    response_message = f"Successfully paid {amountNumber} {sender_accounts["currency"] if transactionType == "company" else sender_accounts["personal"]["currency"]} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts["account_name"] if transactionType == "company" else "personal account"}."
+    response_message = (f"Successfully paid {amountNumber} {sender_accounts['currency'] if transactionType == 'company' else sender_accounts['personal']['currency']} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'company' else 'personal account'}.")
     if memo:
         response_message += f" Memo: {memo}."
     if tax_percentage and tax_account:
-        response_message += f" With {tax_percentage}% tax to '{taxAccount["account_name"]}'"
+        response_message += f" With {tax_percentage}% tax to '{taxAccount['account_name']}'"
     await ctx.respond(response_message, ephemeral=ephemeral)
 
 
