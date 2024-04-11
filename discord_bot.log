@@ -13,3 +13,20 @@
 {"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "testgov", "command_name": "G", "account_type": "government", "ephemeral": false}}
 {"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test gov", "command_name": "G", "account_type": "government", "ephemeral": false}}
 {"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_list", "options": {"account_name": "G", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_list", "options": {"account_name": "test gov", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_list", "options": {"account_name": "test", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_list", "options": {"account_name": "test", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_add", "options": {"account_name": "test", "treasurer_name": "m_anfred", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_list", "options": {"account_name": "test", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_remove", "options": {"account_name": "test", "treasurer_name": "m_anfred", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_list", "options": {"account_name": "test gov", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_add", "options": {"account_name": "test gov", "treasurer_name": "m_anfred", "ephemeral": false}}
+{"user_id": 365931996129787914, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_add", "options": {"account_name": "test gov", "treasurer_name": "go_go", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "treasurer_list", "options": {"account_name": "test gov", "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "treasurer_add", "options": {"account_name": "test gov", "treasurer_name": "m_anfred", "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "treasurer_list", "options": {"account_name": "test gov", "ephemeral": false}}
+{"user_id": 264791398480347136, "command_name": "treasurer_remove", "options": {"account_name": "test gov", "treasurer_name": "m_anfred", "ephemeral": false}}

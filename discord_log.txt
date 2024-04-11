@@ -12,3 +12,20 @@ User ID: 1018934971810979840, Command: create_account, Options: account_name: te
 User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
 User ID: 1018934971810979840, Command: create_account, Options: account_name: testgov, command_name: G, account_type: government, ephemeral: False
 User ID: 1018934971810979840, Command: create_account, Options: account_name: test gov, command_name: G, account_type: government, ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_list, Options: account_name: G, ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_list, Options: account_name: test gov, ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_list, Options: account_name: test, ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_list, Options: account_name: test, ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_add, Options: account_name: test, treasurer_name: m_anfred, ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_list, Options: account_name: test, ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_remove, Options: account_name: test, treasurer_name: m_anfred, ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_list, Options: account_name: test gov, ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_add, Options: account_name: test gov, treasurer_name: m_anfred, ephemeral: False
+User ID: 365931996129787914, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_add, Options: account_name: test gov, treasurer_name: go_go, ephemeral: False
+User ID: 1018934971810979840, Command: treasurer_list, Options: account_name: test gov, ephemeral: False
+User ID: 264791398480347136, Command: treasurer_add, Options: account_name: test gov, treasurer_name: m_anfred, ephemeral: False
+User ID: 264791398480347136, Command: treasurer_list, Options: account_name: test gov, ephemeral: False
