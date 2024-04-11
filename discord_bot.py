@@ -9,6 +9,8 @@ import glob
 import logging
 import math
 
+admin = ['1018934971810979840', '365931996129787914']
+authorised_users = 'authorised.json'
 
 logging.getLogger('discord').setLevel(logging.WARNING)
 logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -75,6 +77,8 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
                         return account_info
 
     elif account_type == "government":
+        with open(authorised_users, 'r') as f:
+            authorised = json.load(f)
         if user_id in authorised:
             file_name = os.path.join(GOVERNMENT_DATA_DIR, '*.json')
             files = glob.glob(file_name)
@@ -156,6 +160,8 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
         }
     
     if account_type == "government":
+        with open(authorised_users, 'r') as f:
+            authorised = json.load(f)
         if user_id in authorised:
             accounts[account_id] = {
                 "account_name": account_name,
@@ -542,31 +548,58 @@ async def baltop(
     await ctx.respond(response, ephemeral=ephemeral)
 
 
-admin = ['1018934971810979840', '365931996129787914']
-filename = 'authorised.json'
+
 @bot.slash_command(name="authorisation", description="Authorise users to do government accounts.")
 async def authorise(
     ctx,
-    user_to_add: discord.User = discord.Option(discord.User, description="The user to authorise"),
+    user_to_add: discord.User = discord.Option(discord.User, description="The user to authorise", required=False),
+    user_to_remove: discord.User = discord.Option(discord.User, description="The user to un-authorise", required=False),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     user_id = str(ctx.author.id)
-    authorise_id = str(user_to_add.id)
-    if user_id in admin:
-        if not os.path.exists(filename):
-            with open(filename, 'w') as f:
-                json.dump([], f)
-        with open(filename, 'r') as f:
-            authorised = json.load(f)
+    
+    if user_to_add:
+        authorise_id = str(user_to_add.id)
+        if user_id in admin:
+            if not os.path.exists(authorised_users):
+                with open(authorised_users, 'w') as f:
+                    json.dump([], f)
+            with open(authorised_users, 'r') as f:
+                authorised = json.load(f)
+            
+            if authorise_id not in authorised:
+                authorised.append(authorise_id)
+                await ctx.respond(f"{authorise_id} has been authorised", ephemeral=ephemeral)
+            else:
+                await ctx.respond(f"{authorise_id} is already authorised.", ephemeral=ephemeral)
+            
+            with open(authorised_users, 'w') as f:
+                json.dump(authorised, f)
+
+        else:
+            await ctx.respond("Your not an admin.", ephemeral=ephemeral)
         
-        if authorise_id not in authorised:
-            authorised.append(authorise_id)
-        
-        with open(filename, 'w') as f:
-            json.dump(authorised, f)
-        
-        await ctx.respond("authorised", ephemeral=ephemeral)
-    else:
-        await ctx.respond("Your not an admin.", ephemeral=ephemeral)
+    elif user_to_remove:
+        authorise_id = str(user_to_remove.id)
+        if user_id in admin:
+            if not os.path.exists(authorised_users):
+                with open(authorised_users, 'w') as f:
+                    json.dump([], f)
+            with open(authorised_users, 'r') as f:
+                authorised = json.load(f)
+            
+            if authorise_id in authorised:
+                authorised.remove(authorise_id)
+                await ctx.respond(f"{authorise_id} has been un-authorised", ephemeral=ephemeral)
+            else:
+                await ctx.respond(f"{authorise_id} is not in the list.", ephemeral=ephemeral)
+
+            with open(authorised_users, 'w') as f:
+                json.dump(authorised, f)
+
+        else:
+            await ctx.respond("Your not an admin.", ephemeral=ephemeral)
+
+
 
 bot.run(TOKEN)
