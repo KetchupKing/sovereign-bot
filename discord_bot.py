@@ -9,7 +9,6 @@ import glob
 import logging
 import math
 
-authorised = ['1018934971810979840', '365931996129787914', '264791398480347136']
 
 logging.getLogger('discord').setLevel(logging.WARNING)
 logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -542,5 +541,32 @@ async def baltop(
         response += f"{i+((page-1)*10)}. {account_name} - {account_info['balance']} Sovereign\n"
     await ctx.respond(response, ephemeral=ephemeral)
 
+
+admin = ['1018934971810979840', '365931996129787914']
+filename = 'authorised.json'
+@bot.slash_command(name="authorisation", description="Authorise users to do government accounts.")
+async def authorise(
+    ctx,
+    user_to_add: discord.User = discord.Option(discord.User, description="The user to authorise"),
+    ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
+):
+    user_id = str(ctx.author.id)
+    authorise_id = str(user_to_add.id)
+    if user_id in admin:
+        if not os.path.exists(filename):
+            with open(filename, 'w') as f:
+                json.dump([], f)
+        with open(filename, 'r') as f:
+            authorised = json.load(f)
+        
+        if authorise_id not in authorised:
+            authorised.append(authorise_id)
+        
+        with open(filename, 'w') as f:
+            json.dump(authorised, f)
+        
+        await ctx.respond("authorised", ephemeral=ephemeral)
+    else:
+        await ctx.respond("Your not an admin.", ephemeral=ephemeral)
 
 bot.run(TOKEN)
