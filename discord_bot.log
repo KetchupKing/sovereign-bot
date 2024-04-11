@@ -30,3 +30,4 @@
 {"user_id": 264791398480347136, "command_name": "treasurer_add", "options": {"account_name": "test gov", "treasurer_name": "m_anfred", "ephemeral": false}}
 {"user_id": 264791398480347136, "command_name": "treasurer_list", "options": {"account_name": "test gov", "ephemeral": false}}
 {"user_id": 264791398480347136, "command_name": "treasurer_remove", "options": {"account_name": "test gov", "treasurer_name": "m_anfred", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}

@@ -65,7 +65,6 @@ def save_company_account_changes(account_name, accounts):
 
 
 def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
-#    if account_type == "company":
     file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
     files = glob.glob(file_name)
     for file in files:
@@ -74,19 +73,6 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
             for account_id, account_info in accounts.items():
                 if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
                     return account_info
-
-#    elif account_type == "government":
-#        with open(authorised_users, 'r') as f:
-#            authorised = json.load(f)
-#        if user_id in authorised:
-#            file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
-#            files = glob.glob(file_name)
-#            for file in files:
-#                with open(file, 'r') as f:
-#                    accounts = json.load(f)
-#                    for account_id, account_info in accounts.items():
-#                        if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
-#                            return account_info
 
     else:
         personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
