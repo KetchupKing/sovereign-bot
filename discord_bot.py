@@ -17,7 +17,6 @@ logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(as
 
 ACCOUNTS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'accounts_data')
 COMPANY_DATA_DIR = os.path.join(os.path.dirname(__file__), 'company_data')
-GOVERNMENT_DATA_DIR = os.path.join(os.path.dirname(__file__), 'government_data')
 os.makedirs(ACCOUNTS_DATA_DIR, exist_ok=True)
 os.makedirs(COMPANY_DATA_DIR, exist_ok=True)
 intents = discord.Intents.default()
@@ -80,7 +79,7 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
         with open(authorised_users, 'r') as f:
             authorised = json.load(f)
         if user_id in authorised:
-            file_name = os.path.join(GOVERNMENT_DATA_DIR, '*.json')
+            file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
             files = glob.glob(file_name)
             for file in files:
                 with open(file, 'r') as f:
