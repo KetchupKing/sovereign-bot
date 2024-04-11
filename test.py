@@ -222,7 +222,7 @@ async def ping(
     ctx,
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-    log_event(ctx.author.id, "ping", {})
+    log_event(ctx.author.id, "ping", {"ephemeral": ephemeral})
     await ctx.respond("Pong!", ephemeral=ephemeral)
 
 
@@ -231,7 +231,7 @@ async def pong(
     ctx,
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-    log_event(ctx.author.id, "pong", {})
+    log_event(ctx.author.id, "pong", {"ephemeral": ephemeral})
     await ctx.respond("Ping!", ephemeral=ephemeral)
 
 
@@ -240,7 +240,7 @@ async def account(
     ctx,
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-    log_event(ctx.author.id, "account", {})
+    log_event(ctx.author.id, "account", {"ephemeral": ephemeral})
     user_id = str(ctx.author.id)
     userName = str(ctx.author.name)
     response = check_or_create_account(user_id, userName)
@@ -254,7 +254,7 @@ async def create_account(
     account_type: str = discord.Option(str, choices=['company', 'government']),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-    log_event(ctx.author.id, "create_account", {"account_name": account_name, "command_name": command_name, "account_type": account_type})
+    log_event(ctx.author.id, "create_account", {"account_name": account_name, "command_name": command_name, "account_type": account_type, "ephemeral": ephemeral})
     account_type_choices = ["company", "government"]
 
     if account_type not in account_type_choices:
@@ -271,7 +271,7 @@ async def list_accounts(
     ctx,
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-    log_event(ctx.author.id, "list_accounts", {})
+    log_event(ctx.author.id, "list_accounts", {"ephemeral": ephemeral})
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
     company_accounts = {}
@@ -327,7 +327,7 @@ async def add_treasurer(
     treasurer_name: discord.User = discord.Option(discord.User, description="Name of treasurer adding"),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-    log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name.name})
+    log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name.name, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
     account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
@@ -361,7 +361,7 @@ async def remove_treasurer(
     treasurer_name: discord.User = discord.Option(discord.User, description="Name of treasurer removing"),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-    log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name.name})
+    log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name.name, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
     account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
@@ -394,7 +394,7 @@ async def list_treasurers(
     account_name: str = discord.Option(description="Account to list treasurers of"),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-    log_event(ctx.author.id, "treasurer_list", {"account_name": account_name})
+    log_event(ctx.author.id, "treasurer_list", {"account_name": account_name, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
     account_to_list = load_accounts(account_type="company", account_name=account_name)
     
@@ -531,7 +531,7 @@ async def baltop(
     page: int = discord.Option(int,description="The amount to transfer", required=False, default=1),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-    log_event(ctx.author.id, "baltop", {})
+    log_event(ctx.author.id, "baltop", {"page": page, "ephemeral": ephemeral})
     sorted_accounts = sort_accounts()
     trimmed_accounts = getItemsOnPage(sorted_accounts,page)
     nAccounts = len(sorted_accounts)
@@ -548,7 +548,6 @@ async def baltop(
     await ctx.respond(response, ephemeral=ephemeral)
 
 
-
 @bot.slash_command(name="authorisation", description="Authorise users to do government accounts.")
 async def authorise(
     ctx,
@@ -556,6 +555,7 @@ async def authorise(
     user_to_remove: discord.User = discord.Option(discord.User, description="The user to un-authorise", required=False),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
+    log_event(ctx.author.id, "authorise", {"adding user": user_to_add, "removing user": user_to_remove, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
     
     if user_to_add:
@@ -599,7 +599,6 @@ async def authorise(
 
         else:
             await ctx.respond("Your not an admin.", ephemeral=ephemeral)
-
 
 
 bot.run(TOKEN)
