@@ -9,7 +9,7 @@ import glob
 import logging
 import math
 
-authorised = ['1018934971810979840', "365931996129787914"]
+authorised = ['1018934971810979840', '365931996129787914', '264791398480347136']
 
 logging.getLogger('discord').setLevel(logging.WARNING)
 logging.basicConfig(filename='discord_bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -39,11 +39,14 @@ def log_event(user_id, command_name, options):
 def logs_to_txt(filename='discord_log.txt'):
     with open('discord_bot.log', 'r') as log_file, open(filename, 'w') as output_file:
         for line in log_file:
-            log_entry = json.loads(line)
-            template_string = "User ID: {user_id}, Command: {command_name}, Options: {options}"
-            options_str = ', '.join(f"{key}: {value}" for key, value in log_entry['options'].items())
-            formatted_entry = template_string.format(user_id=log_entry['user_id'], command_name=log_entry['command_name'], options=options_str)
-            output_file.write(formatted_entry + '\n')
+            try:
+                log_entry = json.loads(line)
+                template_string = "User ID: {user_id}, Command: {command_name}, Options: {options}"
+                options_str = ', '.join(f"{key}: {value}" for key, value in log_entry['options'].items())
+                formatted_entry = template_string.format(user_id=log_entry['user_id'], command_name=log_entry['command_name'], options=options_str)
+                output_file.write(formatted_entry + '\n')
+            except json.JSONDecodeError:
+                print(f"Error parsing line: {line}")
 
 
 def save_company_account_changes(account_name, accounts):
@@ -218,6 +221,15 @@ async def ping(
     await ctx.respond("Pong!", ephemeral=ephemeral)
 
 
+@bot.slash_command(name="pong", description="Replies with Ping!")
+async def pong(
+    ctx,
+    ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
+):
+    log_event(ctx.author.id, "pong", {})
+    await ctx.respond("Ping!", ephemeral=ephemeral)
+
+
 @bot.slash_command(name="account", description="Check or create a personal account.")
 async def account(
     ctx,
@@ -258,7 +270,6 @@ async def list_accounts(
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
     company_accounts = {}
-    government_accounts = {}
     
     file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
     files = glob.glob(file_name)
@@ -278,8 +289,6 @@ async def list_accounts(
         elif user_id in account_info["treasurers"]:
             treasurer_accounts.append([account_name, account_info])
 
-
-
     embed = discord.Embed(
         title="Your accounts",
         description="All accounts you own and are a treasurer of",
@@ -293,12 +302,12 @@ async def list_accounts(
 
     if owned_accounts:
         for i, (account_name, account_info) in enumerate(owned_accounts, start=1):
-            response += f"{account_name}: {account_info["balance"]} {account_info["currency"]}\n"
-            embed.add_field(name=f"{account_name.capitalize()} ({account_info["account_type"]})", value=f"Command Name: {account_info["command_name"]}\nBalance: ㏜{account_info["balance"]}",inline=False)
+            response += f"{account_name}: {account_info['balance']} {account_info['currency']}\n"
+            embed.add_field(name=f"{account_name.capitalize()} ({account_info['account_type']})", value=f"Command Name: {account_info['command_name']}\nBalance: ㏜{account_info['balance']}",inline=False)
 
     if treasurer_accounts:
         for i, (account_name, account_info) in enumerate(treasurer_accounts, start=1):
-            embed.add_field(name=f"{account_name.capitalize()} ({account_info["account_type"]}) (Treasurer)", value=f"Command Name: {account_info["command_name"]}\nBalance: ㏜{account_info["balance"]}",inline=False)
+            embed.add_field(name=f"{account_name.capitalize()} ({account_info['account_type']}) (Treasurer)", value=f"Command Name: {account_info['command_name']}\nBalance: ㏜{account_info['balance']}",inline=False)
 
     if embed:
         await ctx.respond(embed=embed, ephemeral=ephemeral)
@@ -414,12 +423,17 @@ async def pay(
     account_name: str = discord.Option(description="The name of the account to pay", required=False),
     from_account: str = discord.Option(description="The account from which to transfer", required=False),
     tax_account: str = discord.Option(description="The account to add tax to", required=False),
-    tax_percentage: int = discord.Option(description="Percentage of tax to subtract", required=False),
+    tax_percentage: float = discord.Option(float, description="Percentage of tax to subtract", required=False),
     memo: str = discord.Option(description="A memo for the transaction", required=False),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-
+    
     log_event(ctx.author.id, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo, "ephemeral": ephemeral})
+
+    tax_percentage = round(tax_percentage, 3)
+    if tax_percentage > 100 or tax_percentage < 0:
+        await ctx.respond("Only put tax between 100 and 0", ephemeral=ephemeral)
+        return
 
     amountNumber = int(amount)
 
@@ -458,7 +472,7 @@ async def pay(
                 save_company_account_changes(from_account,sender_accounts)
                 transactionType = "company"
         else:
-            await ctx.respond(f"You do not have permission for '{sender_accounts["account_name"]}'", ephemeral=ephemeral)
+            await ctx.respond(f"You do not have permission for '{sender_accounts['account_name']}'", ephemeral=ephemeral)
             return
 
     if account_name:
@@ -498,11 +512,11 @@ async def pay(
             recipient_accounts["balance"] += amountNumber
             save_company_account_changes(account_name,recipient_accounts)
     
-    response_message = f"Successfully paid {amountNumber} {sender_accounts["currency"] if transactionType == "company" else sender_accounts["personal"]["currency"]} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts["account_name"] if transactionType == "company" else "personal account"}."
+    response_message = (f"Successfully paid {amountNumber} {sender_accounts['currency'] if transactionType == 'company' else sender_accounts['personal']['currency']} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'company' else 'personal account'}.")
     if memo:
         response_message += f" Memo: {memo}."
     if tax_percentage and tax_account:
-        response_message += f" With {tax_percentage}% tax to '{taxAccount["account_name"]}'"
+        response_message += f" With {tax_percentage}% tax to '{taxAccount['account_name']}'"
     await ctx.respond(response_message, ephemeral=ephemeral)
 
 
