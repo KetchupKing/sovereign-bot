@@ -266,7 +266,7 @@ async def list_accounts(
         with open(file, 'r') as f:
             accounts = json.load(f)
             for account_id, account_info in accounts.items():
-                if user_id in account_info["treasurers"] or user_id == account_info["owner"]:
+                if user_id in account_info.get("treasurers", []) or user_id == account_info.get("owner"):
                     company_accounts[account_info["account_name"]] = account_info
 
     owned_accounts = []
@@ -284,7 +284,7 @@ async def list_accounts(
         color=discord.Colour.green(),
     )
     response = ""
-    
+
     if personal_accounts:
         if "personal" in personal_accounts:
             response += f"Personal Account: {personal_accounts['personal']['balance']} {personal_accounts['personal']['balance']}\n"
