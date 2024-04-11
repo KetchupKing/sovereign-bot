@@ -297,8 +297,8 @@ async def list_accounts(
     response = ""
     
     if "personal" in personal_accounts:
-        response += f"Personal Account: {personal_accounts['personal']['balance']} {personal_accounts['personal']['currency']}\n"
-        embed.add_field(name=f"{personal_accounts['personal']['account_name']}'s account (Personal)", value=f"Command Name: N/A\nBalance: {personal_accounts['personal']['currency']}")
+        response += f"Personal Account: {personal_accounts['personal']['balance']} {personal_accounts['personal']['balance']}\n"
+        embed.add_field(name=f"{personal_accounts['personal']['account_name']}'s account (Personal)", value=f"Command Name: N/A\nBalance: ㏜{personal_accounts['personal']['balance']}")
 
     if owned_accounts:
         for i, (account_name, account_info) in enumerate(owned_accounts, start=1):
