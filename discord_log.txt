@@ -1,2 +1,14 @@
 User ID: 1018934971810979840, Command: baltop, Options: 
 User ID: 1018934971810979840, Command: baltop, Options: 
+User ID: 1018934971810979840, Command: baltop, Options: page: 4567, ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: account, Options: ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test, command_name: T, account_type: company, ephemeral: False
+User ID: 1018934971810979840, Command: list_accounts, Options: ephemeral: False
+User ID: 1018934971810979840, Command: create_account, Options: account_name: testgov, command_name: G, account_type: government, ephemeral: False
+User ID: 1018934971810979840, Command: create_account, Options: account_name: test gov, command_name: G, account_type: government, ephemeral: False

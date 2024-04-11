@@ -1,3 +1,15 @@
 {"user_id": 1018934971810979840, "command_name": "baltop", "options": {}}
 {"user_id": 1018934971810979840, "command_name": "baltop", "options": {}}
 {"user_id": 1018934971810979840, "command_name": "baltop", "options": {"page": 4567, "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "account", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "company", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "testgov", "command_name": "G", "account_type": "government", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "create_account", "options": {"account_name": "test gov", "command_name": "G", "account_type": "government", "ephemeral": false}}
+{"user_id": 1018934971810979840, "command_name": "list_accounts", "options": {"ephemeral": false}}
