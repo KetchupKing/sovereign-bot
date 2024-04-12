@@ -127,7 +127,7 @@ def check_or_create_account(user_id, userName):
         save_accounts(user_id, accounts)
         return "A new personal account has been created."
     else:
-        return f"Your account balance is {accounts['personal']['balance']} {accounts['personal']['currency']}."
+        return f"Your account balance is Sv {accounts['personal']['balance']}."
 
 
 def create_new_account(ctx, user_id, account_name, command_name, account_type):
