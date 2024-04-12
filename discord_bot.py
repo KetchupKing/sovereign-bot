@@ -346,9 +346,12 @@ async def add_treasurer(
         account_to_modify["treasurers"].append(treasurer_id)
         if save_company_account_changes(account_name, account_to_modify):
             treasurer_accounts = load_accounts(treasurer_id)
-            treasurer_accounts["personal"]["treasurer of"].append(account_name)
-            save_accounts(treasurer_id, treasurer_accounts)
-            await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{account_name}'.", ephemeral=ephemeral)
+            if treasurer_accounts is None or treasurer_accounts.get("personal") is None:
+                await ctx.respond(f"Treasurer '{treasurer_name}' does not have a personal account.", ephemeral=ephemeral)
+            else:
+                treasurer_accounts["personal"]["treasurer of"].append(account_name)
+                save_accounts(treasurer_id, treasurer_accounts)
+                await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{account_name}'.", ephemeral=ephemeral)
         else:
             await ctx.respond("Failed to save changes.", ephemeral=ephemeral)
     else:
@@ -375,14 +378,17 @@ async def remove_treasurer(
         return
     
     treasurer_id = str(treasurer_name.id)
-    
+
     if treasurer_id in account_to_modify["treasurers"]:
         account_to_modify["treasurers"].remove(treasurer_id)
         if save_company_account_changes(account_name, account_to_modify):
             treasurer_accounts = load_accounts(treasurer_id)
-            treasurer_accounts["personal"]["treasurer of"].remove(account_name)
-            save_accounts(treasurer_id, treasurer_accounts)
-            await ctx.respond(f"Treasurer '{treasurer_name}' has been removed from '{account_name}'.", ephemeral=ephemeral)
+            if account_name in treasurer_accounts["personal"]["treasurer of"]:
+                treasurer_accounts["personal"]["treasurer of"].remove(account_name)
+                save_accounts(treasurer_id, treasurer_accounts)
+                await ctx.respond(f"Treasurer '{treasurer_name}' has been removed from '{account_name}'.", ephemeral=ephemeral)
+            else:
+                await ctx.respond(f"Treasurer '{treasurer_name}' is not managing '{account_name}'.", ephemeral=ephemeral)
         else:
             await ctx.respond("Failed to save changes.", ephemeral=ephemeral)
     else:

@@ -65,14 +65,28 @@ def save_company_account_changes(account_name, accounts):
 
 
 def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
-    file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
-    files = glob.glob(file_name)
-    for file in files:
-        with open(file, 'r') as f:
-            accounts = json.load(f)
-            for account_id, account_info in accounts.items():
-                if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
-                    return account_info
+    if account_type == "company":
+        file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
+        files = glob.glob(file_name)
+        for file in files:
+            with open(file, 'r') as f:
+                accounts = json.load(f)
+                for account_id, account_info in accounts.items():
+                    if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
+                        return account_info
+
+    elif account_type == "government":
+        with open(authorised_users, 'r') as f:
+            authorised = json.load(f)
+        if user_id in authorised:
+            file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
+            files = glob.glob(file_name)
+            for file in files:
+                with open(file, 'r') as f:
+                    accounts = json.load(f)
+                    for account_id, account_info in accounts.items():
+                        if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
+                            return account_info
 
     else:
         personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
@@ -260,6 +274,7 @@ async def list_accounts(
     user_id = str(ctx.author.id)
     personal_accounts = load_accounts(user_id)
     company_accounts = {}
+    print("test 1")
     file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
     files = glob.glob(file_name)
     for file in files:
@@ -315,7 +330,7 @@ async def add_treasurer(
 ):
     log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name.name, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
-    account_to_modify = load_accounts(account_name=account_name)
+    account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
     if account_to_modify is None:
         await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
@@ -331,9 +346,12 @@ async def add_treasurer(
         account_to_modify["treasurers"].append(treasurer_id)
         if save_company_account_changes(account_name, account_to_modify):
             treasurer_accounts = load_accounts(treasurer_id)
-            treasurer_accounts["personal"]["treasurer of"].append(account_name)
-            save_accounts(treasurer_id, treasurer_accounts)
-            await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{account_name}'.", ephemeral=ephemeral)
+            if treasurer_accounts is None or treasurer_accounts.get("personal") is None:
+                await ctx.respond(f"Treasurer '{treasurer_name}' does not have a personal account.", ephemeral=ephemeral)
+            else:
+                treasurer_accounts["personal"]["treasurer of"].append(account_name)
+                save_accounts(treasurer_id, treasurer_accounts)
+                await ctx.respond(f"Treasurer '{treasurer_name}' has been added to '{account_name}'.", ephemeral=ephemeral)
         else:
             await ctx.respond("Failed to save changes.", ephemeral=ephemeral)
     else:
@@ -349,7 +367,7 @@ async def remove_treasurer(
 ):
     log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name.name, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
-    account_to_modify = load_accounts(account_name=account_name)
+    account_to_modify = load_accounts(account_type="company", account_name=account_name)
     
     if account_to_modify is None:
         await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
@@ -365,9 +383,12 @@ async def remove_treasurer(
         account_to_modify["treasurers"].remove(treasurer_id)
         if save_company_account_changes(account_name, account_to_modify):
             treasurer_accounts = load_accounts(treasurer_id)
-            treasurer_accounts["personal"]["treasurer of"].remove(account_name)
-            save_accounts(treasurer_id, treasurer_accounts)
-            await ctx.respond(f"Treasurer '{treasurer_name}' has been removed from '{account_name}'.", ephemeral=ephemeral)
+            if account_name in treasurer_accounts["personal"]["treasurer of"]:
+                treasurer_accounts["personal"]["treasurer of"].remove(account_name)
+                save_accounts(treasurer_id, treasurer_accounts)
+                await ctx.respond(f"Treasurer '{treasurer_name}' has been removed from '{account_name}'.", ephemeral=ephemeral)
+            else:
+                await ctx.respond(f"Treasurer '{treasurer_name}' is not managing '{account_name}'.", ephemeral=ephemeral)
         else:
             await ctx.respond("Failed to save changes.", ephemeral=ephemeral)
     else:
@@ -382,7 +403,7 @@ async def list_treasurers(
 ):
     log_event(ctx.author.id, "treasurer_list", {"account_name": account_name, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
-    account_to_list = load_accounts(account_name=account_name)
+    account_to_list = load_accounts(account_type="company", account_name=account_name)
     
     if account_to_list is None:
         await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
