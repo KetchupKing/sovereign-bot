@@ -65,7 +65,7 @@ def save_company_account_changes(account_name, accounts):
 
 
 def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
-    if account_type == "company":
+    if account_type == "Company":
         file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
         files = glob.glob(file_name)
         for file in files:
@@ -102,7 +102,7 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
 
 
 def save_accounts(user_id, accounts, account_type=None, account_name=None):
-    if account_type == "company":
+    if account_type == "Company":
         file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
     elif account_type == "government":
         file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
@@ -147,7 +147,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
     account_id = command_name
     treasurers = [user_id]
     
-    if account_type == "company":
+    if account_type == "Company":
         accounts[account_id] = {
             "account_name": account_name,
             "command_name": command_name,
@@ -176,7 +176,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
 
     personal_accounts = load_accounts(user_id)
     if personal_accounts == None:
-        return f"You need a personal account before you can create a company account"
+        return f"You need a personal account before you can create a Company account"
     personal_accounts["personal"]["own accounts"].append(account_name)
     save_accounts(user_id, personal_accounts)
     save_accounts(user_id, accounts, account_type, account_name)
@@ -245,19 +245,19 @@ async def account(
     response = check_or_create_account(user_id, userName)
     await ctx.respond(response, ephemeral=ephemeral)    
 
-@bot.slash_command(name="create_account", description="Create a company/government account with specified details.")
+@bot.slash_command(name="create_account", description="Create a Company/government account with specified details.")
 async def create_account(
     ctx, 
     account_name: str, 
     command_name: str, 
-    account_type: str = discord.Option(str, choices=['company', 'government']),
+    account_type: str = discord.Option(str, choices=['Company', 'government']),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     log_event(ctx.author.id, "create_account", {"account_name": account_name, "command_name": command_name, "account_type": account_type, "ephemeral": ephemeral})
-    account_type_choices = ["company", "government"]
+    account_type_choices = ["Company", "government"]
 
     if account_type not in account_type_choices:
-        await ctx.respond("Invalid account type. Please choose from 'company' or 'government'.", ephemeral=ephemeral)
+        await ctx.respond("Invalid account type. Please choose from 'Company' or 'government'.", ephemeral=ephemeral)
         return
     
     user_id = str(ctx.author.id)
@@ -330,7 +330,7 @@ async def add_treasurer(
 ):
     log_event(ctx.author.id, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name.name, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
-    account_to_modify = load_accounts(account_type="company", account_name=account_name)
+    account_to_modify = load_accounts(account_type="Company", account_name=account_name)
     
     if account_to_modify is None:
         await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
@@ -367,7 +367,7 @@ async def remove_treasurer(
 ):
     log_event(ctx.author.id, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name.name, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
-    account_to_modify = load_accounts(account_type="company", account_name=account_name)
+    account_to_modify = load_accounts(account_type="Company", account_name=account_name)
     
     if account_to_modify is None:
         await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
@@ -378,7 +378,7 @@ async def remove_treasurer(
         return
     
     treasurer_id = str(treasurer_name.id)
-    
+
     if treasurer_id in account_to_modify["treasurers"]:
         account_to_modify["treasurers"].remove(treasurer_id)
         if save_company_account_changes(account_name, account_to_modify):
@@ -403,7 +403,7 @@ async def list_treasurers(
 ):
     log_event(ctx.author.id, "treasurer_list", {"account_name": account_name, "ephemeral": ephemeral})
     user_id = str(ctx.author.id)
-    account_to_list = load_accounts(account_type="company", account_name=account_name)
+    account_to_list = load_accounts(account_type="Company", account_name=account_name)
     
     if account_to_list is None:
         await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
@@ -453,7 +453,7 @@ async def pay(
     recipient_id = str(account_to_pay.id) if account_to_pay else None
     
     if from_account:
-        sender_accounts = load_accounts(account_type="company", account_name=from_account)
+        sender_accounts = load_accounts(account_type="Company", account_name=from_account)
         if sender_accounts is None:
             await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
             return
@@ -474,21 +474,21 @@ async def pay(
             save_accounts(sender_id, sender_accounts)
             transactionType = "personal"
 
-    elif sender_accounts["account_type"] == "company" or sender_accounts["account_type"] == "government":
+    elif sender_accounts["account_type"] == "Company" or sender_accounts["account_type"] == "government":
         if sender_accounts["owner"] == sender_id or sender_id in sender_accounts["treasurers"]:
             if sender_accounts["balance"] < amountNumber:
-                await ctx.respond("Insufficient funds in the company account.", ephemeral=ephemeral)
+                await ctx.respond("Insufficient funds in the Company account.", ephemeral=ephemeral)
                 return
             else:
                 sender_accounts["balance"] -= amountNumber
                 save_company_account_changes(from_account,sender_accounts)
-                transactionType = "company"
+                transactionType = "Company"
         else:
             await ctx.respond(f"You do not have permission for '{sender_accounts['account_name']}'", ephemeral=ephemeral)
             return
 
     if account_name:
-        recipient_accounts = load_accounts(account_type="company", account_name=account_name)
+        recipient_accounts = load_accounts(account_type="Company", account_name=account_name)
         if recipient_accounts is None:
             await ctx.respond("The specified 'account name' does not exist.", ephemeral=True)
             return
@@ -500,7 +500,7 @@ async def pay(
 
     if tax_percentage and tax_account:
         taxPercentage = int(tax_percentage)
-        taxAccount = load_accounts(account_type="company", account_name=tax_account)
+        taxAccount = load_accounts(account_type="Company", account_name=tax_account)
         
         taxAmount = round(amountNumber*(taxPercentage/100))
         newAmount = round(amountNumber-taxAmount)
@@ -516,7 +516,7 @@ async def pay(
             recipient_accounts["personal"]["balance"] += amountNumber
             save_accounts(recipient_id, recipient_accounts)
 
-    elif recipient_accounts["account_type"] == "company":
+    elif recipient_accounts["account_type"] == "Company":
         if tax_percentage and tax_account:
             recipient_accounts["balance"] += newAmount
             save_company_account_changes(account_name,recipient_accounts)
@@ -524,7 +524,7 @@ async def pay(
             recipient_accounts["balance"] += amountNumber
             save_company_account_changes(account_name,recipient_accounts)
     
-    response_message = (f"Successfully paid {amountNumber} {sender_accounts['currency'] if transactionType == 'company' else sender_accounts['personal']['currency']} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'company' else 'personal account'}.")
+    response_message = (f"Successfully paid {amountNumber} {sender_accounts['currency'] if transactionType == 'Company' else sender_accounts['personal']['currency']} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'Company' else 'personal account'}.")
     if memo:
         response_message += f" Memo: {memo}."
     if tax_percentage and tax_account:
