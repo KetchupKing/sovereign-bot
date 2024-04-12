@@ -118,14 +118,14 @@ def check_or_create_account(user_id, userName):
         accounts = {
             "personal": {
                 "account_name": userName,
-                "balance": 1000,
+                "balance": 1000,########################SET TO 0 ON FINAL RELEASE
                 "currency": "Sovereign",
                 "own accounts": [],
                 "treasurer of": []
             }
         }
         save_accounts(user_id, accounts)
-        return "A new personal account named 'personal' has been created with an initial balance of 1000 Sovereign."
+        return "A new personal account has been created."
     else:
         return f"Your account balance is {accounts['personal']['balance']} {accounts['personal']['currency']}."
 
@@ -152,7 +152,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
             "account_name": account_name,
             "command_name": command_name,
             "account_type": account_type,
-            "balance": 1000,
+            "balance": 1000,########################SET TO 0 ON FINAL RELEASE
             "currency": "Sovereign",
             "treasurers": treasurers,
             "owner": user_id
@@ -166,7 +166,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
                 "account_name": account_name,
                 "command_name": command_name,
                 "account_type": account_type,
-                "balance": 1000,
+                "balance": 1000,########################SET TO 0 ON FINAL RELEASE
                 "currency": "Sovereign",
                 "treasurers": treasurers,
                 "owner": user_id
@@ -180,7 +180,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
     personal_accounts["personal"]["own accounts"].append(account_name)
     save_accounts(user_id, personal_accounts)
     save_accounts(user_id, accounts, account_type, account_name)
-    return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', balance 1000 Sovereign, has been created."
+    return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', has been created."
 
 
 def sort_accounts():
@@ -318,7 +318,6 @@ async def list_accounts(
         return
     if embed:
         await ctx.respond(embed=embed, ephemeral=ephemeral)
-
 
 
 @bot.slash_command(name="treasurer_add", description="Add a treasurer to an account.")
@@ -532,7 +531,7 @@ async def pay(
     await ctx.respond(response_message, ephemeral=ephemeral)
 
 
-@bot.slash_command(name="baltop", description="Accounts with the most Sovereign.")
+@bot.slash_command(name="baltop", description="Accounts with the most Sovereigns.")
 async def baltop(
     ctx, 
     page: int = discord.Option(int,description="The amount to transfer", required=False, default=1),
@@ -547,11 +546,11 @@ async def baltop(
     if page > maxPages:
         page = maxPages
 
-    response = f"Accounts with the most Sovereign:  (Page: {page}/{maxPages})\n"
+    response = f"Accounts with the most Sovereigns:  (Page: {page}/{maxPages})\n"
 
     for i, (account_id, account_info) in enumerate(sorted_accounts, start=1):
         account_name = account_info.get('account_name')
-        response += f"{i+((page-1)*10)}. {account_name} - {account_info['balance']} Sovereign\n"
+        response += f"{i+((page-1)*10)}. {account_name} - Sv{account_info['balance']} \n"
     await ctx.respond(response, ephemeral=ephemeral)
 
 
