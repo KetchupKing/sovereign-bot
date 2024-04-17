@@ -606,6 +606,7 @@ async def authorise(
         else:
             await ctx.respond("Your not an admin.", ephemeral=ephemeral)
 
+
 @bot.slash_command(name="eco", description="Manage account balances.")
 async def eco(
     ctx,
