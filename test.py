@@ -9,7 +9,7 @@ import glob
 import logging
 import math
 
-admin = ['1018934971810979840', '365931996129787914']
+admin = ['365931996129787914']
 authorised_users = 'authorised.json'
 
 logging.getLogger('discord').setLevel(logging.WARNING)
@@ -605,6 +605,64 @@ async def authorise(
 
         else:
             await ctx.respond("Your not an admin.", ephemeral=ephemeral)
+
+@bot.slash_command(name="eco", description="Manage account balances.")
+async def eco(
+    ctx,
+    user: discord.User = discord.Option(discord.User, description="Person to interact with", required=False),
+    account: str = discord.Option(str, description="Account to interact with", required=False),
+    command: str = discord.Option(str, description="Command", required=False),
+    value: int = discord.Option(int, description="The value", required=False),
+    ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
+):
+    user_id = str(ctx.author.id)
+    recipient_id = str(user.id) if user else None
+
+    if account:
+        recipient_accounts = load_accounts(account_type="Company", account_name=account)
+        if recipient_accounts is None:
+            await ctx.respond("The specified 'account name' does not exist.", ephemeral=True)
+            return
+    else:
+        recipient_accounts = load_accounts(recipient_id)
+        if recipient_accounts is None:
+            await ctx.respond("The recipient does not have a personal account.", ephemeral=ephemeral)
+            return
+
+    if user_id in admin:
+        if command == "set":
+            print(recipient_accounts)
+
+            if "personal" in recipient_accounts:
+                recipient_accounts["personal"]["balance"] = value
+                save_accounts(recipient_id, recipient_accounts)
+                
+            elif recipient_accounts["account_type"] == "Company":
+                recipient_accounts["balance"] = value
+                save_company_account_changes(account,recipient_accounts)
+            
+        elif command == "add":
+            if "personal" in recipient_accounts:
+                recipient_accounts["personal"]["balance"] += value
+                save_accounts(recipient_id, recipient_accounts)
+                
+            elif recipient_accounts["account_type"] == "Company":
+                recipient_accounts["balance"] += value
+                save_company_account_changes(account,recipient_accounts)
+
+        elif command == "sub":
+            if "personal" in recipient_accounts:
+                recipient_accounts["personal"]["balance"] -= value
+                save_accounts(recipient_id, recipient_accounts)
+                
+            elif recipient_accounts["account_type"] == "Company":
+                recipient_accounts["balance"] -= value
+                save_company_account_changes(account,recipient_accounts)
+                
+        await ctx.respond(recipient_accounts)
+    else:
+        await ctx.respond("You are not admin")
+
 
 
 bot.run(TOKEN)
