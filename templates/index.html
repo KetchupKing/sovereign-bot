@@ -28,6 +28,12 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp * 1000);
+            const formattedDate = date.toLocaleString();
+            return formattedDate;
+        }
+
         $.get('/filters', function(data) {
             const commandNames = data.command_names.sort();
             const userNames = data.user_names.sort();
@@ -43,13 +49,16 @@
 
         function loadCommands(criteria = {}) {
             $.post('/search', criteria, function(data) {
+                console.log(data); // Add this line to inspect the data
                 $('#commands').empty();
                 data.forEach(function(log) {
-                    const logEntry = `User Name: ${log.user_name}, Command Name: ${log.command_name}, Options: ${JSON.stringify(log.options)}`;
+                    const formattedTimestamp = formatTimestamp(log.timestamp);
+                    const logEntry = `User Name: ${log.user_name}, Command Name: ${log.command_name}, Options: ${JSON.stringify(log.options)}, Time: ${formattedTimestamp}`;
                     $('#commands').prepend('<div class="command">' + logEntry + '</div>');
                 });
             });
         }
+        
 
         loadCommands();
 

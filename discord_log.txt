@@ -1,20 +1,3 @@
-User ID: 1018934971810979840, User Name: kalikingly, Command: account, Options: ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: list_accounts, Options: ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: ping, Options: ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: pong, Options: ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: create_account, Options: account_name: test, command_name: T, account_type: Company, ephemeral: True
-User ID: 1018934971810979840, User Name: kalikingly, Command: create_account, Options: account_name: testing, command_name: TT, account_type: Company, ephemeral: True
-User ID: 1018934971810979840, User Name: kalikingly, Command: list_accounts, Options: ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: treasurer_add, Options: account_name: testing, treasurer_name: m_anfred, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: treasurer_list, Options: account_name: testing, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: treasurer_remove, Options: account_name: testing, treasurer_name: m_anfred, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: pay, Options: amount: 50, account_to_pay: m_anfred, account_name: None, from_account: None, tax_account: testing, tax_percentage: 5.0, memo: None, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: baltop, Options: page: 1, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: authorisation, Options: user_to_add: kalikingly, user_to_remove: None, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: authorisation, Options: user_to_add: None, user_to_remove: None, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: authorisation, Options: user_to_add: None, user_to_remove: m_anfred, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: authorisation, Options: user_to_add: m_anfred, user_to_remove: None, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: authorisation, Options: user_to_add: None, user_to_remove: m_anfred, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: authorisation, Options: user_to_add: None, user_to_remove: kalikingly, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: authorisation, Options: user_to_add: kalikingly, user_to_remove: None, ephemeral: False
-User ID: 1018934971810979840, User Name: kalikingly, Command: eco, Options: user: kalikingly, account: None, command: add, value: 500, ephemeral: False
+User ID: 1018934971810979840, User Name: kalikingly, Command: account, Options: ephemeral: False, Timestamp: 1713455297
+User ID: 1018934971810979840, User Name: kalikingly, Command: list_accounts, Options: ephemeral: False, Timestamp: 1713455302
+User ID: 1018934971810979840, User Name: kalikingly, Command: ping, Options: ephemeral: False, Timestamp: 1713455307

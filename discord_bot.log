@@ -1,21 +1,4 @@
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account", "options": {"ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "pong", "options": {"ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "Company", "ephemeral": true}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "create_account", "options": {"account_name": "testing", "command_name": "TT", "account_type": "Company", "ephemeral": true}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "treasurer_add", "options": {"account_name": "testing", "treasurer_name": "m_anfred", "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "treasurer_list", "options": {"account_name": "testing", "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "treasurer_remove", "options": {"account_name": "testing", "treasurer_name": "m_anfred", "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "pay", "options": {"amount": "50", "account_to_pay": "m_anfred", "account_name": null, "from_account": null, "tax_account": "testing", "tax_percentage": 5.0, "memo": null, "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "authorisation", "options": {"user_to_add": "kalikingly", "user_to_remove": null, "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "authorisation", "options": {"user_to_add": null, "user_to_remove": null, "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "authorisation", "options": {"user_to_add": null, "user_to_remove": "m_anfred", "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "authorisation", "options": {"user_to_add": "m_anfred", "user_to_remove": null, "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "authorisation", "options": {"user_to_add": null, "user_to_remove": "m_anfred", "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "authorisation", "options": {"user_to_add": null, "user_to_remove": "kalikingly", "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "authorisation", "options": {"user_to_add": "kalikingly", "user_to_remove": null, "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "eco", "options": {"user": "kalikingly", "account": null, "command": "add", "value": 500, "ephemeral": false}}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account", "options": {"ephemeral": false}, "timestamp": 1713455297}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713455302}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}, "timestamp": 1713455307}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "pong", "options": {"ephemeral": false}, "timestamp": 1713455310}

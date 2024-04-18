@@ -8,6 +8,7 @@ import re
 import glob
 import logging
 import math
+import time
 
 admin = ['365931996129787914', '1018934971810979840']
 authorised_users = 'authorised.json'
@@ -26,11 +27,13 @@ TOKEN = os.getenv('TOKEN')
 
 
 def log_event(user_id, user_name, command_name, options):
+    current_time = int(time.time())
     log_entry = {
         "user_id": user_id,
         "user_name": user_name,
         "command_name": command_name,
-        "options": options
+        "options": options,
+        "timestamp": current_time
     }
     with open('discord_bot.log', 'a') as log_file:
         log_file.write(json.dumps(log_entry) + '\n')
@@ -43,12 +46,14 @@ def logs_to_txt(filename='discord_log.txt'):
             try:
                 log_entry = json.loads(line)
                 user_name = log_entry.get('user_name', 'Unknown')
-                template_string = "User ID: {user_id}, User Name: {user_name}, Command: {command_name}, Options: {options}"
+                timestamp = log_entry.get('timestamp', 'No timestamp')
+                template_string = "User ID: {user_id}, User Name: {user_name}, Command: {command_name}, Options: {options}, Timestamp: {timestamp}"
                 options_str = ', '.join(f"{key}: {value}" for key, value in log_entry['options'].items())
-                formatted_entry = template_string.format(user_id=log_entry['user_id'], user_name=user_name, command_name=log_entry['command_name'], options=options_str)
+                formatted_entry = template_string.format(user_id=log_entry['user_id'], user_name=user_name, command_name=log_entry['command_name'], options=options_str, timestamp=timestamp)
                 output_file.write(formatted_entry + '\n')
             except json.JSONDecodeError:
                 print(f"Error parsing line: {line}")
+
 
 
 def save_company_account_changes(account_name, accounts):
