@@ -3,7 +3,6 @@ import json
 
 app = Flask(__name__)
 
-# Load the log file
 logs = []
 def load_logs():
     global logs
