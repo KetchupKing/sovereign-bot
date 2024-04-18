@@ -1,11 +1,12 @@
 {
     "personal": {
         "account_name": "kalikingly",
-        "balance": 60,
+        "balance": 510,
         "currency": "Sovereign",
         "own accounts": [
             "test",
-            "test gov"
+            "test gov",
+            "testing"
         ],
         "treasurer of": []
     }
