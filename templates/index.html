@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Discord Command Logs</title>
+    <style>
+        /* Add some basic styling */
+        .command {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Discord Command Logs</h1>
+    <div id="filters">
+        <label for="commandNameFilter">Command Name:</label>
+        <select id="commandNameFilter">
+            <option value="">No filter</option>
+        </select>
+        <label for="userNameFilter">User Name:</label>
+        <select id="userNameFilter">
+            <option value="">No filter</option>
+        </select>
+    </div>
+    <div id="commands"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $.get('/filters', function(data) {
+            const commandNames = data.command_names.sort();
+            const userNames = data.user_names.sort();
+
+            commandNames.forEach(name => {
+                $('#commandNameFilter').append(new Option(name, name));
+            });
+
+            userNames.forEach(name => {
+                $('#userNameFilter').append(new Option(name, name));
+            });
+        });
+
+        function loadCommands(criteria = {}) {
+            $.post('/search', criteria, function(data) {
+                $('#commands').empty();
+                data.forEach(function(log) {
+                    const logEntry = `User Name: ${log.user_name}, Command Name: ${log.command_name}, Options: ${JSON.stringify(log.options)}`;
+                    $('#commands').prepend('<div class="command">' + logEntry + '</div>');
+                });
+            });
+        }
+
+        loadCommands();
+
+        $('#commandNameFilter, #userNameFilter').change(function() {
+            const criteria = {
+                command_name: $('#commandNameFilter').val() || undefined,
+                user_name: $('#userNameFilter').val() || undefined
+            };
+            loadCommands(criteria);
+        });
+
+    </script>
+</body>
+</html>
