@@ -24,7 +24,6 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    load_logs()
     criteria = request.form
     results = []
     for log in logs:
@@ -34,7 +33,6 @@ def search():
 
 @app.route('/filters', methods=['GET'])
 def get_filters():
-    load_logs()
     command_names = set(log['command_name'] for log in logs)
     user_names = set(log['user_name'] for log in logs)
     return jsonify({'command_names': list(command_names), 'user_names': list(user_names)})
