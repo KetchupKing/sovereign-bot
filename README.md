@@ -18,3 +18,8 @@
     pip install aiofiles
     
     pip install PyNaCl
+
+
+    pip install Flask
+    
+    pip install Flask-Login
