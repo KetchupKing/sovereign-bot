@@ -8,7 +8,6 @@ import os
 app = Flask(__name__)
 load_dotenv()
 app.secret_key = os.getenv('TOKEN')
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -51,6 +50,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=1)
     logout_user()
     return redirect(url_for('login'))
 
