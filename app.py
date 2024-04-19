@@ -38,7 +38,7 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if username == 'admin' and password == 'password': # Replace with your own logic
+        if username == 'admin' and password == 'password':#REPLACE WITH DIFFERENT CREDENTIALS
             user = User(1)
             login_user(user)
             return redirect(url_for('index'))
