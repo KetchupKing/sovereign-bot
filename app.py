@@ -1,9 +1,14 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask import Flask, render_template, request, jsonify, redirect, url_for
+from datetime import timedelta
+from dotenv import load_dotenv
 import json
+import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'
+load_dotenv()
+app.secret_key = os.getenv('TOKEN')
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -45,6 +50,7 @@ def login():
         else:
             return 'Invalid credentials'
     return render_template('login.html')
+
 
 @app.route('/logout')
 @login_required
