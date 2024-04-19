@@ -49,7 +49,7 @@
 
         function loadCommands(criteria = {}) {
             $.post('/search', criteria, function(data) {
-                console.log(data); // Add this line to inspect the data
+                console.log(data);
                 $('#commands').empty();
                 data.forEach(function(log) {
                     const formattedTimestamp = formatTimestamp(log.timestamp);
