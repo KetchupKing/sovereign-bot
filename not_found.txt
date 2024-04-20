@@ -5,9 +5,7 @@ Arkovian Treasury 12000
 Dazvani Treasury 11199
 Jernmejer Cartel 10689
 Velsoran Treasury 10000
-n_xtkxwzztkztxurhkruxx 9698
 Cieurnish Defence Budget 8000
-josephinegrey 4623
 Dazvani Trading Company 4607
 Amoebal Meningitis Al 4082
 Cieurnish Justice Budget 4001
@@ -24,9 +22,7 @@ Revelry Apiculture Co. 790
 Legendary Loot Lair 727
 Cieurnish Beverage & Tobacco Company 575
 8BB 461
-Arzi Plays 450
 clem_the_whimsical 360
-Prince Kingly 360
 lol_lol_lolgodlol 360
 fyodorsrodent 342
 Dazvani Nether Imports 323
