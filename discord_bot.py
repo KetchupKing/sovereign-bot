@@ -449,10 +449,6 @@ async def pay(
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     log_event(ctx.author.id, ctx.author.name, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo, "ephemeral": ephemeral})
-    tax_percentage = round(tax_percentage, 3)
-    if tax_percentage > 100 or tax_percentage < 0:
-        await ctx.respond("Only put tax between 100 and 0", ephemeral=ephemeral)
-        return
 
     amountNumber = int(amount)
 
@@ -506,6 +502,10 @@ async def pay(
             return
 
     if tax_percentage and tax_account:
+        tax_percentage = round(tax_percentage, 3)
+        if tax_percentage > 100 or tax_percentage < 0:
+            await ctx.respond("Only put tax between 100 and 0", ephemeral=ephemeral)
+            return
         taxPercentage = int(tax_percentage)
         taxAccount = load_accounts(account_type="Company", account_name=tax_account)
         
