@@ -1,0 +1,9 @@
+command name | company name | balance | owners/treasuers?
+DI Dazvani Industries 75180 - 414382024552480769, 
+DAC Dazvani Arsenal Company 15153 - 414382024552480769,
+CD Dazvani Treasury 11199 - 414382024552480769,
+MDB Montaval Distillery & Brewery 2115 - 365931996129787914,
+MMM Magnificent Magical Market 300 - 217988451998498816,
+ATRC Altus Ta Riga Company 0 - 414382024552480769,
+RACC Rozalt Arms & Construction Co. 0 - 414382024552480769,
+IR Dazvani Imperial Resorts 0 - 414382024552480769,
