@@ -2,3 +2,5 @@
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713455302}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}, "timestamp": 1713455307}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "pong", "options": {"ephemeral": false}, "timestamp": 1713455310}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account_all", "options": {"ephemeral": false}, "timestamp": 1713620069}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account_all", "options": {"ephemeral": false}, "timestamp": 1713620208}

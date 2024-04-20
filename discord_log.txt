@@ -1,3 +1,5 @@
 User ID: 1018934971810979840, User Name: kalikingly, Command: account, Options: ephemeral: False, Timestamp: 1713455297
 User ID: 1018934971810979840, User Name: kalikingly, Command: list_accounts, Options: ephemeral: False, Timestamp: 1713455302
 User ID: 1018934971810979840, User Name: kalikingly, Command: ping, Options: ephemeral: False, Timestamp: 1713455307
+User ID: 1018934971810979840, User Name: kalikingly, Command: pong, Options: ephemeral: False, Timestamp: 1713455310
+User ID: 1018934971810979840, User Name: kalikingly, Command: account_all, Options: ephemeral: False, Timestamp: 1713620069

@@ -1,11 +1,9 @@
 {
     "personal": {
         "account_name": "m_anfred",
-        "balance": 1048,
+        "balance": 1000,
         "currency": "Sovereign",
         "own accounts": [],
-        "treasurer of": [
-            "test gov"
-        ]
+        "treasurer of": []
     }
 }
