@@ -3,3 +3,7 @@ User ID: 1018934971810979840, User Name: kalikingly, Command: list_accounts, Opt
 User ID: 1018934971810979840, User Name: kalikingly, Command: ping, Options: ephemeral: False, Timestamp: 1713455307
 User ID: 1018934971810979840, User Name: kalikingly, Command: pong, Options: ephemeral: False, Timestamp: 1713455310
 User ID: 1018934971810979840, User Name: kalikingly, Command: account_all, Options: ephemeral: False, Timestamp: 1713620069
+User ID: 1018934971810979840, User Name: kalikingly, Command: account_all, Options: ephemeral: False, Timestamp: 1713620208
+User ID: 1018934971810979840, User Name: kalikingly, Command: baltop, Options: page: 1, ephemeral: False, Timestamp: 1713622469
+User ID: 1018934971810979840, User Name: kalikingly, Command: update_all, Options: ephemeral: False, Timestamp: 1713622473
+User ID: 1018934971810979840, User Name: kalikingly, Command: update_all, Options: ephemeral: False, Timestamp: 1713622575

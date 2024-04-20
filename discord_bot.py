@@ -128,7 +128,7 @@ def check_or_create_account(user_id, userName):
         accounts = {
             "personal": {
                 "account_name": userName,
-                "balance": 1000,########################SET TO 0 ON FINAL RELEASE
+                "balance": 0,
                 "currency": "Sovereign",
                 "own accounts": [],
                 "treasurer of": []
@@ -162,7 +162,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
             "account_name": account_name,
             "command_name": command_name,
             "account_type": account_type,
-            "balance": 1000,########################SET TO 0 ON FINAL RELEASE
+            "balance": 0,
             "currency": "Sovereign",
             "treasurers": treasurers,
             "owner": user_id
@@ -176,7 +176,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
                 "account_name": account_name,
                 "command_name": command_name,
                 "account_type": account_type,
-                "balance": 1000,########################SET TO 0 ON FINAL RELEASE
+                "balance": 0,
                 "currency": "Sovereign",
                 "treasurers": treasurers,
                 "owner": user_id
@@ -691,7 +691,7 @@ async def account_all(
                 accounts = {
                     "personal": {
                         "account_name": userName,
-                        "balance": 1000,
+                        "balance": 0,
                         "currency": "Sovereign",
                         "own accounts": [],
                         "treasurer of": []
