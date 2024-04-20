@@ -41,7 +41,7 @@ def log_event(user_id, user_name, command_name, options):
         }
         with open('discord_bot.log', 'a') as log_file:
             log_file.write(json.dumps(log_entry) + '\n')
-            logs_to_txt()
+            #logs_to_txt()
     except:
         return("log_event error, please contact Ketchup & manfred with this")
 
