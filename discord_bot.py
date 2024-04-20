@@ -680,6 +680,7 @@ async def account_all(
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     log_event(ctx.author.id, ctx.author.name, "account_all", {"ephemeral": ephemeral})
+    user_id = str(ctx.author.id)
     if user_id in admin:
         members = await ctx.guild.fetch_members().flatten()
         for member in members:
