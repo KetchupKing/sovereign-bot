@@ -11,3 +11,7 @@
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}, "timestamp": 1713632889}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}, "timestamp": 1713632918}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}, "timestamp": 1713632944}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636092}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636642}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713636657}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636910}

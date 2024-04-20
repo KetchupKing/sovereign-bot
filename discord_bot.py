@@ -609,21 +609,29 @@ async def baltop(
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     try:
+        MAX_MESSAGE_LENGTH = 2000
         log_event(ctx.author.id, ctx.author.name, "baltop", {"page": page, "ephemeral": ephemeral})
         sorted_accounts = sort_accounts()
-        trimmed_accounts = getItemsOnPage(sorted_accounts,page)
+        trimmed_accounts = getItemsOnPage(sorted_accounts, page)
         nAccounts = len(sorted_accounts)
         maxPages = math.ceil(nAccounts/10)
 
         if page > maxPages:
             page = maxPages
 
-        response = f"Accounts with the most Sovereigns:  (Page: {page}/{maxPages})\n"
+        response = f"Accounts with the most Sovereigns: (Page: {page}/{maxPages})\n"
 
         for i, (account_id, account_info) in enumerate(sorted_accounts, start=1):
             account_name = account_info.get('account_name')
-            response += f"{i+((page-1)*10)}. {account_name} - Sv{account_info['balance']} \n"
-        await ctx.respond(response, ephemeral=ephemeral)
+            account_line = f"{i+((page-1)*10)}. {account_name} - Sv{account_info['balance']} \n"
+            if len(response) + len(account_line) > MAX_MESSAGE_LENGTH:
+                await ctx.respond(response, ephemeral=ephemeral)
+                response = account_line
+            else:
+                response += account_line
+
+        if response:
+            await ctx.respond(response, ephemeral=ephemeral)
     except:
         await ctx.respond("baltop command error, please contact Ketchup & manfred with this")
 
