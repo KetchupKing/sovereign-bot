@@ -1,5 +1,8 @@
 Cieurnish Treasury 329124
+Dazvani Industries 75180
+Dazvani Arsenal Company 15153
 Arkovian Treasury 12000
+Dazvani Treasury 11199
 Jernmejer Cartel 10689
 Velsoran Treasury 10000
 Cieurnish Defence Budget 8000
@@ -7,6 +10,7 @@ Dazvani Trading Company 4607
 Amoebal Meningitis Al 4082
 Cieurnish Justice Budget 4001
 Norvalian Treasury 4000
+Montaval Distillery & Brewery 2115
 Cieurnish Finance Budget 2000
 Cieurnish Foreign Affairs Budget 2000
 Cieurnish Culture Budget 2000
@@ -22,6 +26,7 @@ lol_lol_lolgodlol 360
 fyodorsrodent 342
 Dazvani Nether Imports 323
 4drian4ubrey4idennatdoggypupy 306
+Magnificent Magical Market 300
 blake0201 285
 svenvald 260
 kyberthemtron 240
@@ -46,6 +51,7 @@ crystal_destroyer 0
 MineCo 0
 Alam's Personal Account 0
 calvinx 0
+Altus Ta Riga Company 0
 tzscion 0
 Scion Legal 0
 ketchup_king 0
@@ -61,11 +67,11 @@ tavatone 0
 ceaselessv0id 0
 mesothrax 0
 IsoKamikaze Personal 0
-
+Rozalt Arms & Construction Co. 0
 Sangfujht Treasury 0
 cstro 0
 Worshipful Fellows of the D.A 0
-
+Dazvani Imperial Resorts 0
 "Under The Sea" Loan Agency 0
 East Prunia Company 0
 Paevalon Dynamics 0
