@@ -1,19 +1,39 @@
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account", "options": {"ephemeral": false}, "timestamp": 1713455297}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713455302}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}, "timestamp": 1713455307}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "pong", "options": {"ephemeral": false}, "timestamp": 1713455310}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account_all", "options": {"ephemeral": false}, "timestamp": 1713620069}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account_all", "options": {"ephemeral": false}, "timestamp": 1713620208}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713622469}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "update_all", "options": {"ephemeral": false}, "timestamp": 1713622473}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "update_all", "options": {"ephemeral": false}, "timestamp": 1713622575}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "update_all", "options": {"ephemeral": false}, "timestamp": 1713622623}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}, "timestamp": 1713632889}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}, "timestamp": 1713632918}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "ping", "options": {"ephemeral": false}, "timestamp": 1713632944}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636092}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636642}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713636657}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636910}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713637659}
-{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 4, "ephemeral": false}, "timestamp": 1713637663}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": true}, "timestamp": 1713636026}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": true}, "timestamp": 1713636046}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": true}, "timestamp": 1713636055}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636100}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636164}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636412}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": true}, "timestamp": 1713636502}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636509}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636542}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713636573}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713636653}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713637028}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713637772}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713637992}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713638087}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713638134}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "Company", "ephemeral": false}, "timestamp": 1713638144}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713638147}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713640277}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 2, "ephemeral": false}, "timestamp": 1713640290}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713640644}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713640663}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account", "options": {"ephemeral": true}, "timestamp": 1713640932}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713642841}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account", "options": {"ephemeral": true}, "timestamp": 1713642890}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account", "options": {"ephemeral": true}, "timestamp": 1713642977}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": true}, "timestamp": 1713643330}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account", "options": {"ephemeral": false}, "timestamp": 1713643425}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713643546}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713643620}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 2, "ephemeral": false}, "timestamp": 1713643624}
+{"user_id": 264791398480347136, "user_name": "go_go", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713643932}
+{"user_id": 264791398480347136, "user_name": "go_go", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713643934}
+{"user_id": 264791398480347136, "user_name": "go_go", "command_name": "baltop", "options": {"page": 7, "ephemeral": false}, "timestamp": 1713643947}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 10, "ephemeral": false}, "timestamp": 1713644224}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": true}, "timestamp": 1713644834}
+{"user_id": 264791398480347136, "user_name": "go_go", "command_name": "account", "options": {"ephemeral": true}, "timestamp": 1713645366}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "treasurer_list", "options": {"account_name": "LLL", "ephemeral": true}, "timestamp": 1713646311}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "treasurer_list", "options": {"account_name": "LLL", "ephemeral": true}, "timestamp": 1713646332}
