@@ -605,23 +605,27 @@ async def pay(
 @bot.slash_command(name="baltop", description="Accounts with the most Sovereigns.")
 async def baltop(
     ctx, 
-    page: int = discord.Option(int,description="The amount to transfer", required=False, default=1),
+    page: int = discord.Option(int, description="The page number to display", required=False, default=1),
     ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
     try:
         MAX_MESSAGE_LENGTH = 2000
         log_event(ctx.author.id, ctx.author.name, "baltop", {"page": page, "ephemeral": ephemeral})
         sorted_accounts = sort_accounts()
-        trimmed_accounts = getItemsOnPage(sorted_accounts, page)
         nAccounts = len(sorted_accounts)
         maxPages = math.ceil(nAccounts/10)
 
         if page > maxPages:
             page = maxPages
 
+        if page < 1:
+            page = 1
+
+        trimmed_accounts = getItemsOnPage(sorted_accounts, page)
+
         response = f"Accounts with the most Sovereigns: (Page: {page}/{maxPages})\n"
 
-        for i, (account_id, account_info) in enumerate(sorted_accounts, start=1):
+        for i, (account_id, account_info) in enumerate(trimmed_accounts, start=1):
             account_name = account_info.get('account_name')
             account_line = f"{i+((page-1)*10)}. {account_name} - Sv{account_info['balance']} \n"
             if len(response) + len(account_line) > MAX_MESSAGE_LENGTH:
@@ -634,7 +638,6 @@ async def baltop(
             await ctx.respond(response, ephemeral=ephemeral)
     except:
         await ctx.respond("baltop command error, please contact Ketchup & manfred with this")
-
 
 
 @bot.slash_command(name="authorisation", description="Authorise users to do government accounts.")
