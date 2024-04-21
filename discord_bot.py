@@ -521,11 +521,23 @@ async def pay(
             if sender_accounts is None:
                 await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
                 return
+            if sender_accounts["balance"] < amountNumber:
+                await ctx.respond("Insufficient funds in the 'from account'.", ephemeral=ephemeral)
+                return
+            sender_accounts["balance"] -= amountNumber
+            save_company_account_changes(from_account, sender_accounts)
         else:
             sender_accounts = load_accounts(sender_id)
             if sender_accounts is None:
                 await ctx.respond("You do not have a personal account.", ephemeral=ephemeral)
                 return
+            if "personal" in sender_accounts and sender_accounts["personal"]["balance"] < amountNumber:
+                await ctx.respond("Insufficient funds in your personal account.", ephemeral=ephemeral)
+                return
+#            sender_accounts["personal"]["balance"] -= amountNumber
+            save_accounts(sender_id, sender_accounts)
+
+
             
         if from_account and account_name:
             sender_accounts = load_accounts(account_type="Company", account_name=from_account)
@@ -571,6 +583,11 @@ async def pay(
             if recipient_accounts is None:
                 await ctx.respond("The specified 'account name' does not exist.", ephemeral=True)
                 return
+            recipient_accounts["balance"] += amountNumber
+            save_company_account_changes(account_name, recipient_accounts)
+            await ctx.respond(f"Successfully transferred {amountNumber} to '{account_name}'.", ephemeral=ephemeral)
+            return
+
         else:
             recipient_accounts = load_accounts(recipient_id)
             if recipient_accounts is None:
