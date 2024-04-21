@@ -3,7 +3,9 @@
         "account_name": "kalikingly",
         "balance": 6290,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "Legendary Loot Lair"
+        ],
         "treasurer of": []
     }
 }

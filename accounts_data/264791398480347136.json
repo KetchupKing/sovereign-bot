@@ -3,7 +3,9 @@
         "account_name": "go_go",
         "balance": 990,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "Dazvani Industries"
+        ],
         "treasurer of": []
     }
 }

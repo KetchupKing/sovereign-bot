@@ -1,0 +1,13 @@
+{
+    "T": {
+        "account_name": "Dazvani Industries",
+        "command_name": "DI",
+        "account_type": "company",
+        "balance": 75180,
+        "currency": "Sovereign",
+        "treasurers": [
+            "264791398480347136"
+        ],
+        "owner": "264791398480347136"
+    }
+}

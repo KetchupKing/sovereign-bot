@@ -1,6 +1,5 @@
 Cieurnish Treasury 329124
-Dazvani Industries 75180
-Dazvani Arsenal Company 15153
+Dazvani Arsenal Company 15153 - 264791398480347136
 Arkovian Treasury 12000
 Dazvani Treasury 11199
 Jernmejer Cartel 10689
@@ -71,7 +70,7 @@ Rozalt Arms & Construction Co. 0
 Sangfujht Treasury 0
 cstro 0
 Worshipful Fellows of the D.A 0
-Dazvani Imperial Resorts 0
+Dazvani Imperial Resorts 0 - 264791398480347136
 "Under The Sea" Loan Agency 0
 East Prunia Company 0
 Paevalon Dynamics 0

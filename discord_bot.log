@@ -38,3 +38,7 @@
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "treasurer_list", "options": {"account_name": "LLL", "ephemeral": true}, "timestamp": 1713646311}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "treasurer_list", "options": {"account_name": "LLL", "ephemeral": true}, "timestamp": 1713646332}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713685351}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "create_account", "options": {"account_name": "test", "command_name": "t", "account_type": "Company", "ephemeral": false}, "timestamp": 1713701817}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713702057}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713702063}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "Company", "ephemeral": false}, "timestamp": 1713702100}
