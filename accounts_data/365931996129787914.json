@@ -3,7 +3,9 @@
         "account_name": "m_anfred",
         "balance": 19,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "Montaval Distillery & Brewery"
+        ],
         "treasurer of": []
     }
 }
