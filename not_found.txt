@@ -1,16 +1,10 @@
-Cieurnish Treasury 329124
 Arkovian Treasury 12000
 Dazvani Treasury 11199
 Jernmejer Cartel 10689
 Velsoran Treasury 10000
-Cieurnish Defence Budget 8000
 Dazvani Trading Company 4607
 Amoebal Meningitis Al 4082
-Cieurnish Justice Budget 4001
 Norvalian Treasury 4000
-Cieurnish Finance Budget 2000
-Cieurnish Foreign Affairs Budget 2000
-Cieurnish Culture Budget 2000
 Montaval Building Essentials 1480
 Melonyc Church of Ã–g (PBUH) 948
 triforcecomet 828

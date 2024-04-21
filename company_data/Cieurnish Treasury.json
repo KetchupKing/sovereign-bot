@@ -1,0 +1,13 @@
+{
+    "CT": {
+        "account_name": "Cieurnish Treasury",
+        "command_name": "CT",
+        "account_type": "government",
+        "balance": 329124,
+        "currency": "Sovereign",
+        "treasurers": [
+            "414382024552480769"
+        ],
+        "owner": "414382024552480769"
+    }
+}

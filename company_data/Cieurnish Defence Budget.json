@@ -1,0 +1,13 @@
+{
+    "CMD": {
+        "account_name": "Cieurnish Defence Budget",
+        "command_name": "CMD",
+        "account_type": "government",
+        "balance": 8000,
+        "currency": "Sovereign",
+        "treasurers": [
+            "414382024552480769"
+        ],
+        "owner": "414382024552480769"
+    }
+}

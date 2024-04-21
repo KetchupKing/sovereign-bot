@@ -3,7 +3,14 @@
         "account_name": "alanguiano",
         "balance": 22,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "Cieurnish Culture Budget",
+            "Cieurnish Treasury",
+            "Cieurnish Justice Budget",
+            "Cieurnish Foreign Affairs Budget",
+            "Cieurnish Finance Budget",
+            "Cieurnish Defence Budget"
+        ],
         "treasurer of": []
     }
 }

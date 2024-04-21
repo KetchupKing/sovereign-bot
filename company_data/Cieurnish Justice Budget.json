@@ -1,0 +1,13 @@
+{
+    "CMJ": {
+        "account_name": "Cieurnish Justice Budget",
+        "command_name": "CMJ",
+        "account_type": "government",
+        "balance": 4001,
+        "currency": "Sovereign",
+        "treasurers": [
+            "414382024552480769"
+        ],
+        "owner": "414382024552480769"
+    }
+}
