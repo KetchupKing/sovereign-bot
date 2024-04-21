@@ -607,11 +607,12 @@ async def pay(
                 recipient_accounts["balance"] += amountNumber
                 save_company_account_changes(account_name,recipient_accounts)
         
-        response_message = (f"Successfully paid {amountNumber} {sender_accounts['currency'] if transactionType == 'Company' else sender_accounts.get('personal', {}).get('currency', 'default_currency')} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'Company' else 'personal account'}.")
+        response_message = (f"Successfully paid ㏜{amountNumber:,} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'Company' else 'personal account'}.")
+
         if memo:
             response_message += f" Memo: {memo}."
         if tax_percentage and tax_account:
-            response_message += f" With {tax_percentage}% tax to '{taxAccount['account_name']}'"
+            response_message += f" With {tax_percentage}% tax to '{taxAccount['account_name']}' (㏜{taxAmount:,})"
         await ctx.respond(response_message, ephemeral=ephemeral)
     except:
         await ctx.respond("pay command error, please contact Ketchup & manfred with this")
