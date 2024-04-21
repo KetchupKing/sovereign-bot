@@ -1,9 +1,9 @@
 {
-    "CT": {
-        "account_name": "Cieurnish Treasury",
-        "command_name": "CT",
+    "CD": {
+        "account_name": "Dazvani Treasury",
+        "command_name": "CD",
         "account_type": "government",
-        "balance": 333556,
+        "balance": 11199,
         "currency": "Sovereign",
         "treasurers": [
             "414382024552480769"

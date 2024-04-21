@@ -3,7 +3,9 @@
         "account_name": "tidelocked",
         "balance": 873,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "Revelry Apiculture Co."
+        ],
         "treasurer of": []
     }
 }

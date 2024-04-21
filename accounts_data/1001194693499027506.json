@@ -3,7 +3,9 @@
         "account_name": "josies_phiner",
         "balance": 4623,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "Cieurnish Beverage & Tobacco Company"
+        ],
         "treasurer of": []
     }
 }

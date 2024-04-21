@@ -1,9 +1,9 @@
 {
-    "CT": {
-        "account_name": "Cieurnish Treasury",
-        "command_name": "CT",
+    "CA": {
+        "account_name": "Arkovian Treasury",
+        "command_name": "CA",
         "account_type": "government",
-        "balance": 333556,
+        "balance": 12000,
         "currency": "Sovereign",
         "treasurers": [
             "414382024552480769"

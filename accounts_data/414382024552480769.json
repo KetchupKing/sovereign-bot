@@ -9,7 +9,11 @@
             "Cieurnish Justice Budget",
             "Cieurnish Foreign Affairs Budget",
             "Cieurnish Finance Budget",
-            "Cieurnish Defence Budget"
+            "Cieurnish Defence Budget",
+            "Arkovian Treasury",
+            "Dazvani Treasury",
+            "Norvalian Treasury",
+            "Velsoran Treasury"
         ],
         "treasurer of": []
     }

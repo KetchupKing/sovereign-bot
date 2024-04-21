@@ -1,0 +1,13 @@
+{
+    "MBE": {
+        "account_name": "Montaval Building Essentials",
+        "command_name": "MBE",
+        "account_type": "Company",
+        "balance": 1480,
+        "currency": "Sovereign",
+        "treasurers": [
+            "155432796247162881"
+        ],
+        "owner": "155432796247162881"
+    }
+}

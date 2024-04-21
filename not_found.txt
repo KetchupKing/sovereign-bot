@@ -1,32 +1,5 @@
-Dazvani Treasury 11199
-Arkovian Treasury 12000
-Jernmejer Cartel 10689
-Velsoran Treasury 10000
-Amoebal Meningitis Al 4082
-Norvalian Treasury 4000
-Montaval Building Essentials 1480
-Melonyc Church of Ã–g (PBUH) 948
-triforcecomet 828
-Revelry Apiculture Co. 790
-Ñ€Ñ–Ð½Â»Ñ‚ 772
-Cieurnish Beverage & Tobacco Company 575
-8BB 461
-clem_the_whimsical 360
-lol_lol_lolgodlol 360
-fyodorsrodent 342
-Dazvani Nether Imports 323
-4drian4ubrey4idennatdoggypupy 306
-blake0201 285
-svenvald 260
-kyberthemtron 240
-sablesigh 240
-peachytears 240
-thegoldenpud 10
-EndMart Limited 10
-The Cavalier 3
 CafÃ© Valhuszhe 0
 aweds and ends 0
-Manaborian Treasury 0
 Steak King Corporation 0
 thehydrogen 0
 lainuel 0
@@ -56,7 +29,6 @@ ceaselessv0id 0
 mesothrax 0
 IsoKamikaze Personal 0
 Rozalt Arms & Construction Co. 0
-Sangfujht Treasury 0
 cstro 0
 Worshipful Fellows of the D.A 0
 Dazvani Imperial Resorts 0
@@ -64,3 +36,22 @@ Dazvani Imperial Resorts 0
 East Prunia Company 0
 Paevalon Dynamics 0
 Cieurnish Andemaj Company 0
+
+###############################
+###############################
+
+scrapped and sv added to CT
+Melonyc Church of Ög (PBUH) 948
+EndMart Limited 10
+The Cavalier 3
+triforcecomet 828
+clem_the_whimsical 360
+lol_lol_lolgodlol 360
+fyodorsrodent 342
+4drian4ubrey4idennatdoggypupy 306
+blake0201 285
+svenvald 260
+kyberthemtron 240
+sablesigh 240
+peachytears 240
+thegoldenpud 10

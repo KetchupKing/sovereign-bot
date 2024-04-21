@@ -1,0 +1,13 @@
+{
+    "RACO": {
+        "account_name": "Revelry Apiculture Co.",
+        "command_name": "RACO",
+        "account_type": "Company",
+        "balance": 790,
+        "currency": "Sovereign",
+        "treasurers": [
+            "260508466106466305"
+        ],
+        "owner": "260508466106466305"
+    }
+}

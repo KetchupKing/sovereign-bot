@@ -1,9 +1,9 @@
 {
-    "CT": {
-        "account_name": "Cieurnish Treasury",
-        "command_name": "CT",
+    "CN": {
+        "account_name": "Norvalian Treasury",
+        "command_name": "CN",
         "account_type": "government",
-        "balance": 333556,
+        "balance": 4000,
         "currency": "Sovereign",
         "treasurers": [
             "414382024552480769"

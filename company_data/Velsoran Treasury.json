@@ -1,9 +1,9 @@
 {
-    "CT": {
-        "account_name": "Cieurnish Treasury",
-        "command_name": "CT",
+    "CV": {
+        "account_name": "Velsoran Treasury",
+        "command_name": "CV",
         "account_type": "government",
-        "balance": 333556,
+        "balance": 10000,
         "currency": "Sovereign",
         "treasurers": [
             "414382024552480769"

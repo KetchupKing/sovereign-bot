@@ -3,7 +3,9 @@
         "account_name": "therandommelon",
         "balance": 100,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "Montaval Building Essentials"
+        ],
         "treasurer of": []
     }
 }

@@ -3,7 +3,9 @@
         "account_name": "eliterosehip",
         "balance": 73233,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "8BB"
+        ],
         "treasurer of": []
     }
 }
