@@ -1,0 +1,13 @@
+{
+    "MMM": {
+        "account_name": "Magnificent Magical Market",
+        "command_name": "MMM",
+        "account_type": "Company",
+        "balance": 300,
+        "currency": "Sovereign",
+        "treasurers": [
+            "217988451998498816"
+        ],
+        "owner": "217988451998498816"
+    }
+}

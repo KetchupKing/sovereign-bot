@@ -1,0 +1,13 @@
+{
+    "DTC": {
+        "account_name": "Dazvani Trading Company",
+        "command_name": "DTC",
+        "account_type": "Company",
+        "balance": 4607,
+        "currency": "Sovereign",
+        "treasurers": [
+            "264791398480347136"
+        ],
+        "owner": "264791398480347136"
+    }
+}

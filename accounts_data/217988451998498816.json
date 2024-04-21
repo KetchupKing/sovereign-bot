@@ -3,7 +3,9 @@
         "account_name": "arziplays",
         "balance": 450,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "Magnificent Magical Market"
+        ],
         "treasurer of": []
     }
 }
