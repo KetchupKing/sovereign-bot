@@ -627,7 +627,8 @@ async def baltop(
 
         for i, (account_id, account_info) in enumerate(trimmed_accounts, start=1):
             account_name = account_info.get('account_name')
-            account_line = f"{i+((page-1)*10)}. {account_name} - Sv{account_info['balance']} \n"
+            formatted_balance = f"{account_info['balance']:,}"
+            account_line = f"{i+((page-1)*10)}. {account_name} - Sv{formatted_balance} \n"
             if len(response) + len(account_line) > MAX_MESSAGE_LENGTH:
                 await ctx.respond(response, ephemeral=ephemeral)
                 response = account_line
