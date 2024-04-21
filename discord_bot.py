@@ -41,27 +41,8 @@ def log_event(user_id, user_name, command_name, options):
         }
         with open('discord_bot.log', 'a') as log_file:
             log_file.write(json.dumps(log_entry) + '\n')
-            #logs_to_txt()
     except:
         return("log_event error, please contact Ketchup & manfred with this")
-
-
-def logs_to_txt(filename='discord_log.txt'):
-    try:
-        with open('discord_bot.log', 'r') as log_file, open(filename, 'w') as output_file:
-            for line in log_file:
-                try:
-                    log_entry = json.loads(line)
-                    user_name = log_entry.get('user_name', 'Unknown')
-                    timestamp = log_entry.get('timestamp', 'No timestamp')
-                    template_string = "User ID: {user_id}, User Name: {user_name}, Command: {command_name}, Options: {options}, Timestamp: {timestamp}"
-                    options_str = ', '.join(f"{key}: {value}" for key, value in log_entry['options'].items())
-                    formatted_entry = template_string.format(user_id=log_entry['user_id'], user_name=user_name, command_name=log_entry['command_name'], options=options_str, timestamp=timestamp)
-                    output_file.write(formatted_entry + '\n')
-                except json.JSONDecodeError:
-                    print(f"Error parsing line: {line}")
-    except:
-        return("logs_to_txt error, please contact Ketchup & manfred with this")
 
 
 def save_company_account_changes(account_name, accounts):
@@ -216,7 +197,6 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
 def sort_accounts():
     try:
         all_accounts = []
-
         for file_name in glob.glob(os.path.join(COMPANY_DATA_DIR, '*.json')):
             with open(file_name, 'r') as f:
                 accounts = json.load(f)
@@ -232,7 +212,6 @@ def sort_accounts():
                         all_accounts.append((account_id, account_info))
 
         sorted_accounts = sorted(all_accounts, key=lambda x: x[1]['balance'], reverse=True)
-
         return sorted_accounts
     except:
         return("sort_accounts error, please contact Ketchup & manfred with this")
@@ -252,7 +231,6 @@ async def on_ready():
     print(f'Successfully logged in {bot.user}')
 
 
-
 @bot.slash_command(name="ping", description="Replies with Pong!")
 async def ping(
     ctx,
@@ -265,7 +243,6 @@ async def ping(
         await ctx.respond("ping command error, please contact Ketchup & manfred with this")
 
 
-
 @bot.slash_command(name="pong", description="Replies with Ping!")
 async def pong(
     ctx,
@@ -276,7 +253,6 @@ async def pong(
         await ctx.respond("Ping!", ephemeral=ephemeral)
     except:
         await ctx.respond("pong command error, please contact Ketchup & manfred with this")
-
 
 
 @bot.slash_command(name="account", description="Check or create a personal account.")
@@ -294,7 +270,6 @@ async def account(
         await ctx.respond("account command error, please contact Ketchup & manfred with this")
 
 
-
 @bot.slash_command(name="create_account", description="Create a Company/government account with specified details.")
 async def create_account(
     ctx, 
@@ -306,17 +281,15 @@ async def create_account(
     try:
         log_event(ctx.author.id, ctx.author.name, "create_account", {"account_name": account_name, "command_name": command_name, "account_type": account_type, "ephemeral": ephemeral})
         account_type_choices = ["Company", "government"]
-
         if account_type not in account_type_choices:
             await ctx.respond("Invalid account type. Please choose from 'Company' or 'government'.", ephemeral=ephemeral)
             return
-        
+
         user_id = str(ctx.author.id)
         response = create_new_account(ctx, user_id, account_name, command_name, account_type)
         await ctx.respond(response, ephemeral=ephemeral)
     except:
         await ctx.respond("create_account command error, please contact Ketchup & manfred with this")
-
 
 
 @bot.slash_command(name="list_accounts", description="List the personal account, owned accounts, and accounts the user is a treasurer for.")
@@ -367,7 +340,6 @@ async def list_accounts(
             if treasurer_accounts:
                 for i, (account_name, account_info) in enumerate(treasurer_accounts, start=1):
                     embed.add_field(name=f"{account_name} ({account_info['account_type']}) (Treasurer)", value=f"Command Name: {account_info['command_name']}\nBalance: ㏜{account_info['balance']:,}", inline=False)
-
         else:
             await ctx.respond("You do not own or manage any accounts.", ephemeral=ephemeral)
             return
@@ -375,7 +347,6 @@ async def list_accounts(
             await ctx.respond(embed=embed, ephemeral=ephemeral)
     except:
         await ctx.respond("list_accounts command error, please contact Ketchup & manfred with this")
-
 
 
 @bot.slash_command(name="treasurer_add", description="Add a treasurer to an account.")
@@ -393,7 +364,6 @@ async def add_treasurer(
         if account_to_modify is None:
             await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
             return
-        
         if user_id != account_to_modify.get("owner", ""):
             await ctx.respond("You are not the owner of this account.", ephemeral=ephemeral)
             return
@@ -418,7 +388,6 @@ async def add_treasurer(
         await ctx.respond("treasurer_add command error, please contact Ketchup & manfred with this")
 
 
-
 @bot.slash_command(name="treasurer_remove", description="Remove a treasurer from an account.")
 async def remove_treasurer(
     ctx, 
@@ -434,7 +403,6 @@ async def remove_treasurer(
         if account_to_modify is None:
             await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
             return
-        
         if user_id != account_to_modify.get("owner", ""):
             await ctx.respond("You are not the owner of this account.", ephemeral=ephemeral)
             return
@@ -459,7 +427,6 @@ async def remove_treasurer(
         await ctx.respond("treasurer_remove command error, please contact Ketchup & manfred with this")
 
 
-
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")
 async def list_treasurers(
     ctx, 
@@ -474,9 +441,6 @@ async def list_treasurers(
         if account_to_list is None:
             await ctx.respond(f"Account with name '{account_name}' does not exist.", ephemeral=ephemeral)
             return
-        
-        print(user_id in account_to_list["treasurers"])
-
         if user_id != account_to_list["owner"] and not user_id in account_to_list["treasurers"]:
             await ctx.respond("You are not the owner of this account.", ephemeral=ephemeral)
             return
@@ -493,7 +457,6 @@ async def list_treasurers(
             await ctx.respond(f"No treasurers found for '{account_name}'.", ephemeral=ephemeral)
     except:
         await ctx.respond("treasurer_list command error, please contact Ketchup & manfred with this")
-
 
 
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
@@ -534,11 +497,8 @@ async def pay(
             if "personal" in sender_accounts and sender_accounts["personal"]["balance"] < amountNumber:
                 await ctx.respond("Insufficient funds in your personal account.", ephemeral=ephemeral)
                 return
-#            sender_accounts["personal"]["balance"] -= amountNumber
             save_accounts(sender_id, sender_accounts)
-
-
-            
+   
         if from_account and account_name:
             sender_accounts = load_accounts(account_type="Company", account_name=from_account)
             recipient_accounts = load_accounts(account_type="Company", account_name=account_name)
@@ -635,7 +595,6 @@ async def pay(
         await ctx.respond("pay command error, please contact Ketchup & manfred with this")
 
 
-
 @bot.slash_command(name="baltop", description="Accounts with the most Sovereigns.")
 async def baltop(
     ctx, 
@@ -651,12 +610,10 @@ async def baltop(
 
         if page > maxPages:
             page = maxPages
-
         if page < 1:
             page = 1
 
         trimmed_accounts = getItemsOnPage(sorted_accounts, page)
-
         response = f"Top balances in the system: (Page: {page}/{maxPages})\n"
 
         for i, (account_id, account_info) in enumerate(trimmed_accounts, start=1):
@@ -694,7 +651,6 @@ async def authorise(
                         json.dump([], f)
                 with open(authorised_users, 'r') as f:
                     authorised = json.load(f)
-                
                 if authorise_id not in authorised:
                     authorised.append(authorise_id)
                     await ctx.respond(f"{authorise_id} has been authorised", ephemeral=ephemeral)
@@ -703,7 +659,6 @@ async def authorise(
                 
                 with open(authorised_users, 'w') as f:
                     json.dump(authorised, f)
-
             else:
                 await ctx.respond("Your not an admin.", ephemeral=ephemeral)
             
@@ -724,12 +679,10 @@ async def authorise(
 
                 with open(authorised_users, 'w') as f:
                     json.dump(authorised, f)
-
             else:
                 await ctx.respond("Your not an admin.", ephemeral=ephemeral)
     except:
         await ctx.respond("authorisation command error, please contact Ketchup & manfred with this")
-
 
 
 @bot.slash_command(name="eco", description="Manage account balances.")
@@ -760,11 +713,9 @@ async def eco(
         if user_id in admin:
             if command == "set":
                 print(recipient_accounts)
-
                 if "personal" in recipient_accounts:
                     recipient_accounts["personal"]["balance"] = value
                     save_accounts(recipient_id, recipient_accounts)
-                    
                 elif recipient_accounts["account_type"] == "Company":
                     recipient_accounts["balance"] = value
                     save_company_account_changes(account,recipient_accounts)
@@ -773,7 +724,6 @@ async def eco(
                 if "personal" in recipient_accounts:
                     recipient_accounts["personal"]["balance"] += value
                     save_accounts(recipient_id, recipient_accounts)
-                    
                 elif recipient_accounts["account_type"] == "Company":
                     recipient_accounts["balance"] += value
                     save_company_account_changes(account,recipient_accounts)
@@ -782,7 +732,6 @@ async def eco(
                 if "personal" in recipient_accounts:
                     recipient_accounts["personal"]["balance"] -= value
                     save_accounts(recipient_id, recipient_accounts)
-                    
                 elif recipient_accounts["account_type"] == "Company":
                     recipient_accounts["balance"] -= value
                     save_company_account_changes(account,recipient_accounts)
@@ -792,7 +741,6 @@ async def eco(
             await ctx.respond("You are not admin")
     except:
         await ctx.respond("eco command error, please contact Ketchup & manfred with this")
-
 
 
 @bot.slash_command(name="account_all", description="Create a personal account for everyone in the server.")
@@ -828,7 +776,6 @@ async def account_all(
             await ctx.respond("You do not have permission to use this command.", ephemeral=ephemeral)
     except:
         await ctx.respond("account_all command error, please contact Ketchup & manfred with this")
-
 
 
 bot.run(TOKEN)
