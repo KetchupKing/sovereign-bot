@@ -511,9 +511,9 @@ async def pay(
         log_event(ctx.author.id, ctx.author.name, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo, "ephemeral": ephemeral})
 
         amountNumber = int(amount)
-
         sender_id = str(ctx.author.id)
         recipient_id = str(account_to_pay.id) if account_to_pay else None
+        transactionType = None
         
         if from_account:
             sender_accounts = load_accounts(account_type="Company", account_name=from_account)
@@ -526,7 +526,22 @@ async def pay(
                 await ctx.respond("You do not have a personal account.", ephemeral=ephemeral)
                 return
             
-        transactionType = None	
+        if from_account and account_name:
+            sender_accounts = load_accounts(account_type="Company", account_name=from_account)
+            recipient_accounts = load_accounts(account_type="Company", account_name=account_name)
+            if sender_accounts is None or recipient_accounts is None:
+                await ctx.respond("One of the specified accounts does not exist.", ephemeral=ephemeral)
+                return
+            if sender_accounts["balance"] < amountNumber:
+                await ctx.respond("Insufficient funds in the sender account.", ephemeral=ephemeral)
+                return
+
+            sender_accounts["balance"] -= amountNumber
+            recipient_accounts["balance"] += amountNumber
+            save_company_account_changes(from_account, sender_accounts)
+            save_company_account_changes(account_name, recipient_accounts)
+            await ctx.respond(f"Successfully transferred {amountNumber} from '{from_account}' to '{account_name}'.", ephemeral=ephemeral)
+            return
 
         if "personal" in sender_accounts:
             if sender_accounts["personal"]["balance"] < amountNumber:
@@ -591,7 +606,7 @@ async def pay(
                 recipient_accounts["balance"] += amountNumber
                 save_company_account_changes(account_name,recipient_accounts)
         
-        response_message = (f"Successfully paid {amountNumber} {sender_accounts['currency'] if transactionType == 'Company' else sender_accounts['personal']['currency']} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'Company' else 'personal account'}.")
+        response_message = (f"Successfully paid {amountNumber} {sender_accounts['currency'] if transactionType == 'Company' else sender_accounts.get('personal', {}).get('currency', 'default_currency')} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'Company' else 'personal account'}.")
         if memo:
             response_message += f" Memo: {memo}."
         if tax_percentage and tax_account:

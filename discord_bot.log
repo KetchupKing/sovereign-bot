@@ -42,3 +42,9 @@
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713702057}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1713702063}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "Company", "ephemeral": false}, "timestamp": 1713702100}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "Company", "ephemeral": false}, "timestamp": 1713703292}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713703295}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "eco", "options": {"user": null, "account": "test", "command": "add", "value": 1000, "ephemeral": false}, "timestamp": 1713703341}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1713703351}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "pay", "options": {"amount": "50", "account_to_pay": null, "account_name": "LLL", "from_account": "test", "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}, "timestamp": 1713703370}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "pay", "options": {"amount": "50", "account_to_pay": null, "account_name": "LLL", "from_account": "T", "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}, "timestamp": 1713703411}
