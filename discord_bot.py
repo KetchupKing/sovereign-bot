@@ -623,7 +623,7 @@ async def baltop(
 
         trimmed_accounts = getItemsOnPage(sorted_accounts, page)
 
-        response = f"Accounts with the most Sovereigns: (Page: {page}/{maxPages})\n"
+        response = f"Top balances in the system: (Page: {page}/{maxPages})\n"
 
         for i, (account_id, account_info) in enumerate(trimmed_accounts, start=1):
             account_name = account_info.get('account_name')
