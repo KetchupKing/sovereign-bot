@@ -356,17 +356,18 @@ async def list_accounts(
         
         if personal_accounts:
             if "personal" in personal_accounts:
-                response += f"Personal Account: {personal_accounts['personal']['balance']} {personal_accounts['personal']['balance']}\n"
-                embed.add_field(name=f"{personal_accounts['personal']['account_name']}'s account (Personal)", value=f"Command Name: N/A\nBalance: ㏜{personal_accounts['personal']['balance']}")
+                response += f"Personal Account: ㏜{personal_accounts['personal']['balance']:,}\n"
+                embed.add_field(name=f"{personal_accounts['personal']['account_name']}'s account (Personal)", value=f"Command Name: N/A\nBalance: ㏜{personal_accounts['personal']['balance']:,}")
 
             if owned_accounts:
                 for i, (account_name, account_info) in enumerate(owned_accounts, start=1):
                     response += f"{account_name}: {account_info['balance']} {account_info['currency']}\n"
-                    embed.add_field(name=f"{account_name} ({account_info['account_type']})", value=f"Command Name: {account_info['command_name']}\nBalance: ㏜{account_info['balance']}",inline=False)
+                    embed.add_field(name=f"{account_name} ({account_info['account_type']})", value=f"Command Name: {account_info['command_name']}\nBalance: ㏜{account_info['balance']:,}", inline=False)
 
             if treasurer_accounts:
                 for i, (account_name, account_info) in enumerate(treasurer_accounts, start=1):
-                    embed.add_field(name=f"{account_name} ({account_info['account_type']}) (Treasurer)", value=f"Command Name: {account_info['command_name']}\nBalance: ㏜{account_info['balance']}",inline=False)
+                    embed.add_field(name=f"{account_name} ({account_info['account_type']}) (Treasurer)", value=f"Command Name: {account_info['command_name']}\nBalance: ㏜{account_info['balance']:,}", inline=False)
+
         else:
             await ctx.respond("You do not own or manage any accounts.", ephemeral=ephemeral)
             return
