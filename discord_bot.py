@@ -565,6 +565,8 @@ async def pay(
 		print(tax_percentage)
 		print(memo)
 
+		response_message = (f"Successfully paid ㏜{amountNumber:,} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'Company' else 'personal account'}.")
+
 		if from_account:
 			sender_accounts = load_accounts(account_type="Company", account_name=from_account)
 
@@ -693,6 +695,8 @@ async def pay(
 			newAmount = round(amountNumber-taxAmount)
 			taxAccount["balance"] += taxAmount
 			save_company_account_changes(tax_account,taxAccount)
+			response_message += f" With {tax_percentage}% tax to '{taxAccount['account_name']}' (㏜{taxAmount:,})"
+
 
 		if "personal" in recipient_accounts:
 
@@ -714,13 +718,10 @@ async def pay(
 				recipient_accounts["balance"] += amountNumber
 				save_company_account_changes(account_name,recipient_accounts)
 		
-		response_message = (f"Successfully paid ㏜{amountNumber:,} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'Company' else 'personal account'}.")
 
 		if memo:
 			response_message += f" Memo: {memo}."
 
-		if tax_percentage and tax_account:
-			response_message += f" With {tax_percentage}% tax to '{taxAccount['account_name']}' (㏜{taxAmount:,})"
 		await ctx.respond(response_message, ephemeral=ephemeral)
 
 	except:
