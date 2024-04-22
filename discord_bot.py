@@ -462,6 +462,7 @@ async def remove_treasurer(
 	try:
 		log_event(ctx.author.id, ctx.author.name, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name.name, "ephemeral": ephemeral})
 		user_id = str(ctx.author.id)
+		print(user_id)
 		account_to_modify = load_accounts(account_type="Company", account_name=account_name)
 		
 		if account_to_modify is None:
@@ -473,6 +474,7 @@ async def remove_treasurer(
 			return
 		
 		treasurer_id = str(treasurer_name.id)
+		print(treasurer_id)
 
 		if treasurer_id in account_to_modify["treasurers"]:
 			account_to_modify["treasurers"].remove(treasurer_id)
@@ -507,6 +509,7 @@ async def list_treasurers(
 	try:
 		log_event(ctx.author.id, ctx.author.name, "treasurer_list", {"account_name": account_name, "ephemeral": ephemeral})
 		user_id = str(ctx.author.id)
+		print(user_id)
 		account_to_list = load_accounts(account_type="Company", account_name=account_name)
 		
 		if account_to_list is None:
@@ -518,6 +521,7 @@ async def list_treasurers(
 			return
 		
 		treasurers = account_to_list["treasurers"]
+		print(treasurers)
 		
 		if treasurers:
 			treasurer_names = []
@@ -548,12 +552,19 @@ async def pay(
 ):
 	try:
 		log_event(ctx.author.id, ctx.author.name, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo, "ephemeral": ephemeral})
-
+		
 		amountNumber = int(amount)
 		sender_id = str(ctx.author.id)
 		recipient_id = str(account_to_pay.id) if account_to_pay else None
 		transactionType = None
-		
+		print(amount)
+		print(account_to_pay)
+		print(account_name)
+		print(from_account)
+		print(tax_account)
+		print(tax_percentage)
+		print(memo)
+
 		if from_account:
 			sender_accounts = load_accounts(account_type="Company", account_name=from_account)
 
