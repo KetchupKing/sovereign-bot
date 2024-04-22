@@ -45,24 +45,6 @@ def log_event(user_id, user_name, command_name, options):
         return("log_event error, please contact Ketchup & manfred with this")
 
 
-def save_company_account_changes(account_name, accounts):
-    try:
-        file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
-        files = glob.glob(file_name)
-        for file in files:
-            with open(file, 'r') as f:
-                existing_accounts = json.load(f)
-                for account_id, account_info in existing_accounts.items():
-                    if (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
-                        existing_accounts[account_id] = accounts
-                        with open(file, 'w') as f_write:
-                            json.dump(existing_accounts, f_write, indent=4)
-                        return True
-        return False
-    except:
-        return("save_company_account_changes error, please contact Ketchup & manfred with this")
-
-
 def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
     try:
         if account_type == "Company":
@@ -115,6 +97,24 @@ def save_accounts(user_id, accounts, account_type=None, account_name=None):
             json.dump(accounts, f, indent=4)
     except:
         return("save_accounts error, please contact Ketchup & manfred with this")
+
+
+def save_company_account_changes(account_name, accounts):
+    try:
+        file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
+        files = glob.glob(file_name)
+        for file in files:
+            with open(file, 'r') as f:
+                existing_accounts = json.load(f)
+                for account_id, account_info in existing_accounts.items():
+                    if (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
+                        existing_accounts[account_id] = accounts
+                        with open(file, 'w') as f_write:
+                            json.dump(existing_accounts, f_write, indent=4)
+                        return True
+        return False
+    except:
+        return("save_company_account_changes error, please contact Ketchup & manfred with this")
 
 
 def check_or_create_account(user_id, userName):
@@ -515,7 +515,31 @@ async def pay(
 
             await ctx.respond(f"Successfully transferred {amountNumber} from '{from_account}' to '{account_name}'.", ephemeral=ephemeral)
             return
+        
+        if account_to_pay and from_account:
+            sender_accounts = load_accounts(account_type="Company", account_name=from_account)
+            recipient_accounts = load_accounts(recipient_id)
+            
+            if sender_accounts is None or recipient_accounts is None:
+                await ctx.respond("One of the specified accounts does not exist.", ephemeral=ephemeral)
+                return
+            
+            if "personal" in recipient_accounts and recipient_accounts["personal"]["balance"] < amountNumber:
+                await ctx.respond("Insufficient funds in your personal account.", ephemeral=ephemeral)
+                return
+            
+            if sender_accounts["balance"] >= amountNumber:
+                sender_accounts["balance"] -= amountNumber
+                save_company_account_changes(from_account, sender_accounts)
+                recipient_accounts["personal"]["balance"] += amountNumber
+                save_accounts(recipient_id, recipient_accounts)
+                
+            elif sender_accounts["balance"] < amountNumber:
+                await ctx.respond("Insufficient funds in the sender account.", ephemeral=ephemeral)
+                return
 
+            await ctx.respond(f"Successfully transferred {amountNumber} from '{from_account}' to '{account_to_pay.name}'.", ephemeral=ephemeral)
+            return
 
         if "personal" in sender_accounts:
             if sender_accounts["personal"]["balance"] < amountNumber:
