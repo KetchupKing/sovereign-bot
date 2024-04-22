@@ -176,28 +176,34 @@ async def pay(
 			sender_account = load_accounts(sender_id)
 			recipient_account = load_accounts(recipient_id)
 
-			if sender_account["personal"]["balance"] < new_amount:
+			if sender_account["personal"]["balance"] >= new_amount:
+				sender_account["personal"]["balance"] -= amount
+				recipient_account["personal"]["balance"] += new_amount
+				save_accounts(sender_id, accounts=sender_account)
+				save_accounts(recipient_id, accounts=recipient_account)
+				response_message = f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name}."
+				response_message += f" With {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})"
+				return
+			else:
 				await ctx.respond("Insufficient balance.", ephemeral=True)
+				return
 
-			sender_account["personal"]["balance"] -= amount
-			recipient_account["personal"]["balance"] += new_amount
-			save_accounts(sender_id, accounts=sender_account)
-			save_accounts(recipient_id, accounts=recipient_account)
-			response_message = f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name}."
-			response_message += f" With {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})"
 
 		else:
 			sender_account = load_accounts(sender_id)
 			recipient_account = load_accounts(recipient_id)
-   
-			if sender_account["personal"]["balance"] < amount:
+	
+			if sender_account["personal"]["balance"] >= amount:
+				sender_account["personal"]["balance"] -= amount
+				recipient_account["personal"]["balance"] += amount
+				save_accounts(sender_id, accounts=sender_account)
+				save_accounts(recipient_id, accounts=recipient_account)
+				response_message = f"Successfully paid ㏜{amount:,} to {account_to_pay.name}."
+				return
+			else:
 				await ctx.respond("Insufficient balance.", ephemeral=True)
+				return
 
-			sender_account["personal"]["balance"] -= amount
-			recipient_account["personal"]["balance"] += amount
-			save_accounts(sender_id, accounts=sender_account)
-			save_accounts(recipient_id, accounts=recipient_account)
-			response_message = f"Successfully paid ㏜{amount:,} to {account_to_pay.name}."
 
 
 
