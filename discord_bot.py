@@ -487,7 +487,6 @@ async def pay(
             if sender_accounts["balance"] < amountNumber:
                 await ctx.respond("Insufficient funds in the 'from account'.", ephemeral=ephemeral)
                 return
-            sender_accounts["balance"] -= amountNumber
             save_company_account_changes(from_account, sender_accounts)
         else:
             sender_accounts = load_accounts(sender_id)
@@ -505,13 +504,14 @@ async def pay(
             if sender_accounts is None or recipient_accounts is None:
                 await ctx.respond("One of the specified accounts does not exist.", ephemeral=ephemeral)
                 return
-            if sender_accounts["balance"] < amountNumber:
+            if sender_accounts["balance"] >= amountNumber:
+                sender_accounts["balance"] -= amountNumber
+                save_company_account_changes(from_account, sender_accounts)
+                recipient_accounts["balance"] += amountNumber
+                save_company_account_changes(account_name, recipient_accounts)
+            elif sender_accounts["balance"] < amountNumber:
                 await ctx.respond("Insufficient funds in the sender account.", ephemeral=ephemeral)
                 return
-
-            save_company_account_changes(from_account, sender_accounts)
-            recipient_accounts["balance"] += amountNumber
-            save_company_account_changes(account_name, recipient_accounts)
 
             await ctx.respond(f"Successfully transferred {amountNumber} from '{from_account}' to '{account_name}'.", ephemeral=ephemeral)
             return

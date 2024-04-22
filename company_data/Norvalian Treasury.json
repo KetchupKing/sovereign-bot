@@ -3,10 +3,11 @@
         "account_name": "Norvalian Treasury",
         "command_name": "CN",
         "account_type": "government",
-        "balance": 4000,
+        "balance": 4200,
         "currency": "Sovereign",
         "treasurers": [
-            "414382024552480769"
+            "414382024552480769",
+            "854357214046191637"
         ],
         "owner": "414382024552480769"
     }

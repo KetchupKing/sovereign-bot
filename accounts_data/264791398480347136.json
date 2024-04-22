@@ -1,7 +1,7 @@
 {
     "personal": {
         "account_name": "go_go",
-        "balance": 990,
+        "balance": 1313,
         "currency": "Sovereign",
         "own accounts": [
             "Dazvani Industries",
@@ -9,6 +9,9 @@
             "Dazvani Trading Company",
             "Dazvani Nether Imports"
         ],
-        "treasurer of": []
+        "treasurer of": [
+            "CMJ",
+            "CD"
+        ]
     }
 }

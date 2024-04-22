@@ -4,9 +4,10 @@
         "balance": 6290,
         "currency": "Sovereign",
         "own accounts": [
-            "Legendary Loot Lair",
-            "test"
+            "Legendary Loot Lair"
         ],
-        "treasurer of": []
+        "treasurer of": [
+            "DNI"
+        ]
     }
 }

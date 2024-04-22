@@ -3,10 +3,11 @@
         "account_name": "Dazvani Nether Imports",
         "command_name": "DNI",
         "account_type": "Company",
-        "balance": 323,
+        "balance": 5,
         "currency": "Sovereign",
         "treasurers": [
-            "264791398480347136"
+            "264791398480347136",
+            "1018934971810979840"
         ],
         "owner": "264791398480347136"
     }

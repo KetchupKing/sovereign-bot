@@ -4,6 +4,8 @@
         "balance": 9698,
         "currency": "Sovereign",
         "own accounts": [],
-        "treasurer of": []
+        "treasurer of": [
+            "CV"
+        ]
     }
 }

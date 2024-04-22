@@ -4,6 +4,8 @@
         "balance": 20,
         "currency": "Sovereign",
         "own accounts": [],
-        "treasurer of": []
+        "treasurer of": [
+            "CN"
+        ]
     }
 }

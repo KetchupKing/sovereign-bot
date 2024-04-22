@@ -15,6 +15,9 @@
             "Norvalian Treasury",
             "Velsoran Treasury"
         ],
-        "treasurer of": []
+        "treasurer of": [
+            "DI",
+            "DAC"
+        ]
     }
 }
