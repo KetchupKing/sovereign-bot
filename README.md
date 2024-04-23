@@ -1,6 +1,6 @@
 # Sovereign-bot
 
-![Static Badge](https://img.shields.io/badge/Version-0.2-blue)
+![Static Badge](https://img.shields.io/badge/Version-1.0.0-blue)
  Sovereign Bot is a Discord bot developed by [KetchupKing](https://github.com/KetchupKing) and [PentiumY](https://github.com/PentiumY)
 
 ## Setting up the bot
