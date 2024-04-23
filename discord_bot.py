@@ -265,6 +265,22 @@ def getItemsOnPage(lst, page_num, items_per_page=10):
 		return("getItemsOnPage error, please contact Ketchup & manfred with this")
 
 
+def tax(amount, tax_account, tax_percentage):
+	global new_amount
+	tax_percentage = round(tax_percentage, 3)
+	tax_percentage = int(tax_percentage)
+
+	if tax_percentage > 100 or tax_percentage < 0:
+		return "Only put tax between 100 and 0"
+
+	Tax_Account = load_accounts(account_type="Company", account_name=tax_account)
+	tax_amount = round(amount*(tax_percentage/100))
+	Tax_Account["balance"] += tax_amount
+	new_amount = amount - tax_amount
+	save_company_account_changes(tax_account,Tax_Account)
+	return new_amount, Tax_Account, tax_amount
+
+
 @bot.event
 async def on_ready():
 	print(f'Successfully logged in {bot.user}')
@@ -541,7 +557,7 @@ async def list_treasurers(
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
 async def pay(
 	ctx,
-	amount: int = discord.Option(description="The amount to transfer"),
+	amount: int = discord.Option(int, description="The amount to transfer"),
 	account_to_pay: discord.User = discord.Option(discord.User, description="The user to pay", required=False),
 	account_name: str = discord.Option(description="The name of the account to pay", required=False),
 	from_account: str = discord.Option(description="The account from which to transfer", required=False),
@@ -550,182 +566,168 @@ async def pay(
 	memo: str = discord.Option(description="A memo for the transaction", required=False),
 	ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
-	try:
-		log_event(ctx.author.id, ctx.author.name, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo, "ephemeral": ephemeral})
-		
-		amountNumber = int(amount)
-		sender_id = str(ctx.author.id)
-		recipient_id = str(account_to_pay.id) if account_to_pay else None
-		transactionType = None
-		print(amount)
-		print(account_to_pay)
-		print(account_name)
-		print(from_account)
-		print(tax_account)
-		print(tax_percentage)
-		print(memo)
+	log_event(ctx.author.id, ctx.author.name, "pay", {"amount": amount, "account_to_pay": account_to_pay.name if account_to_pay else None, "account_name": account_name, "from_account": from_account, "tax_account": tax_account, "tax_percentage": tax_percentage, "memo": memo, "ephemeral": ephemeral})
 
-		response_message = (f"Successfully paid ㏜{amountNumber:,} to '{account_to_pay.name if account_to_pay else account_name}' from {sender_accounts['account_name'] if transactionType == 'Company' else 'personal account'}.")
+	sender_id = str(ctx.author.id)
+	recipient_id = str(account_to_pay.id) if account_to_pay else account_name
 
-		if from_account:
-			sender_accounts = load_accounts(account_type="Company", account_name=from_account)
+	if account_to_pay and not from_account and not account_name:
+		sender_account = load_accounts(sender_id)
+		recipient_account = load_accounts(recipient_id)
 
-			if sender_accounts is None:
-				await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
+		if sender_id == recipient_id:
+			await ctx.respond("Your not allowed to pay yourself", ephemeral=ephemeral)
+			return
+
+		elif tax_percentage and tax_account:
+			if sender_account["personal"]["balance"] >= new_amount:
+				new_amount, Tax_Account, tax_amount = tax(amount, tax_account, tax_percentage)
+				sender_account["personal"]["balance"] -= amount
+				recipient_account["personal"]["balance"] += new_amount
+				save_accounts(sender_id, accounts=sender_account)
+				save_accounts(recipient_id, accounts=recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
 				return
-
-			if sender_accounts["balance"] < amountNumber:
-				await ctx.respond("Insufficient funds in the 'from account'.", ephemeral=ephemeral)
+			else:
+				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
 				return
-			save_company_account_changes(from_account, sender_accounts)
 
 		else:
-			sender_accounts = load_accounts(sender_id)
-
-			if sender_accounts is None:
-				await ctx.respond("You do not have a personal account.", ephemeral=ephemeral)
+			if sender_account["personal"]["balance"] >= amount:
+				sender_account["personal"]["balance"] -= amount
+				recipient_account["personal"]["balance"] += amount
+				save_accounts(sender_id, accounts=sender_account)
+				save_accounts(recipient_id, accounts=recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_to_pay.name}.", ephemeral=ephemeral)
 				return
-
-			if "personal" in sender_accounts and sender_accounts["personal"]["balance"] < amountNumber:
-				await ctx.respond("Insufficient funds in your personal account.", ephemeral=ephemeral)
-				return
-			save_accounts(sender_id, sender_accounts)
-		
-		if from_account and account_name:
-			sender_accounts = load_accounts(account_type="Company", account_name=from_account)
-			recipient_accounts = load_accounts(account_type="Company", account_name=account_name)
-
-			if sender_accounts is None or recipient_accounts is None:
-				await ctx.respond("One of the specified accounts does not exist.", ephemeral=ephemeral)
-				return
-
-			if sender_accounts["balance"] >= amountNumber:
-				sender_accounts["balance"] -= amountNumber
-				save_company_account_changes(from_account, sender_accounts)
-				recipient_accounts["balance"] += amountNumber
-				save_company_account_changes(account_name, recipient_accounts)
-
-			elif sender_accounts["balance"] < amountNumber:
-				await ctx.respond("Insufficient funds in the sender account.", ephemeral=ephemeral)
-				return
-
-			await ctx.respond(f"Successfully transferred {amountNumber} from '{from_account}' to '{account_name}'.", ephemeral=ephemeral)
-			return
-		
-		if account_to_pay and from_account:
-			sender_accounts = load_accounts(account_type="Company", account_name=from_account)
-			recipient_accounts = load_accounts(recipient_id)
-			
-			if sender_accounts is None or recipient_accounts is None:
-				await ctx.respond("One of the specified accounts does not exist.", ephemeral=ephemeral)
-				return
-			
-			if "personal" in recipient_accounts and recipient_accounts["personal"]["balance"] < amountNumber:
-				await ctx.respond("Insufficient funds in your personal account.", ephemeral=ephemeral)
-				return
-			
-			if sender_accounts["balance"] >= amountNumber:
-				sender_accounts["balance"] -= amountNumber
-				save_company_account_changes(from_account, sender_accounts)
-				recipient_accounts["personal"]["balance"] += amountNumber
-				save_accounts(recipient_id, recipient_accounts)
-				
-			elif sender_accounts["balance"] < amountNumber:
-				await ctx.respond("Insufficient funds in the sender account.", ephemeral=ephemeral)
-				return
-
-			await ctx.respond(f"Successfully transferred {amountNumber} from '{from_account}' to '{account_to_pay.name}'.", ephemeral=ephemeral)
-			return
-
-		if "personal" in sender_accounts:
-
-			if sender_accounts["personal"]["balance"] < amountNumber:
-				await ctx.respond("Insufficient funds.", ephemeral=ephemeral)
-				return
-
 			else:
-				sender_accounts["personal"]["balance"] -= amountNumber
-				save_accounts(sender_id, sender_accounts)
-				transactionType = "personal"
-
-		elif sender_accounts["account_type"] == "Company" or sender_accounts["account_type"] == "government":
-
-			if sender_accounts["owner"] == sender_id or sender_id in sender_accounts["treasurers"]:
-
-				if sender_accounts["balance"] < amountNumber:
-					await ctx.respond("Insufficient funds in the Company account.", ephemeral=ephemeral)
-					return
-
-				else:
-					sender_accounts["balance"] -= amountNumber
-					save_company_account_changes(from_account,sender_accounts)
-					transactionType = "Company"
-
-			else:
-				await ctx.respond(f"You do not have permission for '{sender_accounts['account_name']}'", ephemeral=ephemeral)
+				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
 				return
 
-		if account_name:
-			recipient_accounts = load_accounts(account_type="Company", account_name=account_name)
+	elif account_to_pay and from_account and not account_name:
+		sender_account = load_accounts(account_type="Company", account_name=from_account)
+		recipient_account = load_accounts(recipient_id)
 
-			if recipient_accounts is None:
-				await ctx.respond("The specified 'account name' does not exist.", ephemeral=True)
-				return
-			recipient_accounts["balance"] += amountNumber
-			save_company_account_changes(account_name, recipient_accounts)
-			await ctx.respond(f"Successfully transferred {amountNumber} to '{account_name}'.", ephemeral=ephemeral)
+		if sender_id not in sender_account["treasurers"]:
+			await ctx.respond("Your not allowed to pay from this account", ephemeral=ephemeral)
 			return
+		if sender_account == recipient_account:
+			await ctx.respond("Your not allowed to pay yourself", ephemeral=ephemeral)
+			return
+		if sender_account is None:
+			await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
+			return
+
+		elif tax_percentage and tax_account:
+			if sender_account["balance"] >= amount:
+				new_amount, Tax_Account, tax_amount = tax(amount, tax_account, tax_percentage)
+				sender_account["balance"] -= amount
+				recipient_account["personal"]["balance"] += new_amount
+				save_company_account_changes(from_account, sender_account)
+				save_accounts(recipient_id, accounts=recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name} from account {from_account}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
+				return
+			else:
+				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
+				return
 
 		else:
-			recipient_accounts = load_accounts(recipient_id)
-
-			if recipient_accounts is None:
-				await ctx.respond("The recipient does not have a personal account.", ephemeral=ephemeral)
+			if sender_account["balance"] >= amount:
+				sender_account["balance"] -= amount
+				recipient_account["personal"]["balance"] += amount
+				save_company_account_changes(from_account, sender_account)
+				save_accounts(recipient_id, accounts=recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_to_pay.name} from account {from_account}.", ephemeral=ephemeral)
+				return
+			else:
+				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
 				return
 
-		if tax_percentage and tax_account:
-			tax_percentage = round(tax_percentage, 3)
+	elif account_name and not account_to_pay and not from_account:
+		sender_account = load_accounts(sender_id)
+		recipient_account = load_accounts(account_type="Company", account_name=account_name)
 
-			if tax_percentage > 100 or tax_percentage < 0:
-				await ctx.respond("Only put tax between 100 and 0", ephemeral=ephemeral)
+		if sender_account == recipient_account:
+			await ctx.respond("Your not allowed to pay yourself", ephemeral=ephemeral)
+			return
+		if recipient_account is None:
+			await ctx.respond("The specified account to pay does not exist.", ephemeral=ephemeral)
+			return
+		if sender_account is None:
+			await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
+			return
+
+		elif tax_percentage and tax_account:
+			if sender_account["personal"]["balance"] >= amount:
+				new_amount, Tax_Account, tax_amount = tax(amount, tax_account, tax_percentage)
+				sender_account["personal"]["balance"] -= amount
+				recipient_account["balance"] += new_amount
+				save_accounts(sender_id, accounts=sender_account)
+				save_company_account_changes(account_name, recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_name}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
 				return
-			taxPercentage = int(tax_percentage)
-			taxAccount = load_accounts(account_type="Company", account_name=tax_account)			
-			taxAmount = round(amountNumber*(taxPercentage/100))
-			newAmount = round(amountNumber-taxAmount)
-			taxAccount["balance"] += taxAmount
-			save_company_account_changes(tax_account,taxAccount)
-			response_message += f" With {tax_percentage}% tax to '{taxAccount['account_name']}' (㏜{taxAmount:,})"
-
-
-		if "personal" in recipient_accounts:
-
-			if tax_percentage and tax_account:
-				recipient_accounts["personal"]["balance"] += newAmount
-				save_accounts(recipient_id, recipient_accounts)
-
 			else:
-				recipient_accounts["personal"]["balance"] += amountNumber
-				save_accounts(recipient_id, recipient_accounts)
+				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
+				return
 
-		elif recipient_accounts["account_type"] == "Company":
-
-			if tax_percentage and tax_account:
-				recipient_accounts["balance"] += newAmount
-				save_company_account_changes(account_name,recipient_accounts)
-
+		else:
+			if sender_account["personal"]["balance"] >= amount:
+				sender_account["personal"]["balance"] -= amount
+				recipient_account["balance"] += amount
+				save_accounts(sender_id, accounts=sender_account)
+				save_company_account_changes(account_name, recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_name}.", ephemeral=ephemeral)
+				return
 			else:
-				recipient_accounts["balance"] += amountNumber
-				save_company_account_changes(account_name,recipient_accounts)
-		
+				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
+				return
 
-		if memo:
-			response_message += f" Memo: {memo}."
+	elif account_name and from_account and not account_to_pay:
+		sender_account = load_accounts(account_type="Company", account_name=from_account)
+		recipient_account = load_accounts(account_type="Company", account_name=account_name)
 
-		await ctx.respond(response_message, ephemeral=ephemeral)
+		if sender_id not in sender_account["treasurers"]:
+			await ctx.respond("Your not allowed to pay from this account", ephemeral=ephemeral)
+			return
+		if sender_account == recipient_account:
+			await ctx.respond("Your not allowed to pay yourself", ephemeral=ephemeral)
+			return
+		if sender_account is None:
+			await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
+			return
+		if recipient_account is None:
+			await ctx.respond("The specified account to pay does not exist.", ephemeral=ephemeral)
 
-	except:
-		await ctx.respond("pay command error, please contact Ketchup & manfred with this")
+		elif tax_percentage and tax_account:
+			if sender_account["balance"] >= amount:
+				new_amount, Tax_Account, tax_amount = tax(amount, tax_account, tax_percentage)
+				sender_account["balance"] -= amount
+				recipient_account["balance"] += new_amount
+				save_company_account_changes(from_account, sender_account)
+				save_company_account_changes(account_name, recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_name} from account {from_account}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
+				return
+			else:
+				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
+				return
+
+		else:
+			if sender_account["balance"] >= amount:
+				sender_account["balance"] -= amount
+				recipient_account["balance"] += amount
+				save_company_account_changes(from_account, sender_account)
+				save_company_account_changes(account_name, recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_name} from account {from_account}.", ephemeral=ephemeral)
+				return
+			else:
+				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
+				return
+
+	elif memo:
+		await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
+
+	else:
+		await ctx.respond("Error")
 
 
 @bot.slash_command(name="baltop", description="Accounts with the most Sovereigns.")
