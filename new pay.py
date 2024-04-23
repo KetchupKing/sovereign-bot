@@ -151,8 +151,6 @@ async def pay(
 	sender_id = str(ctx.author.id)
 	recipient_id = str(account_to_pay.id) if account_to_pay else account_name
 
-	sender_accounts = load_accounts(account_type="Company", account_name=from_account)
-	recipient_accounts = load_accounts(account_type="Company", account_name=account_name)
 
 #account_to_pay - your personal to another personal
 	if account_to_pay and not from_account and not account_name:
@@ -181,8 +179,7 @@ async def pay(
 				recipient_account["personal"]["balance"] += new_amount
 				save_accounts(sender_id, accounts=sender_account)
 				save_accounts(recipient_id, accounts=recipient_account)
-				response_message = f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name}."
-				response_message += f" With {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})"
+				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})")
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=True)
@@ -198,7 +195,62 @@ async def pay(
 				recipient_account["personal"]["balance"] += amount
 				save_accounts(sender_id, accounts=sender_account)
 				save_accounts(recipient_id, accounts=recipient_account)
-				response_message = f"Successfully paid ㏜{amount:,} to {account_to_pay.name}."
+				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_to_pay.name}.")
+				return
+			else:
+				await ctx.respond("Insufficient balance.", ephemeral=True)
+				return
+
+
+#account_to_pay and from_account - your company/gov to another personal
+	elif account_to_pay and from_account and not account_name:
+		sender_account = load_accounts(account_type="Company", account_name=from_account)
+		recipient_account = load_accounts(recipient_id)
+
+		if sender_account == recipient_account:
+			await ctx.respond("Your not allowed to pay yourself")
+			return
+
+		elif tax_percentage and tax_account:
+			if sender_account is None:
+				await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
+				return
+
+			tax_percentage = round(tax_percentage, 3)
+			tax_percentage = int(tax_percentage)
+
+			if tax_percentage > 100 or tax_percentage < 0:
+				await ctx.respond("Only put tax between 100 and 0", ephemeral=ephemeral)
+				return
+
+			Tax_Account = load_accounts(account_type="Company", account_name=tax_account)
+			tax_amount = round(amount*(tax_percentage/100))
+			Tax_Account["balance"] += tax_amount
+			new_amount = amount - tax_amount
+			save_company_account_changes(tax_account,Tax_Account)
+
+			if sender_account["balance"] >= amount:
+				sender_account["balance"] -= amount
+				recipient_account["personal"]["balance"] += new_amount
+				save_company_account_changes(from_account, sender_account)
+				save_accounts(recipient_id, accounts=recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name} from account {from_account}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})")
+				return
+
+			else:
+				await ctx.respond("Insufficient balance.", ephemeral=True)
+				return
+
+		else:
+			if sender_account is None:
+				await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
+				return
+			if sender_account["balance"] >= amount:
+				sender_account["balance"] -= amount
+				recipient_account["personal"]["balance"] += amount
+				save_company_account_changes(from_account, sender_account)
+				save_accounts(recipient_id, accounts=recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_to_pay.name} from account {from_account}.")
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=True)
@@ -207,24 +259,15 @@ async def pay(
 
 
 
-
-
- 
-#account_to_pay and from_account - your company/gov to another personal
-	elif account_to_pay and from_account and not account_name:
-			return 0
-
 #account_name - your personal to company/gov
-	elif account_name:
-			return 0
+#	elif account_name:
+
 
 #account_name and from_account - your company/gov to another company/gov
-	elif account_name and from_account:
-			return 0
+#	elif account_name and from_account:
+
 
 	if memo:
 		response_message += f" Memo: {memo}."
-
-	await ctx.respond(response_message, ephemeral=ephemeral)
 
 bot.run(TOKEN)
