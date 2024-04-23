@@ -1,0 +1,13 @@
+{
+    "MoF": {
+        "account_name": "Ministry of Finance",
+        "command_name": "MoF",
+        "account_type": "government",
+        "balance": 0,
+        "currency": "Sovereign",
+        "treasurers": [
+            "436289865739665410"
+        ],
+        "owner": "436289865739665410"
+    }
+}

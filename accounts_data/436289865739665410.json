@@ -4,7 +4,8 @@
         "balance": 73233,
         "currency": "Sovereign",
         "own accounts": [
-            "8BB"
+            "8BB",
+            "Ministry of Finance"
         ],
         "treasurer of": [
             "CMF"
