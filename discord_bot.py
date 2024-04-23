@@ -10,7 +10,7 @@ import time
 import os
 import re
 
-admin = ['365931996129787914', '1018934971810979840']
+admin = ['']
 authorised_users = 'authorised.json'
 
 logging.getLogger('discord').setLevel(logging.WARNING)

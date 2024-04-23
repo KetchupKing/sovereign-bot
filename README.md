@@ -19,7 +19,6 @@
     
     pip install PyNaCl
 
-
     pip install Flask
     
     pip install Flask-Login
