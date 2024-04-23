@@ -47,7 +47,6 @@ def log_event(user_id, user_name, command_name, options):
 
 def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
 	try:
-	 
 		if account_type == "Company":
 			file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
 			files = glob.glob(file_name)
@@ -185,7 +184,6 @@ async def pay(
 				await ctx.respond("Insufficient balance.", ephemeral=True)
 				return
 
-
 		else:
 			sender_account = load_accounts(sender_id)
 			recipient_account = load_accounts(recipient_id)
@@ -206,6 +204,10 @@ async def pay(
 	elif account_to_pay and from_account and not account_name:
 		sender_account = load_accounts(account_type="Company", account_name=from_account)
 		recipient_account = load_accounts(recipient_id)
+
+		if sender_account["treasurers"] != sender_id:
+			await ctx.respond("Your not allowed to pay from this account")
+			return
 
 		if sender_account == recipient_account:
 			await ctx.respond("Your not allowed to pay yourself")
@@ -257,10 +259,59 @@ async def pay(
 				return
 
 
-
-
 #account_name - your personal to company/gov
-#	elif account_name:
+	elif account_name and not account_to_pay and not from_account:
+		sender_account = load_accounts(sender_id)
+		recipient_account = load_accounts(account_type="Company", account_name=account_name)
+
+		if sender_account == recipient_account:
+			await ctx.respond("Your not allowed to pay yourself")
+			return
+
+		elif tax_percentage and tax_account:
+			if sender_account is None:
+				await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
+				return
+
+			tax_percentage = round(tax_percentage, 3)
+			tax_percentage = int(tax_percentage)
+
+			if tax_percentage > 100 or tax_percentage < 0:
+				await ctx.respond("Only put tax between 100 and 0", ephemeral=ephemeral)
+				return
+
+			Tax_Account = load_accounts(account_type="Company", account_name=tax_account)
+			tax_amount = round(amount*(tax_percentage/100))
+			Tax_Account["balance"] += tax_amount
+			new_amount = amount - tax_amount
+			save_company_account_changes(tax_account,Tax_Account)
+
+			if sender_account["personal"]["balance"] >= amount:
+				sender_account["personal"]["balance"] -= amount
+				recipient_account["balance"] += new_amount
+				save_accounts(sender_id, accounts=sender_account)
+				save_company_account_changes(account_name, recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_name}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})")
+				return
+
+			else:
+				await ctx.respond("Insufficient balance.", ephemeral=True)
+				return
+
+		else:
+			if sender_account is None:
+				await ctx.respond("The specified 'from account' does not exist.", ephemeral=ephemeral)
+				return
+			if sender_account["personal"]["balance"] >= amount:
+				sender_account["personal"]["balance"] -= amount
+				recipient_account["balance"] += amount
+				save_accounts(sender_id, accounts=sender_account)
+				save_company_account_changes(account_name, recipient_account)
+				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_name}.")
+				return
+			else:
+				await ctx.respond("Insufficient balance.", ephemeral=True)
+				return
 
 
 #account_name and from_account - your company/gov to another company/gov
