@@ -10,7 +10,7 @@ import time
 import os
 import re
 
-admin = ['']
+admin = ['365931996129787914', '1018934971810979840']
 authorised_users = 'authorised.json'
 
 logging.getLogger('discord').setLevel(logging.WARNING)
@@ -587,6 +587,8 @@ async def pay(
 				save_accounts(sender_id, accounts=sender_account)
 				save_accounts(recipient_id, accounts=recipient_account)
 				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
+				if memo:
+					await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
@@ -599,6 +601,8 @@ async def pay(
 				save_accounts(sender_id, accounts=sender_account)
 				save_accounts(recipient_id, accounts=recipient_account)
 				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_to_pay.name}.", ephemeral=ephemeral)
+				if memo:
+					await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
@@ -626,6 +630,8 @@ async def pay(
 				save_company_account_changes(from_account, sender_account)
 				save_accounts(recipient_id, accounts=recipient_account)
 				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name} from account {from_account}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
+				if memo:
+					await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
@@ -638,6 +644,8 @@ async def pay(
 				save_company_account_changes(from_account, sender_account)
 				save_accounts(recipient_id, accounts=recipient_account)
 				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_to_pay.name} from account {from_account}.", ephemeral=ephemeral)
+				if memo:
+					await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
@@ -665,6 +673,8 @@ async def pay(
 				save_accounts(sender_id, accounts=sender_account)
 				save_company_account_changes(account_name, recipient_account)
 				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_name}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
+				if memo:
+					await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
@@ -677,6 +687,8 @@ async def pay(
 				save_accounts(sender_id, accounts=sender_account)
 				save_company_account_changes(account_name, recipient_account)
 				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_name}.", ephemeral=ephemeral)
+				if memo:
+					await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
@@ -706,6 +718,8 @@ async def pay(
 				save_company_account_changes(from_account, sender_account)
 				save_company_account_changes(account_name, recipient_account)
 				await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_name} from account {from_account}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
+				if memo:
+					await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
@@ -718,13 +732,13 @@ async def pay(
 				save_company_account_changes(from_account, sender_account)
 				save_company_account_changes(account_name, recipient_account)
 				await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_name} from account {from_account}.", ephemeral=ephemeral)
+				if memo:
+					await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 				return
 			else:
 				await ctx.respond("Insufficient balance.", ephemeral=ephemeral)
 				return
 
-	elif memo:
-		await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 
 	else:
 		await ctx.respond("Error")
@@ -902,45 +916,45 @@ async def eco(
 		await ctx.respond("eco command error, please contact Ketchup & manfred with this")
 
 
-@bot.slash_command(name="account_all", description="Create a personal account for everyone in the server.")
-async def account_all(
-	ctx,
-	ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
-):
-	try:
-		log_event(ctx.author.id, ctx.author.name, "account_all", {"ephemeral": ephemeral})
-		user_id = str(ctx.author.id)
-
-		if user_id in admin:
-			members = await ctx.guild.fetch_members().flatten()
-
-			for member in members:
-				user_id = str(member.id)
-				userName = str(member.name)
-				accounts = load_accounts(user_id)
-
-				if not accounts:
-					accounts = {
-						"personal": {
-							"account_name": userName,
-							"balance": 0,
-							"currency": "Sovereign",
-							"own accounts": [],
-							"treasurer of": []
-						}
-					}
-					save_accounts(user_id, accounts)
-					print(f"A new personal account has been created for {userName}.")
-
-				else:
-					print(f"{userName} already has an account.")
-			await ctx.respond("All personal accounts have been created.", ephemeral=ephemeral)
-
-		else:
-			await ctx.respond("You do not have permission to use this command.", ephemeral=ephemeral)
-
-	except:
-		await ctx.respond("account_all command error, please contact Ketchup & manfred with this")
+#@bot.slash_command(name="account_all", description="Create a personal account for everyone in the server.")
+#async def account_all(
+#	ctx,
+#	ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
+#):
+#	try:
+#		log_event(ctx.author.id, ctx.author.name, "account_all", {"ephemeral": ephemeral})
+#		user_id = str(ctx.author.id)
+#
+#		if user_id in admin:
+#			members = await ctx.guild.fetch_members().flatten()
+#
+#			for member in members:
+#				user_id = str(member.id)
+#				userName = str(member.name)
+#				accounts = load_accounts(user_id)
+#
+#				if not accounts:
+#					accounts = {
+#						"personal": {
+#							"account_name": userName,
+#							"balance": 0,
+#							"currency": "Sovereign",
+#							"own accounts": [],
+#							"treasurer of": []
+#						}
+#					}
+#					save_accounts(user_id, accounts)
+#					print(f"A new personal account has been created for {userName}.")
+#
+#				else:
+#					print(f"{userName} already has an account.")
+#			await ctx.respond("All personal accounts have been created.", ephemeral=ephemeral)
+#
+#		else:
+#			await ctx.respond("You do not have permission to use this command.", ephemeral=ephemeral)
+#
+#	except:
+#		await ctx.respond("account_all command error, please contact Ketchup & manfred with this")
 
 
 bot.run(TOKEN)
