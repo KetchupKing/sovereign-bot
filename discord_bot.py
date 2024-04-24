@@ -1,4 +1,5 @@
 from discord.ext import commands
+from discord.ui import Button, View
 from dotenv import load_dotenv
 import aiofiles
 import logging
@@ -45,6 +46,11 @@ def log_event(user_id, user_name, command_name, options):
 	except:
 		return("log_event error, please contact Ketchup & manfred with this")
 
+def removeAccount(accountName):
+	file_name = os.path.join(COMPANY_DATA_DIR, f'{accountName}.json')
+	os.remove(file_name)
+	print(file_name)
+
 
 def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
 	try:
@@ -60,7 +66,6 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
 					for account_id, account_info in accounts.items():
 		 
 						if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
-							print(account_info)
 							return account_info
 
 		elif account_type == "government":
@@ -915,6 +920,56 @@ async def eco(
 	except:
 		await ctx.respond("eco command error, please contact Ketchup & manfred with this")
 
+@bot.slash_command(name="transfer_account", description="Transfer or something")
+async def transfer_account(
+	ctx,
+	account_name: str = discord.Option(str, description="Account to transfer", required=True),
+	transfer_to = discord.Option(discord.User, description="Account to transfer to", required=True)
+):
+	account = load_accounts(account_type="Company", account_name=account_name)
+	if str(ctx.author.id) == account["owner"]:
+		confirmButton = Button(label="Confirm account transfer", style=discord.ButtonStyle.danger, emoji="✅")
+
+		async def button_callback(interaction):
+			if interaction.user.id == ctx.author.id:
+				account["owner"] = str(transfer_to.id)
+				account["treasurers"].remove(str(ctx.author.id))
+				account["treasurers"].append(str(transfer_to.id))
+				save_company_account_changes(account_name, account)
+				await interaction.response.send_message(f"Transferring {account_name} to {str(transfer_to.name)}")
+			
+		confirmButton.callback = button_callback
+
+		view = View()
+		view.add_item(confirmButton)
+
+		await ctx.respond(f"Do you want to transfer the account {account_name}", view=view)
+	else:
+		await ctx.respond("You are not the owner of this account")
+
+@bot.slash_command(name="remove_account", description="Remove account")
+async def remove_account(
+	ctx,
+	account_name: str = discord.Option(str, description="Account to remove", required=True)
+):
+	account = load_accounts(account_type="Company", account_name=account_name)
+	if str(ctx.author.id) == account["owner"]:
+		if account["balance"] == 0:
+			confirmButton = Button(label="Confirm account removal", style=discord.ButtonStyle.danger, emoji="✅")
+
+			async def button_callback(interaction):
+				if interaction.user.id == ctx.author.id:
+					removeAccount(account["account_name"])
+					await interaction.response.send_message(f"ok removing then....")
+				
+			confirmButton.callback = button_callback
+
+			view = View()
+			view.add_item(confirmButton)
+
+			await ctx.respond(f"Do you want to transfer the account {account_name}", view=view)
+		else:
+			await ctx.respond(f"Empty account before removing")
 
 #@bot.slash_command(name="account_all", description="Create a personal account for everyone in the server.")
 #async def account_all(

@@ -1,8 +1,8 @@
 {
-    "T": {
-        "account_name": "test",
-        "command_name": "T",
-        "account_type": "Company",
+    "a": {
+        "account_name": "a",
+        "command_name": "a",
+        "account_type": "government",
         "balance": 0,
         "currency": "Sovereign",
         "treasurers": [

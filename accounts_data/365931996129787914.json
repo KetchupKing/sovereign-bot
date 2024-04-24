@@ -4,7 +4,9 @@
         "balance": 19,
         "currency": "Sovereign",
         "own accounts": [
-            "Montaval Distillery & Brewery"
+            "Montaval Distillery & Brewery",
+            "a",
+            "test"
         ],
         "treasurer of": []
     }
