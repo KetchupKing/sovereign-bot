@@ -3,12 +3,12 @@
         "account_name": "Dazvani Arsenal Company",
         "command_name": "DAC",
         "account_type": "company",
-        "balance": 15143,
+        "balance": 15043,
         "currency": "Sovereign",
         "treasurers": [
-            "264791398480347136",
+            "414382024552480769",
             "414382024552480769"
         ],
-        "owner": "264791398480347136"
+        "owner": "414382024552480769"
     }
 }

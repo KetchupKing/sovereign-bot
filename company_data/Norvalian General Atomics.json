@@ -1,0 +1,14 @@
+{
+    "NGA": {
+        "account_name": "Norvalian General Atomics",
+        "command_name": "NGA",
+        "account_type": "Company",
+        "balance": 0,
+        "currency": "Sovereign",
+        "treasurers": [
+            "264791398480347136",
+            "217988451998498816"
+        ],
+        "owner": "264791398480347136"
+    }
+}
