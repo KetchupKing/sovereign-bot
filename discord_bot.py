@@ -994,7 +994,6 @@ async def transfer_account(
 		await ctx.respond("transfer_account command error, please contact Ketchup & manfred with this")
 
 
-
 @bot.slash_command(name="remove_account", description="Remove account")
 async def remove_account(
 	ctx,
@@ -1025,6 +1024,7 @@ async def remove_account(
 				await ctx.respond(f"Empty account before removing")
 	except:
 		await ctx.respond("remove_account command error, please contact Ketchup & manfred with this")
+
 
 #@bot.slash_command(name="account_all", description="Create a personal account for everyone in the server.")
 #async def account_all(
