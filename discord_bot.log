@@ -179,3 +179,4 @@
 {"user_id": 365931996129787914, "user_name": "m_anfred", "command_name": "create_account", "options": {"account_name": "test", "command_name": "T", "account_type": "Company", "ephemeral": false}, "timestamp": 1713983789}
 {"user_id": 365931996129787914, "user_name": "m_anfred", "command_name": "pay", "options": {"amount": 10, "account_to_pay": null, "account_name": "test", "from_account": null, "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}, "timestamp": 1713983866}
 {"user_id": 365931996129787914, "user_name": "m_anfred", "command_name": "pay", "options": {"amount": 10, "account_to_pay": "m_anfred", "account_name": null, "from_account": "test", "tax_account": null, "tax_percentage": null, "memo": null, "ephemeral": false}, "timestamp": 1713983888}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "account", "options": {"ephemeral": false}, "timestamp": 1714134202}

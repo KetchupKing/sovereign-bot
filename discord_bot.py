@@ -151,10 +151,15 @@ def check_or_create_account(user_id, userName):
 		print(accounts)
 
 		if not accounts:
+			from_account = 'Cieurnish Treasury'
+			sender_account = load_accounts(account_type="Company", account_name=from_account)
+			sender_account["balance"] -= 300
+			save_company_account_changes(from_account, sender_account)
+
 			accounts = {
 				"personal": {
 					"account_name": userName,
-					"balance": 0,
+					"balance": 300,
 					"currency": "Sovereign",
 					"own accounts": [],
 					"treasurer of": []
