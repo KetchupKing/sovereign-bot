@@ -292,6 +292,29 @@ def tax(amount, tax_account, tax_percentage):
 	return new_amount, Tax_Account, tax_amount
 
 
+def load_user_settings():
+	global user_settings
+	try:
+		with open('user_settings.json', 'r') as f:
+			user_settings = json.load(f)
+	except FileNotFoundError:
+		user_settings = {}
+	except json.JSONDecodeError:
+		user_settings = {}
+	except Exception as e:
+		print(f"Error loading user settings: {e}")
+		user_settings = {}
+
+
+def save_user_settings():
+	with open('user_settings.json', 'w') as f:
+		json.dump(user_settings, f, indent=4)
+
+
+def should_send_notification(user_id):
+	return user_settings.get(user_id, True)
+
+
 @bot.event
 async def on_ready():
 	print(f'Successfully logged in {bot.user}')
@@ -565,6 +588,17 @@ async def list_treasurers(
 		await ctx.respond("treasurer_list command error, please contact Ketchup & manfred with this")
 
 
+@bot.slash_command(name="toggle_notifications", description="Toggle notifications on or off.")
+async def toggle_notifications(ctx):
+	user_id = str(ctx.author.id)
+	if user_id not in user_settings:
+		user_settings[user_id] = True
+	user_settings[user_id] = not user_settings[user_id]
+	save_user_settings()
+	log_event(user_id, ctx.author.name, "toggle_notifications", {"new_setting": user_settings[user_id]})
+	await ctx.respond(f"Notifications toggled to {'on' if user_settings[user_id] else 'off'} for you.")
+
+
 @bot.slash_command(name="pay", description="Transfer an amount from one account to another.")
 async def pay(
 	ctx,
@@ -599,6 +633,8 @@ async def pay(
 					save_accounts(sender_id, accounts=sender_account)
 					save_accounts(recipient_id, accounts=recipient_account)
 					await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
+					if should_send_notification(recipient_id):
+						await account_to_pay.send(f"You have received a payment of ㏜{amount:,} from {ctx.author.name}\nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount}). \nMemo: {memo}.")
 
 					if memo:
 						await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
@@ -616,6 +652,8 @@ async def pay(
 					save_accounts(sender_id, accounts=sender_account)
 					save_accounts(recipient_id, accounts=recipient_account)
 					await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_to_pay.name}.", ephemeral=ephemeral)
+					if should_send_notification(recipient_id):
+						await account_to_pay.send(f"You have received a payment of ㏜{amount:,} from {ctx.author.name}. \nMemo: {memo}.")
 
 					if memo:
 						await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
