@@ -688,6 +688,9 @@ async def pay(
 					save_company_account_changes(from_account, sender_account)
 					save_accounts(recipient_id, accounts=recipient_account)
 					await ctx.respond(f"Successfully paid ㏜{new_amount:,} to {account_to_pay.name} from account {from_account}. \nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount:,})", ephemeral=ephemeral)
+					if should_send_notification(recipient_id):
+						await account_to_pay.send(f"You have received a payment of ㏜{amount:,} from {from_account}\nWith {tax_percentage}% tax to '{Tax_Account['account_name']}' (㏜{tax_amount}). \nMemo: {memo}.")
+
 
 					if memo:
 						await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
@@ -705,6 +708,8 @@ async def pay(
 					save_company_account_changes(from_account, sender_account)
 					save_accounts(recipient_id, accounts=recipient_account)
 					await ctx.respond(f"Successfully paid ㏜{amount:,} to {account_to_pay.name} from account {from_account}.", ephemeral=ephemeral)
+					if should_send_notification(recipient_id):
+						await account_to_pay.send(f"You have received a payment of ㏜{amount:,} from {from_account}. \nMemo: {memo}.")
 
 					if memo:
 						await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
@@ -1104,5 +1109,5 @@ async def remove_account(
 #	except:
 #		await ctx.respond("account_all command error, please contact Ketchup & manfred with this")
 
-
+load_user_settings()
 bot.run(TOKEN)
