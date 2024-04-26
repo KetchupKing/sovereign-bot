@@ -46,6 +46,7 @@ def log_event(user_id, user_name, command_name, options):
 	except:
 		return("log_event error, please contact Ketchup & manfred with this")
 
+
 def removeAccount(accountName):
 	file_name = os.path.join(COMPANY_DATA_DIR, f'{accountName}.json')
 	os.remove(file_name)
