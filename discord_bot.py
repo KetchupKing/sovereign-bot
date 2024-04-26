@@ -55,7 +55,7 @@ def removeAccount(accountName):
 
 def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
 	try:
-	 
+	
 		if account_type == "Company":
 			file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
 			files = glob.glob(file_name)
@@ -63,9 +63,9 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
 			for file in files:
 				with open(file, 'r') as f:
 					accounts = json.load(f)
-	 
+	
 					for account_id, account_info in accounts.items():
-		 
+		
 						if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
 							return account_info
 
@@ -107,7 +107,7 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
 
 def save_accounts(user_id, accounts, account_type=None, account_name=None):
 	try:
-	 
+	
 		if account_type == "Company":
 			file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
 			print(file_name)
@@ -170,7 +170,7 @@ def check_or_create_account(user_id, userName):
 			return "A new personal account has been created."
 
 		else:
-			return f"Your account balance is Sv {accounts['personal']['balance']}."
+			return f"Your account balance is Sv {accounts['personal']['balance']:,}."
 	except:
 		return("check_or_create_account error, please contact Ketchup & manfred with this")
 
@@ -1061,7 +1061,7 @@ async def remove_account(
 				view = View()
 				view.add_item(confirmButton)
 
-				await ctx.respond(f"Do you want to transfer the account {account_name}", view=view)
+				await ctx.respond(f"Do you want to delete the account {account_name}", view=view)
 
 			else:
 				await ctx.respond(f"Empty account before removing")
