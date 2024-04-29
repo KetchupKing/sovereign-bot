@@ -830,6 +830,70 @@ async def pay(
 		await ctx.respond("pay command error, please contact Ketchup & manfred with this")
 
 
+@bot.slash_command(name="bulk_pay", description="Pay multiple users from a specified account.")
+async def bulk_pay(
+	ctx,
+	amount: int = discord.Option(int, description="The total amount to pay"),
+	recipient1: discord.User = discord.Option(discord.User, description="Recipient 1", required=False),
+	recipient2: discord.User = discord.Option(discord.User, description="Recipient 2", required=False),
+	recipient3: discord.User = discord.Option(discord.User, description="Recipient 3", required=False),
+	recipient4: discord.User = discord.Option(discord.User, description="Recipient 4", required=False),
+	recipient5: discord.User = discord.Option(discord.User, description="Recipient 5", required=False),
+	recipient6: discord.User = discord.Option(discord.User, description="Recipient 6", required=False),
+	recipient7: discord.User = discord.Option(discord.User, description="Recipient 7", required=False),
+	recipient8: discord.User = discord.Option(discord.User, description="Recipient 8", required=False),
+	recipient9: discord.User = discord.Option(discord.User, description="Recipient 9", required=False),
+	recipient10: discord.User = discord.Option(discord.User, description="Recipient 10", required=False),
+	from_account: str = discord.Option(description="The account from which to transfer", required=False),
+	ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
+):
+	try:
+		sender_id = str(ctx.author.id)
+		recipients = [recipient1, recipient2, recipient3, recipient4, recipient5, recipient6, recipient7, recipient8, recipient9, recipient10]
+		recipients = [user for user in recipients if user is not None]
+		total_amount = amount * len(recipients)
+
+		if from_account:
+			sender_account = load_accounts(account_type="Company", account_name=from_account)
+
+			if sender_account is None or sender_account["balance"] < total_amount:
+				await ctx.respond("Insufficient balance in the 'from account'.", ephemeral=ephemeral)
+				return
+
+			if sender_id not in sender_account["treasurers"]:
+				await ctx.respond("Your not allowed to pay from this account", ephemeral=ephemeral)
+				return
+
+			sender_account["balance"] -= total_amount
+			save_company_account_changes(from_account, sender_account)
+
+		else:
+			sender_account = load_accounts(sender_id)
+
+			if sender_account["personal"]["balance"] < total_amount:
+				await ctx.respond("Insufficient balance in your personal account.", ephemeral=ephemeral)
+				return
+
+			sender_account["personal"]["balance"] -= total_amount
+			save_accounts(sender_id, accounts=sender_account)
+
+		for recipient in recipients:
+			recipient_id = str(recipient.id)
+			recipient_account = load_accounts(recipient_id)
+			recipient_account["personal"]["balance"] += amount
+			save_accounts(recipient_id, accounts=recipient_account)
+
+			if should_send_notification(recipient_id):
+				from_account_text = f" from {from_account}" if from_account else ""
+				await recipient.send(f"You have received a payment of ㏜{amount:,} from {ctx.author.name}{from_account_text}.")
+
+		from_account_text = f" from {from_account}" if from_account else ""
+		await ctx.respond(f"Successfully paid ㏜{amount:,} to each of the {len(recipients)} recipients{from_account_text}.", ephemeral=ephemeral)
+
+	except:
+		await ctx.respond(f"bulk_pay command error", ephemeral=ephemeral)
+
+
 @bot.slash_command(name="baltop", description="Accounts with the most Sovereigns.")
 async def baltop(
 	ctx, 
