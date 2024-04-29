@@ -845,9 +845,6 @@ async def bulk_pay(
 	recipient9: discord.User = discord.Option(discord.User, description="Recipient 9", required=False),
 	recipient10: discord.User = discord.Option(discord.User, description="Recipient 10", required=False),
 	from_account: str = discord.Option(description="The account from which to transfer", required=False),
-	tax_account: str = discord.Option(description="The account to add tax to", required=False),
-	tax_percentage: float = discord.Option(float, description="Percentage of tax to subtract", required=False),
-	memo: str = discord.Option(description="A memo for the transaction", required=False),
 	ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
 	try:
@@ -856,39 +853,29 @@ async def bulk_pay(
 		recipients = [user for user in recipients if user is not None]
 		total_amount = amount * len(recipients)
 
-		if tax_account and tax_percentage:
-			tax_amount = total_amount * (tax_percentage / 100) if tax_percentage else 0
-			total_amount_after_tax = total_amount - tax_amount
-
 		if from_account:
 			sender_account = load_accounts(account_type="Company", account_name=from_account)
 
-			if sender_account is None or sender_account["balance"] < total_amount_after_tax:
+			if sender_account is None or sender_account["balance"] < total_amount:
 				await ctx.respond("Insufficient balance in the 'from account'.", ephemeral=ephemeral)
 				return
 
-			sender_account["balance"] -= total_amount_after_tax
+			if sender_id not in sender_account["treasurers"]:
+				await ctx.respond("Your not allowed to pay from this account", ephemeral=ephemeral)
+				return
+
+			sender_account["balance"] -= total_amount
 			save_company_account_changes(from_account, sender_account)
 
 		else:
 			sender_account = load_accounts(sender_id)
 
-			if sender_account["personal"]["balance"] < total_amount_after_tax:
+			if sender_account["personal"]["balance"] < total_amount:
 				await ctx.respond("Insufficient balance in your personal account.", ephemeral=ephemeral)
 				return
 
-			sender_account["personal"]["balance"] -= total_amount_after_tax
+			sender_account["personal"]["balance"] -= total_amount
 			save_accounts(sender_id, accounts=sender_account)
-
-		if tax_amount > 0 and tax_account:
-			tax_account_info = load_accounts(account_type="Company", account_name=tax_account)
-
-			if tax_account_info is None:
-				await ctx.respond("The specified tax account does not exist.", ephemeral=ephemeral)
-				return
-
-			tax_account_info["balance"] += tax_amount
-			save_company_account_changes(tax_account, tax_account_info)
 
 		for recipient in recipients:
 			recipient_id = str(recipient.id)
@@ -898,14 +885,10 @@ async def bulk_pay(
 
 			if should_send_notification(recipient_id):
 				from_account_text = f" from {from_account}" if from_account else ""
-				await recipient.send(f"You have received a payment of ㏜{amount:,} from {ctx.author.name}{from_account_text}. \nMemo: {memo}.")
+				await recipient.send(f"You have received a payment of ㏜{amount:,} from {ctx.author.name}{from_account_text}.")
 
 		from_account_text = f" from {from_account}" if from_account else ""
 		await ctx.respond(f"Successfully paid ㏜{amount:,} to each of the {len(recipients)} recipients{from_account_text}.", ephemeral=ephemeral)
-
-		if memo:
-			await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
-		return
 
 	except:
 		await ctx.respond(f"bulk_pay command error", ephemeral=ephemeral)
