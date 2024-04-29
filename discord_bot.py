@@ -856,9 +856,8 @@ async def bulk_pay(
 		recipients = [user for user in recipients if user is not None]
 		total_amount = amount * len(recipients)
 
-		if tax_account and tax_percentage:
-			tax_amount = total_amount * (tax_percentage / 100) if tax_percentage else 0
-			total_amount_after_tax = total_amount - tax_amount
+		tax_amount = total_amount * (tax_percentage / 100) if tax_percentage else 0
+		total_amount_after_tax = total_amount - tax_amount
 
 		if from_account:
 			sender_account = load_accounts(account_type="Company", account_name=from_account)
