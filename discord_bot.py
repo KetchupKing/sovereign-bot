@@ -856,38 +856,31 @@ async def bulk_pay(
 		recipients = [user for user in recipients if user is not None]
 		total_amount = amount * len(recipients)
 
-		tax_amount = total_amount * (tax_percentage / 100) if tax_percentage else 0
-		total_amount_after_tax = total_amount - tax_amount
+		if tax_percentage and tax_account:
+			try:
+				new_amount, Tax_Account, tax_amount = tax(total_amount, tax_account, tax_percentage)
+			except:
+				await ctx.respond(f"Error calculating tax", ephemeral=ephemeral)
+				return
+		else:
+			new_amount = total_amount
+			tax_amount = 0
 
 		if from_account:
 			sender_account = load_accounts(account_type="Company", account_name=from_account)
-
-			if sender_account is None or sender_account["balance"] < total_amount_after_tax:
+			if sender_account is None or sender_account["balance"] < new_amount:
 				await ctx.respond("Insufficient balance in the 'from account'.", ephemeral=ephemeral)
 				return
-
-			sender_account["balance"] -= total_amount_after_tax
+			sender_account["balance"] -= new_amount
 			save_company_account_changes(from_account, sender_account)
 
 		else:
 			sender_account = load_accounts(sender_id)
-
-			if sender_account["personal"]["balance"] < total_amount_after_tax:
+			if sender_account["personal"]["balance"] < new_amount:
 				await ctx.respond("Insufficient balance in your personal account.", ephemeral=ephemeral)
 				return
-
-			sender_account["personal"]["balance"] -= total_amount_after_tax
+			sender_account["personal"]["balance"] -= new_amount
 			save_accounts(sender_id, accounts=sender_account)
-
-		if tax_amount > 0 and tax_account:
-			tax_account_info = load_accounts(account_type="Company", account_name=tax_account)
-
-			if tax_account_info is None:
-				await ctx.respond("The specified tax account does not exist.", ephemeral=ephemeral)
-				return
-
-			tax_account_info["balance"] += tax_amount
-			save_company_account_changes(tax_account, tax_account_info)
 
 		for recipient in recipients:
 			recipient_id = str(recipient.id)
@@ -906,8 +899,8 @@ async def bulk_pay(
 			await ctx.respond(f" Memo: {memo}.", ephemeral=ephemeral)
 		return
 
-	except:
-		await ctx.respond(f"bulk_pay command error", ephemeral=ephemeral)
+	except Exception as e:
+		await ctx.respond(f"bulk_pay command error: {e}", ephemeral=ephemeral)
 
 
 @bot.slash_command(name="baltop", description="Accounts with the most Sovereigns.")
