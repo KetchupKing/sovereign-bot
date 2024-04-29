@@ -50,7 +50,7 @@ def log_event(user_id, user_name, command_name, options):
 def removeAccount(accountName):
 	file_name = os.path.join(COMPANY_DATA_DIR, f'{accountName}.json')
 	os.remove(file_name)
-	print(file_name)
+	#print(file_name)
 
 
 def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
@@ -72,7 +72,7 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
 		elif account_type == "government":
 			with open(authorised_users, 'r') as f:
 				authorised = json.load(f)
-				print(authorised)
+				#print(authorised)
 	
 			if user_id in authorised:
 				file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
@@ -85,16 +85,16 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
 						for account_id, account_info in accounts.items():
 		
 							if account_name and (account_info['command_name'] == account_name or account_info['account_name'] == account_name):
-								print(account_info)
+								#print(account_info)
 								return account_info
 
 		else:
 			personal_file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
-			print(personal_file_name)
+			#print(personal_file_name)
 			try:
 				with open(personal_file_name, 'r') as f:
 					personal_accounts = json.load(f)
-					print(personal_accounts)
+					#print(personal_accounts)
 					return personal_accounts
 			except FileNotFoundError:
 				pass
@@ -110,15 +110,15 @@ def save_accounts(user_id, accounts, account_type=None, account_name=None):
 	
 		if account_type == "Company":
 			file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
-			print(file_name)
+			#print(file_name)
 
 		elif account_type == "government":
 			file_name = os.path.join(COMPANY_DATA_DIR, f"{account_name}.json")
-			print(file_name)
+			#print(file_name)
 
 		else:
 			file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
-			print(file_name)
+			#print(file_name)
 		with open(file_name, 'w') as f:
 			json.dump(accounts, f, indent=4)
 	except:
@@ -149,7 +149,7 @@ def save_company_account_changes(account_name, accounts):
 def check_or_create_account(user_id, userName):
 	try:
 		accounts = load_accounts(user_id)
-		print(accounts)
+		#print(accounts)
 
 		if not accounts:
 			from_account = 'Cieurnish Treasury'
@@ -192,11 +192,11 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
 				return f"Error: The account name '{account_name}' or command name '{command_name}' is already in use."
 		
 		accounts = load_accounts(user_id, account_type) if load_accounts(user_id, account_type) else {}
-		print(accounts)
+		#print(accounts)
 		account_id = command_name
-		print(account_id)
+		#print(account_id)
 		treasurers = [user_id]
-		print(treasurers)
+		#print(treasurers)
 		
 		if account_type == "Company":
 			accounts[account_id] = {
@@ -227,7 +227,7 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
 				return "You need to be an authorised user"
 
 		personal_accounts = load_accounts(user_id)
-		print(personal_accounts)
+		#print(personal_accounts)
 
 		if personal_accounts == None:
 			return f"You need a personal account before you can create a Company account"
@@ -352,11 +352,11 @@ async def account(
 	try:
 		log_event(ctx.author.id, ctx.author.name, "account", {"ephemeral": ephemeral})
 		user_id = str(ctx.author.id)
-		print(user_id)
+		#print(user_id)
 		userName = str(ctx.author.name)
-		print(userName)
+		#print(userName)
 		response = check_or_create_account(user_id, userName)
-		print(response)
+		#print(response)
 		await ctx.respond(response, ephemeral=ephemeral)
 	except:
 		await ctx.respond("account command error, please contact Ketchup & manfred with this")
@@ -379,9 +379,9 @@ async def create_account(
 			return
 
 		user_id = str(ctx.author.id)
-		print(user_id)
+		#print(user_id)
 		response = create_new_account(ctx, user_id, account_name, command_name, account_type)
-		print(response)
+		#print(response)
 		await ctx.respond(response, ephemeral=ephemeral)
 	except:
 		await ctx.respond("create_account command error, please contact Ketchup & manfred with this")
@@ -395,7 +395,7 @@ async def list_accounts(
 	try:
 		log_event(ctx.author.id, ctx.author.name, "list_accounts", {"ephemeral": ephemeral})
 		user_id = str(ctx.author.id)
-		print(user_id)
+		#print(user_id)
 		personal_accounts = load_accounts(user_id)
 		company_accounts = {}
 		file_name = os.path.join(COMPANY_DATA_DIR, '*.json')
@@ -465,7 +465,7 @@ async def add_treasurer(
 	try:
 		log_event(ctx.author.id, ctx.author.name, "treasurer_add", {"account_name": account_name, "treasurer_name": treasurer_name.name, "ephemeral": ephemeral})
 		user_id = str(ctx.author.id)
-		print(user_id)
+		#print(user_id)
 		account_to_modify = load_accounts(account_type="Company", account_name=account_name)
 
 		if account_to_modify is None:
@@ -512,7 +512,7 @@ async def remove_treasurer(
 	try:
 		log_event(ctx.author.id, ctx.author.name, "treasurer_remove", {"account_name": account_name, "treasurer_name": treasurer_name.name, "ephemeral": ephemeral})
 		user_id = str(ctx.author.id)
-		print(user_id)
+		#print(user_id)
 		account_to_modify = load_accounts(account_type="Company", account_name=account_name)
 		
 		if account_to_modify is None:
@@ -524,7 +524,7 @@ async def remove_treasurer(
 			return
 		
 		treasurer_id = str(treasurer_name.id)
-		print(treasurer_id)
+		#print(treasurer_id)
 
 		if treasurer_id in account_to_modify["treasurers"]:
 			account_to_modify["treasurers"].remove(treasurer_id)
@@ -559,7 +559,7 @@ async def list_treasurers(
 	try:
 		log_event(ctx.author.id, ctx.author.name, "treasurer_list", {"account_name": account_name, "ephemeral": ephemeral})
 		user_id = str(ctx.author.id)
-		print(user_id)
+		#print(user_id)
 		account_to_list = load_accounts(account_type="Company", account_name=account_name)
 		
 		if account_to_list is None:
@@ -571,7 +571,7 @@ async def list_treasurers(
 			return
 		
 		treasurers = account_to_list["treasurers"]
-		print(treasurers)
+		#print(treasurers)
 		
 		if treasurers:
 			treasurer_names = []
@@ -1027,7 +1027,7 @@ async def eco(
 		if user_id in admin:
 
 			if command == "set":
-				print(recipient_accounts)
+				#print(recipient_accounts)
 
 				if "personal" in recipient_accounts:
 					recipient_accounts["personal"]["balance"] = value
@@ -1161,10 +1161,10 @@ async def remove_account(
 #						}
 #					}
 #					save_accounts(user_id, accounts)
-#					print(f"A new personal account has been created for {userName}.")
+#					#print(f"A new personal account has been created for {userName}.")
 #
 #				else:
-#					print(f"{userName} already has an account.")
+#					#print(f"{userName} already has an account.")
 #			await ctx.respond("All personal accounts have been created.", ephemeral=ephemeral)
 #
 #		else:
