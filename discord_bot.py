@@ -857,22 +857,29 @@ async def bulk_pay(
 
         if from_account:
             sender_account = load_accounts(account_type="Company", account_name=from_account)
+
             if sender_account is None or sender_account["balance"] < total_amount:
                 await ctx.respond("Insufficient balance in the 'from account'.", ephemeral=ephemeral)
                 return
+
             if sender_id not in sender_account["treasurers"]:
                 await ctx.respond("Your not allowed to pay from this account", ephemeral=ephemeral)
                 return
+
             sender_account["balance"] -= total_amount
+
         else:
             sender_account = load_accounts(sender_id)
+
             if sender_account["personal"]["balance"] < total_amount:
                 await ctx.respond("Insufficient balance in your personal account.", ephemeral=ephemeral)
                 return
+
             sender_account["personal"]["balance"] -= total_amount
 
         if from_account:
             save_company_account_changes(from_account, sender_account)
+
         else:
             save_accounts(sender_id, accounts=sender_account)
 
@@ -881,6 +888,7 @@ async def bulk_pay(
             recipient_account = load_accounts(recipient_id)
             recipient_account["personal"]["balance"] += amount
             await save_accounts_async(recipient_id, recipient_account)
+
             if should_send_notification(recipient_id):
                 from_account_text = f" from {from_account}" if from_account else ""
                 await recipient.send(f"You have received a payment of ㏜{amount:,} from {ctx.author.name}{from_account_text}.")
