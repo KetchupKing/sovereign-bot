@@ -280,3 +280,7 @@
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 300, "recipients": ["kalikingly"], "from_account": "LLL", "ephemeral": false}, "timestamp": 1714490946}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 300, "recipients": ["kalikingly"], "from_account": "CT", "ephemeral": false}, "timestamp": 1714491015}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 300, "recipients": ["kalikingly"], "from_account": "f", "ephemeral": false}, "timestamp": 1714491024}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 324567865432, "recipients": ["kalikingly"], "from_account": null, "ephemeral": false}, "timestamp": 1714491351}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 324567865432, "recipients": ["kalikingly"], "from_account": "LLL", "ephemeral": false}, "timestamp": 1714491356}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 100, "recipients": ["kalikingly"], "from_account": null, "ephemeral": false}, "timestamp": 1714491911}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 100, "recipients": ["kalikingly"], "from_account": null, "ephemeral": false}, "timestamp": 1714492264}
