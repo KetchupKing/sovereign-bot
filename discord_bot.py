@@ -589,7 +589,10 @@ async def list_treasurers(
 
 
 @bot.slash_command(name="toggle_notifications", description="Toggle notifications on or off.")
-async def toggle_notifications(ctx):
+async def toggle_notifications(
+    ctx
+):
+	log_event(ctx.author.id, ctx.author.name, "toggle_notifications", {})
 	user_id = str(ctx.author.id)
 	if user_id not in user_settings:
 		user_settings[user_id] = True
@@ -843,6 +846,7 @@ async def bulk_pay(
 	ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
 	try:
+		log_event(ctx.author.id, ctx.author.name, "bulk_pay", {"amount": amount, "recipients": [recipient1, recipient2, recipient3, recipient4, recipient5], "from_account": from_account, "ephemeral": ephemeral})
 		sender_id = str(ctx.author.id)
 		recipients = [recipient1, recipient2, recipient3, recipient4, recipient5]
 		recipients = [user for user in recipients if user is not None]
