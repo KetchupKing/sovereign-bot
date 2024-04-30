@@ -273,3 +273,10 @@
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 6, "ephemeral": false}, "timestamp": 1714479857}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "baltop", "options": {"page": 1, "ephemeral": false}, "timestamp": 1714481671}
 {"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 5, "recipients": ["kalikingly"], "from_account": null, "ephemeral": false}, "timestamp": 1714482628}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "list_accounts", "options": {"ephemeral": false}, "timestamp": 1714490681}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 100, "recipients": ["kalikingly"], "from_account": null, "ephemeral": false}, "timestamp": 1714490691}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "toggle_notifications", "options": {}, "timestamp": 1714490892}
+{"user_id": "1018934971810979840", "user_name": "kalikingly", "command_name": "toggle_notifications", "options": {"new_setting": true}, "timestamp": 1714490892}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 300, "recipients": ["kalikingly"], "from_account": "LLL", "ephemeral": false}, "timestamp": 1714490946}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 300, "recipients": ["kalikingly"], "from_account": "CT", "ephemeral": false}, "timestamp": 1714491015}
+{"user_id": 1018934971810979840, "user_name": "kalikingly", "command_name": "bulk_pay", "options": {"amount": 300, "recipients": ["kalikingly"], "from_account": "f", "ephemeral": false}, "timestamp": 1714491024}
