@@ -41,6 +41,7 @@ def log_event(user_id, user_name, command_name, options):
 			"options": options,
 			"timestamp": current_time
 		}
+		print(log_entry)
 		with open('discord_bot.log', 'a') as log_file:
 			log_file.write(json.dumps(log_entry) + '\n')
 	except:
@@ -845,8 +846,9 @@ async def bulk_pay(
 	from_account: str = discord.Option(description="The account from which to transfer", required=False),
 	ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
+	log_event(ctx.author.id, ctx.author.name, "bulk_pay", {"amount": amount, "recipients": [recipient1.name if recipient1 else recipient2.name if recipient2 else recipient3.name if recipient3 else recipient4.name if recipient4 else recipient5.name if recipient5 else 0], "from_account": from_account, "ephemeral": ephemeral})
+
 	try:
-		log_event(ctx.author.id, ctx.author.name, "bulk_pay", {"amount": amount, "recipients": [recipient1, recipient2, recipient3, recipient4, recipient5], "from_account": from_account, "ephemeral": ephemeral})
 		sender_id = str(ctx.author.id)
 		recipients = [recipient1, recipient2, recipient3, recipient4, recipient5]
 		recipients = [user for user in recipients if user is not None]
