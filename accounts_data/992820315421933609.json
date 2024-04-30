@@ -1,9 +1,11 @@
 {
     "personal": {
         "account_name": "kapakka",
-        "balance": 772,
+        "balance": 2000,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "c1"
+        ],
         "treasurer of": []
     }
 }

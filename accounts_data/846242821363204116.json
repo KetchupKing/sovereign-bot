@@ -3,7 +3,9 @@
         "account_name": "fool.xkkdkjsjdfxcbdaev",
         "balance": 9698,
         "currency": "Sovereign",
-        "own accounts": [],
+        "own accounts": [
+            "test"
+        ],
         "treasurer of": [
             "CV"
         ]

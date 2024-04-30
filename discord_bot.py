@@ -839,17 +839,12 @@ async def bulk_pay(
 	recipient3: discord.User = discord.Option(discord.User, description="Recipient 3", required=False),
 	recipient4: discord.User = discord.Option(discord.User, description="Recipient 4", required=False),
 	recipient5: discord.User = discord.Option(discord.User, description="Recipient 5", required=False),
-	recipient6: discord.User = discord.Option(discord.User, description="Recipient 6", required=False),
-	recipient7: discord.User = discord.Option(discord.User, description="Recipient 7", required=False),
-	recipient8: discord.User = discord.Option(discord.User, description="Recipient 8", required=False),
-	recipient9: discord.User = discord.Option(discord.User, description="Recipient 9", required=False),
-	recipient10: discord.User = discord.Option(discord.User, description="Recipient 10", required=False),
 	from_account: str = discord.Option(description="The account from which to transfer", required=False),
 	ephemeral: bool = discord.Option(bool, description="Make the response ephemeral", required=False, default=False)
 ):
 	try:
 		sender_id = str(ctx.author.id)
-		recipients = [recipient1, recipient2, recipient3, recipient4, recipient5, recipient6, recipient7, recipient8, recipient9, recipient10]
+		recipients = [recipient1, recipient2, recipient3, recipient4, recipient5]
 		recipients = [user for user in recipients if user is not None]
 		total_amount = amount * len(recipients)
 

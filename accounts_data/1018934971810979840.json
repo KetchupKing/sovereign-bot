@@ -1,10 +1,11 @@
 {
     "personal": {
         "account_name": "kalikingly",
-        "balance": 6190,
+        "balance": 6140,
         "currency": "Sovereign",
         "own accounts": [
-            "Legendary Loot Lair"
+            "Legendary Loot Lair",
+            "temp"
         ],
         "treasurer of": [
             "DNI"

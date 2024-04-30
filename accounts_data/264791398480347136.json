@@ -1,14 +1,15 @@
 {
     "personal": {
         "account_name": "go_go",
-        "balance": 1508,
+        "balance": 526,
         "currency": "Sovereign",
         "own accounts": [
             "Dazvani Industries",
             "Dazvani Arsenal Company",
             "Dazvani Trading Company",
             "Dazvani Nether Imports",
-            "Norvalian General Atomics"
+            "Norvalian General Atomics",
+            "test"
         ],
         "treasurer of": [
             "CMJ",
