@@ -45,15 +45,17 @@ def log_event(user_id, user_name, command_name, options):
 		print(log_entry)
 		with open('discord_bot.log', 'a') as log_file:
 			log_file.write(json.dumps(log_entry) + '\n')
-	except:
-		return("log_event error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		return(f"log_event error: {e}, please contact Ketchup & manfred with this")
 
 
 def removeAccount(accountName):
-	file_name = os.path.join(COMPANY_DATA_DIR, f'{accountName}.json')
-	os.remove(file_name)
-	#print(file_name)
-
+	try:
+		file_name = os.path.join(COMPANY_DATA_DIR, f'{accountName}.json')
+		os.remove(file_name)
+		#print(file_name)
+	except Exception as e:
+		return(f"removeAccount error: {e}, please contact Ketchup & manfred with this")
 
 def load_accounts(user_id=None, account_type=None, account_name=None, command_name=None):
 	try:
@@ -103,8 +105,8 @@ def load_accounts(user_id=None, account_type=None, account_name=None, command_na
 			except json.JSONDecodeError:
 				print(f"Error: {personal_file_name} is empty or not properly formatted.")
 		return None
-	except:
-		return("load_accounts error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		return(f"load_accounts error: {e}, please contact Ketchup & manfred with this")
 
 
 def save_accounts(user_id, accounts, account_type=None, account_name=None):
@@ -123,8 +125,8 @@ def save_accounts(user_id, accounts, account_type=None, account_name=None):
 			#print(file_name)
 		with open(file_name, 'w') as f:
 			json.dump(accounts, f, indent=4)
-	except:
-		return("save_accounts error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		return(f"save_accounts error: {e}, please contact Ketchup & manfred with this")
 
 
 def save_company_account_changes(account_name, accounts):
@@ -144,8 +146,8 @@ def save_company_account_changes(account_name, accounts):
 							json.dump(existing_accounts, f_write, indent=4)
 						return True
 		return False
-	except:
-		return("save_company_account_changes error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		return(f"save_company_account_changes error: {e}, please contact Ketchup & manfred with this")
 
 
 def check_or_create_account(user_id, userName):
@@ -173,8 +175,8 @@ def check_or_create_account(user_id, userName):
 
 		else:
 			return f"Your account balance is Sv {accounts['personal']['balance']:,}."
-	except:
-		return("check_or_create_account error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		return(f"check_or_create_account error: {e}, please contact Ketchup & manfred with this")
 
 
 def create_new_account(ctx, user_id, account_name, command_name, account_type):
@@ -237,8 +239,8 @@ def create_new_account(ctx, user_id, account_name, command_name, account_type):
 		save_accounts(user_id, personal_accounts)
 		save_accounts(user_id, accounts, account_type, account_name)
 		return f"Account '{account_name}' with command name '{command_name}', type '{account_type}', has been created."
-	except:
-		return("create_new_account error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		return(f"create_new_account error: {e}, please contact Ketchup & manfred with this")
 
 
 def sort_accounts():
@@ -265,8 +267,8 @@ def sort_accounts():
 
 		sorted_accounts = sorted(all_accounts, key=lambda x: x[1]['balance'], reverse=True)
 		return sorted_accounts
-	except:
-		return("sort_accounts error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		return(f"sort_accounts error: {e}, please contact Ketchup & manfred with this")
 
 
 def getItemsOnPage(lst, page_num, items_per_page=10):
@@ -274,24 +276,27 @@ def getItemsOnPage(lst, page_num, items_per_page=10):
 		start_index = (page_num - 1) * items_per_page
 		end_index = min(start_index + items_per_page, len(lst))
 		return lst[start_index:end_index]
-	except:
-		return("getItemsOnPage error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		return(f"getItemsOnPage error: {e}, please contact Ketchup & manfred with this")
 
 
 def tax(amount, tax_account, tax_percentage):
 	global new_amount
-	tax_percentage = round(tax_percentage, 3)
-	tax_percentage = int(tax_percentage)
+	try:
+		tax_percentage = round(tax_percentage, 3)
+		tax_percentage = int(tax_percentage)
 
-	if tax_percentage > 100 or tax_percentage < 0:
-		return "Only put tax between 100 and 0"
+		if tax_percentage > 100 or tax_percentage < 0:
+			return "Only put tax between 100 and 0"
 
-	Tax_Account = load_accounts(account_type="Company", account_name=tax_account)
-	tax_amount = round(amount*(tax_percentage/100))
-	Tax_Account["balance"] += tax_amount
-	new_amount = amount - tax_amount
-	save_company_account_changes(tax_account,Tax_Account)
-	return new_amount, Tax_Account, tax_amount
+		Tax_Account = load_accounts(account_type="Company", account_name=tax_account)
+		tax_amount = round(amount*(tax_percentage/100))
+		Tax_Account["balance"] += tax_amount
+		new_amount = amount - tax_amount
+		save_company_account_changes(tax_account,Tax_Account)
+		return new_amount, Tax_Account, tax_amount
+	except Exception as e:
+		return(f"tax error: {e}, please contact Ketchup & manfred with this")
 
 
 def load_user_settings():
@@ -330,8 +335,8 @@ async def ping(
 	try:
 		log_event(ctx.author.id, ctx.author.name, "ping", {"ephemeral": ephemeral})
 		await ctx.respond("Pong!", ephemeral=ephemeral)
-	except:
-		await ctx.respond("ping command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"ping command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="pong", description="Replies with Ping!")
@@ -342,8 +347,8 @@ async def pong(
 	try:
 		log_event(ctx.author.id, ctx.author.name, "pong", {"ephemeral": ephemeral})
 		await ctx.respond("Ping!", ephemeral=ephemeral)
-	except:
-		await ctx.respond("pong command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"pong command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="account", description="Check or create a personal account.")
@@ -360,8 +365,8 @@ async def account(
 		response = check_or_create_account(user_id, userName)
 		#print(response)
 		await ctx.respond(response, ephemeral=ephemeral)
-	except:
-		await ctx.respond("account command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"account command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="create_account", description="Create a Company/government account with specified details.")
@@ -385,8 +390,8 @@ async def create_account(
 		response = create_new_account(ctx, user_id, account_name, command_name, account_type)
 		#print(response)
 		await ctx.respond(response, ephemeral=ephemeral)
-	except:
-		await ctx.respond("create_account command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"create_account command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="list_accounts", description="List the personal account, owned accounts, and accounts the user is a treasurer for.")
@@ -453,8 +458,8 @@ async def list_accounts(
 
 		if embed:
 			await ctx.respond(embed=embed, ephemeral=ephemeral)
-	except:
-		await ctx.respond("list_accounts command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"list_accounts command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="treasurer_add", description="Add a treasurer to an account.")
@@ -500,8 +505,8 @@ async def add_treasurer(
 		else:
 			await ctx.respond(f"Treasurer '{treasurer_name}' is already added to '{account_name}'.", ephemeral=ephemeral)
 
-	except:
-		await ctx.respond("treasurer_add command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"treasurer_add command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="treasurer_remove", description="Remove a treasurer from an account.")
@@ -548,8 +553,8 @@ async def remove_treasurer(
 		else:
 			await ctx.respond(f"Treasurer '{treasurer_name}' is not added to '{account_name}'.", ephemeral=ephemeral)
 
-	except:
-		await ctx.respond("treasurer_remove command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"treasurer_remove command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="treasurer_list", description="List all treasurers for an account.")
@@ -586,8 +591,8 @@ async def list_treasurers(
 		else:
 			await ctx.respond(f"No treasurers found for '{account_name}'.", ephemeral=ephemeral)
 
-	except:
-		await ctx.respond("treasurer_list command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"treasurer_list command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="toggle_notifications", description="Toggle notifications on or off.")
@@ -630,7 +635,6 @@ async def pay(
 				return
 
 			elif tax_percentage and tax_account:
-
 				if sender_account["personal"]["balance"] >= new_amount:
 					new_amount, Tax_Account, tax_amount = tax(amount, tax_account, tax_percentage)
 					sender_account["personal"]["balance"] -= amount
@@ -650,7 +654,6 @@ async def pay(
 					return
 
 			else:
-
 				if sender_account["personal"]["balance"] >= amount:
 					sender_account["personal"]["balance"] -= amount
 					recipient_account["personal"]["balance"] += amount
@@ -685,7 +688,6 @@ async def pay(
 				return
 
 			elif tax_percentage and tax_account:
-
 				if sender_account["balance"] >= amount:
 					new_amount, Tax_Account, tax_amount = tax(amount, tax_account, tax_percentage)
 					sender_account["balance"] -= amount
@@ -706,7 +708,6 @@ async def pay(
 					return
 
 			else:
-
 				if sender_account["balance"] >= amount:
 					sender_account["balance"] -= amount
 					recipient_account["personal"]["balance"] += amount
@@ -741,7 +742,6 @@ async def pay(
 				return
 
 			elif tax_percentage and tax_account:
-
 				if sender_account["personal"]["balance"] >= amount:
 					new_amount, Tax_Account, tax_amount = tax(amount, tax_account, tax_percentage)
 					sender_account["personal"]["balance"] -= amount
@@ -759,7 +759,6 @@ async def pay(
 					return
 
 			else:
-
 				if sender_account["personal"]["balance"] >= amount:
 					sender_account["personal"]["balance"] -= amount
 					recipient_account["balance"] += amount
@@ -795,7 +794,6 @@ async def pay(
 				await ctx.respond("The specified account to pay does not exist.", ephemeral=ephemeral)
 
 			elif tax_percentage and tax_account:
-
 				if sender_account["balance"] >= amount:
 					new_amount, Tax_Account, tax_amount = tax(amount, tax_account, tax_percentage)
 					sender_account["balance"] -= amount
@@ -813,7 +811,6 @@ async def pay(
 					return
 
 			else:
-
 				if sender_account["balance"] >= amount:
 					sender_account["balance"] -= amount
 					recipient_account["balance"] += amount
@@ -831,8 +828,8 @@ async def pay(
 
 		else:
 			await ctx.respond("Error")
-	except:
-		await ctx.respond("pay command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"pay command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="bulk_pay", description="Pay multiple users from a specified account.")
@@ -870,7 +867,6 @@ async def bulk_pay(
 			if sender_id not in sender_account["treasurers"]:
 				await ctx.respond("Your not allowed to pay from this account", ephemeral=ephemeral)
 				return
-
 			sender_account["balance"] -= total_amount
 
 		else:
@@ -879,7 +875,6 @@ async def bulk_pay(
 			if sender_account["personal"]["balance"] < total_amount:
 				await ctx.respond("Insufficient balance in your personal account.", ephemeral=ephemeral)
 				return
-
 			sender_account["personal"]["balance"] -= total_amount
 
 		if from_account:
@@ -899,7 +894,6 @@ async def bulk_pay(
 				await recipient.send(f"You have received a payment of ㏜{amount:,} from {ctx.author.name}{from_account_text}.")
 
 		await asyncio.gather(*(process_payment(recipient) for recipient in recipients))
-
 		from_account_text = f" from {from_account}" if from_account else ""
 		await ctx.respond(f"Successfully paid ㏜{amount:,} to each of the {len(recipients)} recipients{from_account_text}.", ephemeral=ephemeral)
 
@@ -948,8 +942,8 @@ async def baltop(
 		if response:
 			await ctx.respond(response, ephemeral=ephemeral)
 
-	except:
-		await ctx.respond("baltop command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"baltop command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="authorisation", description="Authorise users to do government accounts.")
@@ -1011,8 +1005,8 @@ async def authorise(
 			else:
 				await ctx.respond("Your not an admin.", ephemeral=ephemeral)
 
-	except:
-		await ctx.respond("authorisation command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"authorisation command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="eco", description="Manage account balances.")
@@ -1080,8 +1074,8 @@ async def eco(
 		else:
 			await ctx.respond("You are not admin")
 
-	except:
-		await ctx.respond("eco command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"eco command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="transfer_account", description="Transfer or something")
@@ -1115,8 +1109,8 @@ async def transfer_account(
 		else:
 			await ctx.respond("You are not the owner of this account")
 
-	except:
-		await ctx.respond("transfer_account command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"transfer_account command error: {e}, please contact Ketchup & manfred with this")
 
 
 @bot.slash_command(name="remove_account", description="Remove account")
@@ -1147,8 +1141,8 @@ async def remove_account(
 
 			else:
 				await ctx.respond(f"Empty account before removing")
-	except:
-		await ctx.respond("remove_account command error, please contact Ketchup & manfred with this")
+	except Exception as e:
+		await ctx.respond(f"remove_account command error: {e}, please contact Ketchup & manfred with this")
 
 
 load_user_settings()
