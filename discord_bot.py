@@ -855,7 +855,6 @@ async def bulk_pay(
         recipients = [user for user in recipients if user is not None]
         total_amount = amount * len(recipients)
 
-        # Load the sender's account only once
         if from_account:
             sender_account = load_accounts(account_type="Company", account_name=from_account)
             if sender_account is None or sender_account["balance"] < total_amount:
@@ -872,13 +871,11 @@ async def bulk_pay(
                 return
             sender_account["personal"]["balance"] -= total_amount
 
-        # Save the sender's account changes only once
         if from_account:
             save_company_account_changes(from_account, sender_account)
         else:
             save_accounts(sender_id, accounts=sender_account)
 
-        # Process recipient payments asynchronously
         async def process_payment(recipient):
             recipient_id = str(recipient.id)
             recipient_account = load_accounts(recipient_id)
@@ -888,7 +885,6 @@ async def bulk_pay(
                 from_account_text = f" from {from_account}" if from_account else ""
                 await recipient.send(f"You have received a payment of ㏜{amount:,} from {ctx.author.name}{from_account_text}.")
 
-        # Use asyncio.gather to process payments concurrently
         await asyncio.gather(*(process_payment(recipient) for recipient in recipients))
 
         from_account_text = f" from {from_account}" if from_account else ""
@@ -897,7 +893,6 @@ async def bulk_pay(
     except Exception as e:
         await ctx.respond(f"bulk_pay command error: {e}", ephemeral=ephemeral)
 
-# Asynchronous version of save_accounts using aiofiles
 async def save_accounts_async(user_id, accounts):
     file_name = os.path.join(ACCOUNTS_DATA_DIR, f"{user_id}.json")
     async with aiofiles.open(file_name, 'w') as f:
