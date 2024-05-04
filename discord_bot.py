@@ -635,7 +635,7 @@ async def pay(
 				return
 
 			elif tax_percentage and tax_account:
-				if sender_account["personal"]["balance"] >= new_amount:
+				if sender_account["personal"]["balance"] >= amount:
 					new_amount, Tax_Account, tax_amount = tax(amount, tax_account, tax_percentage)
 					sender_account["personal"]["balance"] -= amount
 					recipient_account["personal"]["balance"] += new_amount
